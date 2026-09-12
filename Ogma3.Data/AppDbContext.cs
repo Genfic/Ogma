@@ -53,4 +53,10 @@ public sealed partial class AppDbContext(DbContextOptions<AppDbContext> options)
 		// Load model configurations
 		builder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
 	}
+
+	protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+	{
+		base.ConfigureConventions(configurationBuilder);
+		configurationBuilder.Conventions.Add(_ => new ISchedulableContentConvention());
+	}
 }

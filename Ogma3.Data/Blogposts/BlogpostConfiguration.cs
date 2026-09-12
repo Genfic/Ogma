@@ -8,9 +8,8 @@ namespace Ogma3.Data.Blogposts;
 
 public sealed class BlogpostConfiguration : BaseConfiguration<Blogpost>
 {
-	public override void Configure(EntityTypeBuilder<Blogpost> builder)
+	protected override void Config(EntityTypeBuilder<Blogpost> builder)
 	{
-		base.Configure(builder);
 
 		// CONSTRAINTS
 		builder

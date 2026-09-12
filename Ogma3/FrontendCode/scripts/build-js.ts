@@ -130,6 +130,6 @@ if (values.watch) {
 		transformer: (events) =>
 			events.filter(({ path }) => hasExtension(path, "tsx", "ts", "js", "css")).map((e) => e.path),
 		predicate: (files) => files.length > 0,
-		action: async (_) => await compileAll(),
+		action: async () => await compileAll(),
 	});
 }

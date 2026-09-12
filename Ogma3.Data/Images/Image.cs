@@ -14,9 +14,8 @@ public sealed class Image : BaseModel
 
 public sealed class ImageConfiguration : BaseConfiguration<Image>
 {
-	public override void Configure(EntityTypeBuilder<Image> builder)
+	protected override void Config(EntityTypeBuilder<Image> builder)
 	{
-		base.Configure(builder);
 
 		builder
 			.Property(i => i.Url)

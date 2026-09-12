@@ -8,9 +8,8 @@ namespace Ogma3.Data.Tags;
 
 public sealed class TagConfiguration : BaseConfiguration<Tag>
 {
-	public override void Configure(EntityTypeBuilder<Tag> builder)
+	protected override void Config(EntityTypeBuilder<Tag> builder)
 	{
-		base.Configure(builder);
 
 		// CONSTRAINTS
 		builder

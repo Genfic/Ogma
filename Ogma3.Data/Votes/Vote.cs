@@ -15,9 +15,8 @@ public sealed class Vote : BaseModel
 
 	public sealed class VoteConfiguration : BaseConfiguration<Vote>
 	{
-		public override void Configure(EntityTypeBuilder<Vote> builder)
+		protected override void Config(EntityTypeBuilder<Vote> builder)
 		{
-			base.Configure(builder);
 
 			builder
 				.HasOne(v => v.User)

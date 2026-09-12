@@ -28,10 +28,10 @@ public partial class ChapterEntityType
             "Ogma3.Data.Chapters.Chapter",
             typeof(Chapter),
             baseEntityType,
-            propertyCount: 14,
+            propertyCount: 15,
             navigationCount: 4,
             foreignKeyCount: 2,
-            unnamedIndexCount: 5,
+            unnamedIndexCount: 6,
             keyCount: 1);
 
         var id = runtimeEntityType.AddProperty(
@@ -105,6 +105,14 @@ public partial class ChapterEntityType
             nullable: true);
         publicationDate.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
+        var scheduledFor = runtimeEntityType.AddProperty(
+            "ScheduledFor",
+            typeof(DateTimeOffset?),
+            propertyInfo: typeof(Chapter).GetProperty("ScheduledFor", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            fieldInfo: typeof(Chapter).GetField("<ScheduledFor>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            nullable: true);
+        scheduledFor.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+
         var signature = runtimeEntityType.AddProperty(
             "Signature",
             typeof(uint[]),
@@ -174,9 +182,13 @@ public partial class ChapterEntityType
             new[] { publicationDate });
 
         var index2 = runtimeEntityType.AddIndex(
-            new[] { signature });
+            new[] { scheduledFor });
+        index2.AddAnnotation("Relational:Filter", "\"ScheduledFor\" IS NOT NULL");
 
         var index3 = runtimeEntityType.AddIndex(
+            new[] { signature });
+
+        var index4 = runtimeEntityType.AddIndex(
             new[] { storyId });
 
         return runtimeEntityType;

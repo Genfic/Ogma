@@ -7,9 +7,8 @@ namespace Ogma3.Data.Stories;
 
 public sealed class StoryConfiguration : BaseConfiguration<Story>
 {
-	public override void Configure(EntityTypeBuilder<Story> builder)
+	protected override void Config(EntityTypeBuilder<Story> builder)
 	{
-		base.Configure(builder);
 
 		// CONSTRAINTS
 		builder.HasIndex(s => s.AuthorId);

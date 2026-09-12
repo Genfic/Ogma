@@ -7,9 +7,8 @@ namespace Ogma3.Data.Notifications;
 
 public sealed class NotificationConfiguration : BaseConfiguration<Notification>
 {
-	public override void Configure(EntityTypeBuilder<Notification> builder)
+	protected override void Config(EntityTypeBuilder<Notification> builder)
 	{
-		base.Configure(builder);
 
 		// CONSTRAINTS
 		builder

@@ -8,11 +8,12 @@ using Ogma3.Data.Stories;
 namespace Ogma3.Data.Chapters;
 
 [AutoDbSet]
-public sealed class Chapter : BaseModel, IBlockableContent, IReportableContent, IDateableContent
+public sealed class Chapter : BaseModel, IBlockableContent, IReportableContent, IDateableContent, ISchedulableContent
 {
 	public uint Order { get; set; }
 	public DateTimeOffset CreationDate { get; set; }
 	public DateTimeOffset? PublicationDate { get; set => field ??= value; } // immutable once set
+	public DateTimeOffset? ScheduledFor { get; init; }
 	public bool IsVisible { get; set; }
 	public string Title { get; set; } = null!;
 	public string Slug { get; set; } = null!;

@@ -12,9 +12,8 @@ public sealed class Icon : BaseModel
 
 public sealed class IconConfiguration : BaseConfiguration<Icon>
 {
-	public override void Configure(EntityTypeBuilder<Icon> builder)
+	protected override void Config(EntityTypeBuilder<Icon> builder)
 	{
-		base.Configure(builder);
 
 		builder
 			.HasIndex(i => i.Name)

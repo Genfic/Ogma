@@ -14,7 +14,7 @@ using Ogma3.Data.Votes;
 namespace Ogma3.Data.Stories;
 
 [AutoDbSet]
-public sealed class Story : BaseModel, IBlockableContent, IReportableContent, IDateableContent
+public sealed class Story : BaseModel, IBlockableContent, IReportableContent, IDateableContent, ISchedulableContent
 {
 	public OgmaUser Author { get; set; } = null!;
 	public long AuthorId { get; set; }
@@ -26,6 +26,7 @@ public sealed class Story : BaseModel, IBlockableContent, IReportableContent, ID
 	public long? CoverId { get; set; }
 	public DateTimeOffset CreationDate { get; set; }
 	public DateTimeOffset? PublicationDate { get; set => field ??= value; } // immutable once set
+	public DateTimeOffset? ScheduledFor { get; init; }
 	public DateTimeOffset? LastUpdatedAt { get; set; }
 	public bool IsVisible { get; set; }
 	public int VoteCount { get; set; }

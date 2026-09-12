@@ -8,9 +8,8 @@ namespace Ogma3.Data.NewsPosts;
 
 public class NewsConfiguration : BaseConfiguration<News>
 {
-	public override void Configure(EntityTypeBuilder<News> builder)
+	protected override void Config(EntityTypeBuilder<News> builder)
 	{
-		base.Configure(builder);
 
 		builder
 			.Property(b => b.Title)

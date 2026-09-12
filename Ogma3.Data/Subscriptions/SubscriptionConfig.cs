@@ -7,9 +7,8 @@ namespace Ogma3.Data.Subscriptions;
 
 public sealed class SubscriptionConfig : BaseConfiguration<Subscription>
 {
-	public override void Configure(EntityTypeBuilder<Subscription> builder)
+	protected override void Config(EntityTypeBuilder<Subscription> builder)
 	{
-		base.Configure(builder);
 
 		builder.HasIndex(s => s.UserId);
 		builder.HasIndex(s => s.TierId);

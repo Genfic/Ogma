@@ -7,9 +7,8 @@ namespace Ogma3.Data.Clubs;
 
 public sealed class ClubConfiguration : BaseConfiguration<Club>
 {
-	public override void Configure(EntityTypeBuilder<Club> builder)
+	protected override void Config(EntityTypeBuilder<Club> builder)
 	{
-		base.Configure(builder);
 
 		// CONSTRAINTS
 		builder

@@ -12,10 +12,9 @@ public sealed class Quote : BaseModel
 
 	public sealed class QuoteConfiguration : BaseConfiguration<Quote>
 	{
-		public override void Configure(EntityTypeBuilder<Quote> builder)
+		protected override void Config(EntityTypeBuilder<Quote> builder)
 		{
-			base.Configure(builder);
-			builder.Property(q => q.Body).IsRequired();
+						builder.Property(q => q.Body).IsRequired();
 			builder.Property(q => q.Author).IsRequired();
 		}
 	}

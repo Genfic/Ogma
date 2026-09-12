@@ -27,10 +27,10 @@ public partial class BlogpostEntityType
             "Ogma3.Data.Blogposts.Blogpost",
             typeof(Blogpost),
             baseEntityType,
-            propertyCount: 15,
+            propertyCount: 16,
             navigationCount: 6,
             foreignKeyCount: 4,
-            unnamedIndexCount: 7,
+            unnamedIndexCount: 8,
             keyCount: 1);
 
         var id = runtimeEntityType.AddProperty(
@@ -139,6 +139,14 @@ public partial class BlogpostEntityType
             nullable: true);
         publicationDate.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
+        var scheduledFor = runtimeEntityType.AddProperty(
+            "ScheduledFor",
+            typeof(DateTimeOffset?),
+            propertyInfo: typeof(Blogpost).GetProperty("ScheduledFor", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            fieldInfo: typeof(Blogpost).GetField("<ScheduledFor>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            nullable: true);
+        scheduledFor.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+
         var slug = runtimeEntityType.AddProperty(
             "Slug",
             typeof(string),
@@ -191,6 +199,10 @@ public partial class BlogpostEntityType
             new[] { publicationDate });
 
         var index5 = runtimeEntityType.AddIndex(
+            new[] { scheduledFor });
+        index5.AddAnnotation("Relational:Filter", "\"ScheduledFor\" IS NOT NULL");
+
+        var index6 = runtimeEntityType.AddIndex(
             new[] { title });
 
         return runtimeEntityType;

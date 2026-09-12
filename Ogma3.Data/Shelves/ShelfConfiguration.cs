@@ -6,9 +6,8 @@ namespace Ogma3.Data.Shelves;
 
 public sealed class ShelfConfiguration : BaseConfiguration<Shelf>
 {
-	public override void Configure(EntityTypeBuilder<Shelf> builder)
+	protected override void Config(EntityTypeBuilder<Shelf> builder)
 	{
-		base.Configure(builder);
 
 		// CONSTRAINTS
 		builder

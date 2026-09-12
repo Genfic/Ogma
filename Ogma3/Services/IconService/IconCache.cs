@@ -49,7 +49,8 @@ public sealed class IconCache(IHttpClientFactory clientFactory, ILogger<IconCach
 			return found;
 		}
 
-		logger.LogInformation("Icon cache miss. Fetching {Count}/{Total} icons.", missing, names.Count);
+		var loggedNames = groups.SelectMany(g => g.Value.Select(v => $"{g.Key}:{v}"));
+		logger.LogInformation("Icon cache miss. Fetching {Count}/{Total} icons: {@Names}.", missing, names.Count, loggedNames);
 
 		var newIcons = new ConcurrentBag<Icon>();
 		var client = clientFactory.CreateClient();
@@ -60,17 +61,24 @@ public sealed class IconCache(IHttpClientFactory clientFactory, ILogger<IconCach
 				IconifyJsonContext.Default.IconifyResponse
 			);
 
-			if (res is { Icons: var i, Height: var h, Width: var w })
+			if (res is null)
 			{
-				foreach (var ico in i)
-				{
-					var key = string.Concat(g.Key, ':', ico.Key);
-					var icon = new Icon(key, w, h, ico.Value.Body);
-
-					_cache.TryAdd(key, icon);
-					newIcons.Add(icon);
-				}
+				return;
 			}
+
+			var aliasMap = res.Aliases.ToDictionary(a => a.Value.Parent, a => a.Key);
+
+			foreach (var ico in res.Icons)
+			{
+				var name = aliasMap.TryGetValue(ico.Key, out var alias) ? alias : ico.Key;
+
+				var key = $"{g.Key}:{name}";
+				var icon = new Icon(key, res.Width, res.Height, ico.Value.Body);
+
+				_cache.TryAdd(key, icon);
+				newIcons.Add(icon);
+			}
+
 		}));
 
 		found.AddRange(newIcons);

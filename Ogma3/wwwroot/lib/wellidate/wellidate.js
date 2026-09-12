@@ -683,6 +683,41 @@
         }
     }
 
+	const parseNumberOrDate = (value) => {
+		if (value === "" || value == null) return NaN;
+
+		const str = String(value).trim();
+		if (/^[+-]?(\d+\.?\d*|\.\d+)(e[+-]?\d+)?$/i.test(str)) {
+			return Number.parseFloat(str);
+		}
+
+		const time = new Date(str).getTime();
+		return Number.isNaN(time) ? NaN : time;
+	};
+
+	const formatNumberOrDate = (element, value) => {
+		const types = ["date", "datetime-local", "month", "week", "time"];
+
+		if (!types.includes(element?.type)) {
+			return value;
+		}
+
+		const date = new Date(value);
+		if (Number.isNaN(date.getTime())) {
+			return value;
+		}
+
+		const options = {
+			"date": {dateStyle: "medium", timeStyle: undefined },
+			"datetime-local": { dateStyle: "medium", timeStyle: "short"},
+			"month": { year: "numeric", month: "long" },
+			"week": {dateStyle: "medium", timeStyle: undefined },
+			"time": { hour: "2-digit", minute: "2-digit" },
+		}[element.type]
+
+		return new Intl.DateTimeFormat(undefined, options).format(date);
+	}
+
     Wellidate.default = {
         focusInvalid: true,
         focusCleanup: false,
@@ -938,45 +973,47 @@
             },
             range: {
                 message: "Please enter a value between {0} and {1}.",
-                isValid() {
-                    const min = parseFloat(this.min);
-                    const max = parseFloat(this.max);
-                    const value = this.normalizeValue();
+				isValid() {
+					const min = parseNumberOrDate(this.min);
+					const max = parseNumberOrDate(this.max);
+					const value = parseNumberOrDate(this.normalizeValue());
 
-                    return !value || (isNaN(min) || min <= value) && (value <= max || isNaN(max));
-                },
+					return !this.normalizeValue() || (Number.isNaN(min) || min <= value) && (value <= max || Number.isNaN(max));
+				},
                 formatMessage() {
                     const range = this;
+					const min = formatNumberOrDate(range.element, range.min);
+					const max = formatNumberOrDate(range.element, range.max);
 
                     if (range.min != null && range.max == null && !range.isDataMessage) {
-                        return Wellidate.default.rules.min.message.replace("{0}", range.min);
+                        return Wellidate.default.rules.min.message.replace("{0}", min);
                     } else if (range.min == null && range.max != null && !range.isDataMessage) {
-                        return Wellidate.default.rules.max.message.replace("{0}", range.max);
+                        return Wellidate.default.rules.max.message.replace("{0}", max);
                     }
 
-                    return range.message.replace("{0}", range.min).replace("{1}", range.max);
+                    return range.message.replace("{0}", min).replace("{1}", max);
                 }
             },
             min: {
                 message: "Please enter a value greater than or equal to {0}.",
                 isValid() {
-                    const value = this.normalizeValue();
+                    const value = parseNumberOrDate(this.normalizeValue());
 
-                    return !value || parseFloat(this.value) <= value;
+                    return !this.normalizeValue() || parseNumberOrDate(this.value) <= value;
                 },
                 formatMessage() {
-                    return this.message.replace("{0}", this.value);
+                    return this.message.replace("{0}", formatNumberOrDate(this.element, this.value));
                 }
             },
             max: {
                 message: "Please enter a value less than or equal to {0}.",
                 isValid() {
-                    const value = this.normalizeValue();
+                    const value = parseNumberOrDate(this.normalizeValue());
 
-                    return !value || value <= parseFloat(this.value);
+                    return !this.normalizeValue() || value <= parseNumberOrDate(this.value);
                 },
                 formatMessage() {
-                    return this.message.replace("{0}", this.value);
+                    return this.message.replace("{0}", formatNumberOrDate(this.element, this.value));
                 }
             },
             greater: {

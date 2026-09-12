@@ -76,5 +76,11 @@ public static class ClaimsPrincipalEx
 			val = null;
 			return false;
 		}
+
+		public string GetTimezone()
+			=> principal.TryGetClaim(ClaimTypes.Timezone, out var tz) ? tz : "UTC";
+
+		public TimeZoneInfo GetTimeZoneInfo()
+			=> TimeZoneInfo.TryFindSystemTimeZoneById(principal.GetTimezone(), out var tzi) ? tzi : TimeZoneInfo.Utc;
 	}
 }

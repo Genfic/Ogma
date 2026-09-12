@@ -7,9 +7,8 @@ namespace Ogma3.Data.Documents;
 
 public sealed class DocumentConfiguration : BaseConfiguration<Document>
 {
-	public override void Configure(EntityTypeBuilder<Document> builder)
+	protected override void Config(EntityTypeBuilder<Document> builder)
 	{
-		base.Configure(builder);
 
 		// CONSTRAINTS
 		builder

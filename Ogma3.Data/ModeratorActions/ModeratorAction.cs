@@ -17,9 +17,8 @@ public sealed class ModeratorAction : BaseModel
 
 	public sealed class ModeratorActionConfiguration : BaseConfiguration<ModeratorAction>
 	{
-		public override void Configure(EntityTypeBuilder<ModeratorAction> builder)
+		protected override void Config(EntityTypeBuilder<ModeratorAction> builder)
 		{
-			base.Configure(builder);
 
 			builder
 				.Property(ma => ma.Description)

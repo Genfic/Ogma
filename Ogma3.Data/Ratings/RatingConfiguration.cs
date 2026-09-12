@@ -7,9 +7,8 @@ namespace Ogma3.Data.Ratings;
 
 public sealed class RatingConfiguration : BaseConfiguration<Rating>
 {
-	public override void Configure(EntityTypeBuilder<Rating> builder)
+	protected override void Config(EntityTypeBuilder<Rating> builder)
 	{
-		base.Configure(builder);
 
 		// CONSTRAINTS
 		builder

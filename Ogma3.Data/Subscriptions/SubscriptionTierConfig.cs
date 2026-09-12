@@ -5,9 +5,8 @@ namespace Ogma3.Data.Subscriptions;
 
 public sealed class SubscriptionTierConfig : BaseConfiguration<SubscriptionTier>
 {
-	public override void Configure(EntityTypeBuilder<SubscriptionTier> builder)
+	protected override void Config(EntityTypeBuilder<SubscriptionTier> builder)
 	{
-		base.Configure(builder);
 
 		builder
 			.Property(t => t.Name)

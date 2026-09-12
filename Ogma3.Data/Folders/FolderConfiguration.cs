@@ -8,9 +8,8 @@ namespace Ogma3.Data.Folders;
 
 public sealed class FolderConfiguration : BaseConfiguration<Folder>
 {
-	public override void Configure(EntityTypeBuilder<Folder> builder)
+	protected override void Config(EntityTypeBuilder<Folder> builder)
 	{
-		base.Configure(builder);
 
 		// CONSTRAINTS
 		builder

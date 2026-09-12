@@ -30,12 +30,12 @@ public partial class StoryEntityType
             "Ogma3.Data.Stories.Story",
             typeof(Story),
             baseEntityType,
-            propertyCount: 19,
+            propertyCount: 20,
             complexPropertyCount: 1,
             navigationCount: 7,
             skipNavigationCount: 3,
             foreignKeyCount: 4,
-            unnamedIndexCount: 4,
+            unnamedIndexCount: 5,
             keyCount: 1);
 
         var id = runtimeEntityType.AddProperty(
@@ -162,6 +162,14 @@ public partial class StoryEntityType
             sentinel: 0L);
         ratingId.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
+        var scheduledFor = runtimeEntityType.AddProperty(
+            "ScheduledFor",
+            typeof(DateTimeOffset?),
+            propertyInfo: typeof(Story).GetProperty("ScheduledFor", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            fieldInfo: typeof(Story).GetField("<ScheduledFor>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            nullable: true);
+        scheduledFor.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+
         var slug = runtimeEntityType.AddProperty(
             "Slug",
             typeof(string),
@@ -223,6 +231,10 @@ public partial class StoryEntityType
 
         var index2 = runtimeEntityType.AddIndex(
             new[] { ratingId });
+
+        var index3 = runtimeEntityType.AddIndex(
+            new[] { scheduledFor });
+        index3.AddAnnotation("Relational:Filter", "\"ScheduledFor\" IS NOT NULL");
 
         return runtimeEntityType;
     }

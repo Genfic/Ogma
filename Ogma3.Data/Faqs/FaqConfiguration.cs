@@ -5,9 +5,8 @@ namespace Ogma3.Data.Faqs;
 
 public sealed class FaqConfiguration : BaseConfiguration<Faq>
 {
-	public override void Configure(EntityTypeBuilder<Faq> builder)
+	protected override void Config(EntityTypeBuilder<Faq> builder)
 	{
-		base.Configure(builder);
 
 		builder
 			.Property(f => f.Question)

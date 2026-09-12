@@ -7,9 +7,8 @@ namespace Ogma3.Data.TagNamespaces;
 
 public class TagNamespaceConfig : BaseConfiguration<TagNamespace>
 {
-	public override void Configure(EntityTypeBuilder<TagNamespace> builder)
+	protected override void Config(EntityTypeBuilder<TagNamespace> builder)
 	{
-		base.Configure(builder);
 
 		builder
 			.HasIndex(t => t.Name)

@@ -8,9 +8,8 @@ namespace Ogma3.Data.ClubThreads;
 
 public sealed class ClubThreadConfiguration : BaseConfiguration<ClubThread>
 {
-	public override void Configure(EntityTypeBuilder<ClubThread> builder)
+	protected override void Config(EntityTypeBuilder<ClubThread> builder)
 	{
-		base.Configure(builder);
 
 		// CONSTRAINTS
 		builder

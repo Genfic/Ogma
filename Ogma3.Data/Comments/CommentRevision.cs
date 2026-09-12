@@ -16,9 +16,8 @@ public sealed class CommentRevision : BaseModel
 
 	public sealed class CommentRevisionConfiguration : BaseConfiguration<CommentRevision>
 	{
-		public override void Configure(EntityTypeBuilder<CommentRevision> builder)
+		protected override void Config(EntityTypeBuilder<CommentRevision> builder)
 		{
-			base.Configure(builder);
 
 			// CONSTRAINTS
 			builder

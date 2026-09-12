@@ -18,9 +18,8 @@ public sealed class ContentBlock : BaseModel
 
 	public sealed class ContentBlockConfiguration : BaseConfiguration<ContentBlock>
 	{
-		public override void Configure(EntityTypeBuilder<ContentBlock> builder)
+		protected override void Config(EntityTypeBuilder<ContentBlock> builder)
 		{
-			base.Configure(builder);
 
 			builder
 				.Property(cb => cb.Reason)

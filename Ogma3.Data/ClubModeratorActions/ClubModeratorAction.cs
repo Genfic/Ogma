@@ -20,9 +20,8 @@ public sealed class ClubModeratorAction : BaseModel
 
 	public sealed class ModeratorActionConfiguration : BaseConfiguration<ClubModeratorAction>
 	{
-		public override void Configure(EntityTypeBuilder<ClubModeratorAction> builder)
+		protected override void Config(EntityTypeBuilder<ClubModeratorAction> builder)
 		{
-			base.Configure(builder);
 
 			builder
 				.Property(ma => ma.Description)

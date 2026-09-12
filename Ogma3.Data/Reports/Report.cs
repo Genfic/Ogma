@@ -44,9 +44,8 @@ public sealed class Report : BaseModel
 
 	public sealed class ReportConfiguration : BaseConfiguration<Report>
 	{
-		public override void Configure(EntityTypeBuilder<Report> builder)
+		protected override void Config(EntityTypeBuilder<Report> builder)
 		{
-			base.Configure(builder);
 
 			builder
 				.Property(b => b.ReportDate)

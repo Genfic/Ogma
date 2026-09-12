@@ -9,9 +9,8 @@ namespace Ogma3.Data.CommentsThreads;
 
 public sealed class CommentsThreadConfiguration : BaseConfiguration<CommentThread>
 {
-	public override void Configure(EntityTypeBuilder<CommentThread> builder)
+	protected override void Config(EntityTypeBuilder<CommentThread> builder)
 	{
-		base.Configure(builder);
 
 		// CONSTRAINTS
 		builder

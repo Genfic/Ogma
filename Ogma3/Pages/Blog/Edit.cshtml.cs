@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,6 +20,8 @@ public sealed class EditModel(AppDbContext context, OgmaConfig config) : PageMod
 	[BindProperty]
 	public required PostData Input { get; set; }
 
+	public required bool WasPublished { get; set; }
+
 	public async Task<IActionResult> OnGetAsync(long id)
 	{
 		// Get the logged-in user
@@ -29,13 +32,15 @@ public sealed class EditModel(AppDbContext context, OgmaConfig config) : PageMod
 		var input = await context.Blogposts
 			.Where(m => m.Id == id)
 			.Where(b => b.AuthorId == uid)
-			.Select(b => new PostData
+			.Select(b => new ExtendedData
 			{
 				Id = b.Id,
 				Title = b.Title,
 				Body = b.Body,
 				Tags = string.Join(", ", b.Hashtags),
-				Published = b.IsVisible,
+				Publish = b.IsVisible,
+				WasPublished = b.PublicationDate != null,
+				Schedule = b.ScheduledFor,
 				IsLocked = b.IsLocked,
 				AttachedChapter = b.AttachedChapter == null ? null : new ChapterMinimal
 				{
@@ -63,21 +68,29 @@ public sealed class EditModel(AppDbContext context, OgmaConfig config) : PageMod
 
 		if (input is null) return NotFound();
 
+		WasPublished = input.WasPublished;
 		Input = input;
 
 		return Page();
 	}
 
-	public sealed class PostData
+	public class PostData
 	{
 		public required long Id { get; init; }
 		public required string Title { get; init; }
 		public required string Body { get; init; }
-		public string? Tags { get; init; } = "";
+		public string? Tags { get; init; }
 		public required ChapterMinimal? AttachedChapter { get; init; }
 		public required StoryMinimal? AttachedStory { get; init; }
-		public required bool Published { get; set; }
-		public required bool IsLocked { get; set; }
+		public required bool Publish { get; init; }
+		public DateTimeOffset? Schedule { get; init; }
+		[DisplayName("Lock")]
+		public required bool IsLocked { get; init; }
+	}
+
+	public sealed class ExtendedData : PostData
+	{
+		public required bool WasPublished { get; init; }
 	}
 
 	public sealed class PostDataValidation : AbstractValidator<PostData>
@@ -118,6 +131,10 @@ public sealed class EditModel(AppDbContext context, OgmaConfig config) : PageMod
 			cutoff = Math.Min(body.IndexOfBefore(' ', config.BlogpostExcerptDefaultCutoff * 2), cutoff);
 		}
 
+		var schedule = Input.Schedule is {} sch
+			? TimeZoneInfo.ConvertTime(sch, User.GetTimeZoneInfo()).ToUniversalTime()
+			: (DateTimeOffset?)null;
+
 		var rows = await context.Blogposts
 			.Where(b => b.Id == id)
 			.Where(b => b.AuthorId == uid)
@@ -128,9 +145,12 @@ public sealed class EditModel(AppDbContext context, OgmaConfig config) : PageMod
 				.SetProperty(p => p.ExcerptCutoff, cutoff > 0 ? cutoff : config.BlogpostExcerptDefaultCutoff)
 				.SetProperty(p => p.WordCount, Input.Body.Words())
 				.SetProperty(b => b.Hashtags, Input.Tags.ParseHashtags().ToArray())
-				.SetProperty(b => b.PublicationDate, b => b.PublicationDate ?? (Input.Published ? DateTimeOffset.UtcNow : null))
-				.SetProperty(b => b.IsVisible, Input.Published)
+				.SetProperty(b => b.IsVisible, Input.Publish)
 				.SetProperty(b => b.IsLocked, Input.IsLocked)
+				.If(Input.Publish, usb => usb
+					.SetProperty(b => b.PublicationDate, b => b.PublicationDate ?? DateTimeOffset.UtcNow))
+				.If(schedule is not null, usb => usb
+					.SetProperty(b => b.ScheduledFor, schedule))
 			);
 
 		if (rows <= 0) return NotFound();

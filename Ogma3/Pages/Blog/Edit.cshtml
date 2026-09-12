@@ -1,4 +1,5 @@
 @page "{id:int}"
+@using Ogma3.Infrastructure.Extensions
 @using Utils.Extensions
 @model EditModel
 
@@ -48,19 +49,41 @@
 		<span asp-validation-for="Input.Tags"></span>
 	</div>
 
-	<div class="o-form-group keep-size">
-		<label asp-for="Input.Published"></label>
-		<p class="desc">Control whether the post is published or not</p>
+	<div class="form-row">
+		<div class="o-form-group">
+			<label asp-for="Input.Publish"></label>
+			<p class="desc">Control whether the post is published or not</p>
 
-		<div class="toggle-input">
-			<input asp-for="Input.Published">
+			<div class="toggle-input">
+				<input asp-for="Input.Publish">
 
-			<label asp-for="Input.Published">
-				<span class="toggle"></span>
-				<span class="label-on">On</span>
-				<span class="label-off">Off</span>
-			</label>
+				<label asp-for="Input.Publish">
+					<span class="toggle"></span>
+					<span class="label-on">Yes</span>
+					<span class="label-off">No</span>
+				</label>
+			</div>
 		</div>
+
+		@if (!Model.WasPublished)
+		{
+			<div class="o-form-group">
+				<label asp-for="Input.Schedule">
+					Schedule (@User.GetTimezone())
+				</label>
+				@{
+					var now = DateTimeOffset.UtcNow;
+					now = now.AddSeconds(-now.Second);
+				}
+				<input
+					type="datetime-local"
+					asp-for="Input.Schedule"
+					min="@Html.ToUserTime(now + TimeSpan.FromMinutes(1)).ToString("s")"
+					max="@Html.ToUserTime(now + TimeSpan.FromDays(365)).ToString("s")"
+					step="60"
+				>
+			</div>
+		}
 	</div>
 
 	<div class="o-form-group keep-size">

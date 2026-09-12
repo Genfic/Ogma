@@ -7,9 +7,8 @@ namespace Ogma3.Data.GlobalNotifications;
 
 public class GlobalNotificationConfiguration : BaseConfiguration<GlobalNotification>
 {
-	public override void Configure(EntityTypeBuilder<GlobalNotification> builder)
+	protected override void Config(EntityTypeBuilder<GlobalNotification> builder)
 	{
-		base.Configure(builder);
 
 		builder
 			.Property(n => n.Message)

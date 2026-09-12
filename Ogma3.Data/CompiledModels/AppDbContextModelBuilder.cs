@@ -12,7 +12,7 @@ namespace CompiledModels;
 public partial class AppDbContextModel
 {
     private AppDbContextModel()
-        : base(skipDetectChanges: false, modelId: new Guid("24d6dd79-0e83-46d5-b4c3-949ce93562d9"), entityTypeCount: 49)
+        : base(skipDetectChanges: false, modelId: new Guid("356ac091-60df-4101-ad57-3cbb1d35c508"), entityTypeCount: 49)
     {
     }
 
@@ -219,7 +219,7 @@ public partial class AppDbContextModel
         AddAnnotation("Npgsql:CollationDefinition:nocase", "und-u-ks-level2,und-u-ks-level2,icu,False");
         AddAnnotation("Npgsql:CollationDefinition:nocase-noaccent", "und-u-ks-level1,und-u-ks-level1,icu,False");
         AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-        AddAnnotation("ProductVersion", "11.0.0-preview.7.26381.103");
+        AddAnnotation("ProductVersion", "11.0.0-rc.1.26425.128");
         AddAnnotation("Relational:MaxIdentifierLength", 63);
     }
 }

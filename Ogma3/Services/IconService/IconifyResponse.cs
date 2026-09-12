@@ -11,6 +11,9 @@ public sealed record IconifyResponse
 	[JsonPropertyName("icons")]
 	public required Dictionary<string, Icon> Icons { get; init; }
 
+	[JsonPropertyName("aliases")]
+	public Dictionary<string, Alias> Aliases { get; init; } = new();
+
 	[JsonPropertyName("width")]
 	public required byte Width { get; init; }
 
@@ -23,6 +26,13 @@ public sealed record Icon
 {
 	[JsonPropertyName("body")]
 	public required string Body { get; init; }
+}
+
+[UsedImplicitly]
+public sealed record Alias
+{
+	[JsonPropertyName("parent")]
+	public required string Parent { get; init; }
 }
 
 [UsedImplicitly]

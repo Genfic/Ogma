@@ -8,9 +8,8 @@ namespace Ogma3.Data.Infractions;
 
 public sealed class InfractionConfig : BaseConfiguration<Infraction>
 {
-	public override void Configure(EntityTypeBuilder<Infraction> builder)
+	protected override void Config(EntityTypeBuilder<Infraction> builder)
 	{
-		base.Configure(builder);
 
 		builder.HasIndex(i => i.UserId);
 		builder.HasIndex(i => i.Type);

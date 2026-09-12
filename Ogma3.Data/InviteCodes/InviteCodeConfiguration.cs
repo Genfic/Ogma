@@ -7,9 +7,8 @@ namespace Ogma3.Data.InviteCodes;
 
 public sealed class InviteCodeConfiguration : BaseConfiguration<InviteCode>
 {
-	public override void Configure(EntityTypeBuilder<InviteCode> builder)
+	protected override void Config(EntityTypeBuilder<InviteCode> builder)
 	{
-		base.Configure(builder);
 
 		// CONSTRAINTS
 		builder

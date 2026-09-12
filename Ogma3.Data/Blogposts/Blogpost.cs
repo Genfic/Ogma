@@ -10,12 +10,13 @@ using Ogma3.Data.Users;
 namespace Ogma3.Data.Blogposts;
 
 [AutoDbSet]
-public sealed class Blogpost : BaseModel, IBlockableContent, IReportableContent, IDateableContent
+public sealed class Blogpost : BaseModel, IBlockableContent, IReportableContent, IDateableContent, ISchedulableContent
 {
 	public string Title { get; set; } = null!;
 	public string Slug { get; set; } = null!;
 	public int ExcerptCutoff { get; set; }
 	public DateTimeOffset? PublicationDate { get; set => field ??= value; } // immutable once set
+	public DateTimeOffset? ScheduledFor { get; init; }
 	public bool IsVisible { get; set; }
 	public DateTimeOffset CreationDate { get; set; }
 	public OgmaUser Author { get; set; } = null!;

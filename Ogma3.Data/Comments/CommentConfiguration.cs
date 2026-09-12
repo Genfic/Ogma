@@ -7,9 +7,8 @@ namespace Ogma3.Data.Comments;
 
 public sealed class CommentConfiguration : BaseConfiguration<Comment>
 {
-	public override void Configure(EntityTypeBuilder<Comment> builder)
+	protected override void Config(EntityTypeBuilder<Comment> builder)
 	{
-		base.Configure(builder);
 
 		// CONSTRAINTS
 		builder

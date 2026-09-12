@@ -14,9 +14,8 @@ public sealed class ChapterConfiguration : BaseConfiguration<Chapter>
 		a => a.Aggregate(0, (i, v) => HashCode.Combine(i, v.GetHashCode()))
 	);
 
-	public override void Configure(EntityTypeBuilder<Chapter> builder)
+	protected override void Config(EntityTypeBuilder<Chapter> builder)
 	{
-		base.Configure(builder);
 
 		builder
 			.HasIndex(c => c.Signature)
