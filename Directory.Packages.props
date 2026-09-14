@@ -24,7 +24,7 @@
     <PackageVersion Include="Atulin.MinHash" Version="1.0.0" />
     <PackageVersion Include="Atulin.NpgsqlSourceGenerator" Version="1.1.1" />
     <PackageVersion Include="Atulin.SealAnalyzer" Version="1.0.0" />
-    <PackageVersion Include="AWSSDK.S3" Version="4.0.103.2" />
+    <PackageVersion Include="AWSSDK.S3" Version="4.0.103.3" />
     <PackageVersion Include="Bogus" Version="35.6.5" />
     <PackageVersion Include="Chorn.EmbeddedResourceAccessGenerator" Version="1.1.5" />
     <PackageVersion Include="FluentValidation" Version="12.1.1" />
@@ -46,10 +46,12 @@
     <PackageVersion Include="Microsoft.AspNetCore.Identity.UI" Version="11.0.0-rc.1.26425.128" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="11.0.0-rc.1.26425.128 " />
     <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="11.0.0-rc.1.26425.128" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="11.0.0-rc.1.26425.128" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Abstractions" Version="11.0.0-rc.1.26425.128" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="11.0.0-rc.1.26425.128" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Proxies" Version="11.0.0-rc.1.26425.128" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="11.0.0-rc.1.26431.118" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="11.0.0-rc.1.26431.118" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="11.0.0-rc.1.26431.118" />
+    <!-- EFCore.PG 11 RC1 broken workaround  -->
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Abstractions" Version="11.0.0-rc.1.26431.118" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Proxies" Version="11.0.0-rc.1.26431.118" />
     <PackageVersion Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="11.0.0-rc.1.26425.128" />
     <PackageVersion Include="Microsoft.Extensions.Hosting" Version="11.0.0-rc.1.26425.128 " />
     <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="10.10.0" />
@@ -62,7 +64,7 @@
     <PackageVersion Include="NetEscapades.EnumGenerators" Version="1.0.0-beta21" />
     <PackageVersion Include="NetVips" Version="3.2.0" />
     <PackageVersion Include="NetVips.Native" Version="8.18.6" />
-    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="11.0.0-rc.1-ci.impatient" />
+    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="11.0.0-rc.1" />
     <PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.18.0" />
     <PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.18.0" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.18.0" />
@@ -82,10 +84,10 @@
     <PackageVersion Include="Sqids" Version="3.2.1" />
     <PackageVersion Include="stbychkov.AutoLoggerMessage" Version="1.0.17" />
     <PackageVersion Include="System.ServiceModel.Syndication" Version="11.0.0-rc.1.26425.128" />
-    <PackageVersion Include="TUnit" Version="1.66.27" />
+    <PackageVersion Include="TUnit" Version="1.67.0" />
     <PackageVersion Include="WaffleGenerator.Bogus" Version="4.3.1" />
-    <PackageVersion Include="ZiggyCreatures.FusionCache" Version="2.7.2" />
-    <PackageVersion Include="ZiggyCreatures.FusionCache.Backplane.StackExchangeRedis" Version="2.7.2" />
-    <PackageVersion Include="ZiggyCreatures.FusionCache.Serialization.CysharpMemoryPack" Version="2.7.2" />
+    <PackageVersion Include="ZiggyCreatures.FusionCache" Version="2.8.0" />
+    <PackageVersion Include="ZiggyCreatures.FusionCache.Backplane.StackExchangeRedis" Version="2.8.0" />
+    <PackageVersion Include="ZiggyCreatures.FusionCache.Serialization.CysharpMemoryPack" Version="2.8.0" />
   </ItemGroup>
 </Project>
