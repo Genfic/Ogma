@@ -14,7 +14,8 @@ using Utils.Extensions;
 namespace Ogma3.Pages.Chapters;
 
 [Authorize]
-public sealed class EditModel(
+public sealed class EditModel
+(
 	AppDbContext context,
 	MinHasher hasher,
 	ChapterService chapterService,
@@ -22,6 +23,8 @@ public sealed class EditModel(
 {
 	[BindProperty]
 	public required PostData Input { get; set; }
+
+	public required bool WasPublished { get; set; }
 
 	public async Task<IActionResult> OnGetAsync(long id)
 	{
@@ -36,7 +39,8 @@ public sealed class EditModel(
 				Body = c.Body,
 				StartNotes = c.StartNotes,
 				EndNotes = c.EndNotes,
-				IsPublished = c.IsVisible,
+				Publish = c.IsVisible,
+				Schedule = c.ScheduledFor,
 				StoryId = c.StoryId,
 			})
 			.FirstOrDefaultAsync();
@@ -57,14 +61,17 @@ public sealed class EditModel(
 		public required string? StartNotes { get; init; }
 		[Display(Name = "End notes")]
 		public required string? EndNotes { get; init; }
-		public required bool IsPublished { get; init; }
+		public required bool Publish { get; init; }
 		public required long? StoryId { get; init; }
+		public required DateTimeOffset? Schedule { get; init; }
 	}
 
 	public sealed class PostDataValidation : AbstractValidator<PostData>
 	{
 		public PostDataValidation()
 		{
+			var now = DateTimeOffset.UtcNow;
+
 			RuleFor(b => b.Title)
 				.NotEmpty()
 				.Length(CTConfig.Chapter.MinTitleLength, CTConfig.Chapter.MaxTitleLength);
@@ -75,8 +82,11 @@ public sealed class EditModel(
 				.MaximumLength(CTConfig.Chapter.MaxNotesLength);
 			RuleFor(c => c.EndNotes)
 				.MaximumLength(CTConfig.Chapter.MaxNotesLength);
-			RuleFor(c => c.IsPublished)
+			RuleFor(c => c.Publish)
 				.NotNull();
+			RuleFor(b => b.Schedule)
+				.InclusiveBetween(now + CTConfig.Publication.MinDelay, now + CTConfig.Publication.MaxDelay)
+				.When(b => b.Schedule is not null);
 		}
 	}
 
@@ -96,6 +106,10 @@ public sealed class EditModel(
 
 		if (!ModelState.IsValid) return Page();
 
+		var schedule = Input.Schedule is {} sch
+			? TimeZoneInfo.ConvertTime(sch, User.GetTimeZoneInfo()).ToUniversalTime()
+			: (DateTimeOffset?)null;
+
 		var chapterEditRows = await context.Chapters
 			.Where(c => c.Id == id)
 			.Where(c => c.Story.AuthorId == uid)
@@ -106,9 +120,12 @@ public sealed class EditModel(
 				.SetProperty(c => c.StartNotes, Input.StartNotes?.Trim())
 				.SetProperty(c => c.EndNotes, Input.EndNotes?.Trim())
 				.SetProperty(c => c.WordCount, Input.Body.Words())
-				.SetProperty(c => c.PublicationDate, c => c.PublicationDate ?? (Input.IsPublished ? DateTimeOffset.UtcNow : null))
-				.SetProperty(c => c.IsVisible, Input.IsPublished)
+				.SetProperty(c => c.IsVisible, Input.Publish)
 				.SetProperty(c => c.Signature, hasher.ComputeSignature(Input.Body.Trim()))
+				.If(Input.Publish, usb => usb
+					.SetProperty(b => b.PublicationDate, b => b.PublicationDate ?? DateTimeOffset.UtcNow))
+				.If(schedule is not null, usb => usb
+					.SetProperty(b => b.ScheduledFor, schedule))
 			);
 
 		if (chapterEditRows <= 0) return NotFound("Chapter not found");

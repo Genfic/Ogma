@@ -50,20 +50,41 @@
 		</div>
 	</div>
 
-	<div class="o-form-group keep-size">
-		<label asp-for="Input.Published"></label>
-		<p class="desc">Control whether your story is visible or not</p>
+	<div class="form-row">
+		<div class="o-form-group">
+			<label asp-for="Input.Publish"></label>
+			<p class="desc">Control whether the post is published or not</p>
 
-		<div class="toggle-input">
-			<input asp-for="Input.Published">
+			<div class="toggle-input">
+				<input asp-for="Input.Publish">
 
-			<label asp-for="Input.Published">
-				<span class="toggle"></span>
-				<span class="label-on">On</span>
-				<span class="label-off">Off</span>
-			</label>
-
+				<label asp-for="Input.Publish">
+					<span class="toggle"></span>
+					<span class="label-on">Yes</span>
+					<span class="label-off">No</span>
+				</label>
+			</div>
 		</div>
+
+		@if (!Model.WasPublished)
+		{
+			<div class="o-form-group">
+				<label asp-for="Input.Schedule">
+					Schedule (UTC)
+				</label>
+				@{
+					var now = DateTimeOffset.UtcNow;
+					now = now.AddSeconds(-now.Second);
+				}
+				<input
+					type="datetime-local"
+					asp-for="Input.Schedule"
+					min="@((now + CTConfig.Publication.MinDelay).ToString("s"))"
+					max="@((now + CTConfig.Publication.MaxDelay).ToString("s"))"
+					step="60"
+				>
+			</div>
+		}
 	</div>
 
 	<div class="o-form-group keep-size">

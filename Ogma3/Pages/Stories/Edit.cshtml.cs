@@ -52,7 +52,8 @@ public sealed class EditModel
 				Tags = story.Tags.Select(st => st.Id).ToList(),
 				ExtraTags = string.Join(", ", story.ExtraTags),
 				Status = story.Status,
-				Published = story.IsVisible,
+				Publish = story.IsVisible,
+				Schedule = story.ScheduledFor,
 				IsLocked = story.IsLocked,
 				Credits = story.Credits.Select(c => new NullableCredit(c.Role, c.Name, c.Link)).ToList(),
 			})
@@ -68,6 +69,8 @@ public sealed class EditModel
 
 	[BindProperty] public required InputModel Input { get; set; }
 
+	public required bool WasPublished { get; set; }
+
 	public sealed class InputModel
 	{
 		public required long Id { get; init; }
@@ -80,7 +83,9 @@ public sealed class EditModel
 		public required List<long> Tags { get; init; }
 		[Display(Name = "Extra tags")]
 		public string? ExtraTags { get; init; }
-		public required bool Published { get; init; }
+		public required bool Publish { get; init; }
+		public required DateTimeOffset? Schedule { get; init; }
+		[Display(Name = "Lock")]
 		public required bool IsLocked { get; init; }
 		public List<NullableCredit> Credits { get; init; } = [];
 	}
@@ -149,7 +154,7 @@ public sealed class EditModel
 
 		if (storyData is null) return NotFound();
 
-		if (storyData.PublicationDate is null && Input.Published && storyData.ChapterCount <= 0)
+		if (storyData.PublicationDate is null && Input.Publish && storyData.ChapterCount <= 0)
 		{
 			ModelState.AddModelError("", "You cannot publish a story with no chapters");
 			await Hydrate();
@@ -168,7 +173,7 @@ public sealed class EditModel
 			.ToList();
 
 		var newSlug = Input.Title.Friendlify();
-		var publishDate = storyData.PublicationDate ?? (Input.Published ? DateTimeOffset.UtcNow : null);
+		var publishDate = storyData.PublicationDate ?? (Input.Publish ? DateTimeOffset.UtcNow : null);
 
 		var extraTags = Input.ExtraTags?
 			.Split(',')
@@ -188,7 +193,7 @@ public sealed class EditModel
 				.SetProperty(s => s.Status, Input.Status)
 				.SetProperty(s => s.IsLocked, Input.IsLocked)
 				.SetProperty(s => s.PublicationDate, publishDate)
-				.SetProperty(s => s.IsVisible, Input.Published)
+				.SetProperty(s => s.IsVisible, Input.Publish)
 				.SetProperty(s => s.Credits, credits)
 				.SetProperty(s => s.ExtraTags, extraTags ?? [])
 			);

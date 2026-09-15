@@ -167,4 +167,10 @@ public static class CTConfig
 	{
 		public const string DismissedNotifications = "dismissed-notifications";
 	}
+
+	public static class Publication
+	{
+		public static readonly TimeSpan MinDelay = TimeSpan.FromMinutes(5);
+		public static readonly TimeSpan MaxDelay = TimeSpan.FromDays(365 * 5);
+	}
 }

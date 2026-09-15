@@ -115,5 +115,9 @@
 	},
 	"Cookies": {
 		"DismissedNotifications": "dismissed-notifications"
+	},
+	"Publication": {
+		"MinDelay": "TimeSpan.FromMinutes(5)",
+		"MaxDelay": "TimeSpan.FromDays(365 * 5)"
 	}
 }

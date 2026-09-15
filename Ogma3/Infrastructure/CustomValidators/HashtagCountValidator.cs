@@ -22,7 +22,7 @@ public sealed class HashtagCountValidator<T>(uint max) : IPropertyValidator<T, s
 			return true;
 		}
 
-		var span = value.Trim(',').AsSpan();
+		var span = value.AsSpan().Trim(',');
 		if (span.IsEmpty)
 		{
 			return true;

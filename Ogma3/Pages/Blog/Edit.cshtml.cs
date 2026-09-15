@@ -32,14 +32,14 @@ public sealed class EditModel(AppDbContext context, OgmaConfig config) : PageMod
 		var input = await context.Blogposts
 			.Where(m => m.Id == id)
 			.Where(b => b.AuthorId == uid)
-			.Select(b => new ExtendedData
+			.Select(b => new PostData
 			{
 				Id = b.Id,
 				Title = b.Title,
 				Body = b.Body,
 				Tags = string.Join(", ", b.Hashtags),
 				Publish = b.IsVisible,
-				WasPublished = b.PublicationDate != null,
+				PublicationDate = b.PublicationDate,
 				Schedule = b.ScheduledFor,
 				IsLocked = b.IsLocked,
 				AttachedChapter = b.AttachedChapter == null ? null : new ChapterMinimal
@@ -68,35 +68,33 @@ public sealed class EditModel(AppDbContext context, OgmaConfig config) : PageMod
 
 		if (input is null) return NotFound();
 
-		WasPublished = input.WasPublished;
+		WasPublished = input.PublicationDate != null;
 		Input = input;
 
 		return Page();
 	}
 
-	public class PostData
+	public sealed class PostData
 	{
 		public required long Id { get; init; }
 		public required string Title { get; init; }
 		public required string Body { get; init; }
+		public DateTimeOffset? PublicationDate { get; init; }
 		public string? Tags { get; init; }
 		public required ChapterMinimal? AttachedChapter { get; init; }
 		public required StoryMinimal? AttachedStory { get; init; }
 		public required bool Publish { get; init; }
-		public DateTimeOffset? Schedule { get; init; }
+		public required DateTimeOffset? Schedule { get; init; }
 		[DisplayName("Lock")]
 		public required bool IsLocked { get; init; }
-	}
-
-	public sealed class ExtendedData : PostData
-	{
-		public required bool WasPublished { get; init; }
 	}
 
 	public sealed class PostDataValidation : AbstractValidator<PostData>
 	{
 		public PostDataValidation()
 		{
+			var now = DateTimeOffset.UtcNow;
+
 			RuleFor(b => b.Title)
 				.NotEmpty()
 				.Length(CTConfig.Blogpost.MinTitleLength, CTConfig.Blogpost.MaxTitleLength);
@@ -107,6 +105,9 @@ public sealed class EditModel(AppDbContext context, OgmaConfig config) : PageMod
 				.HashtagsFewerThan(CTConfig.Blogpost.MaxTagsAmount)
 				.HashtagsShorterThan(CTConfig.Blogpost.MaxTagLength)
 				.When(b => b.Tags is not null);
+			RuleFor(b => b.Schedule)
+				.InclusiveBetween(now + CTConfig.Publication.MinDelay, now + CTConfig.Publication.MaxDelay)
+				.When(b => b.Schedule is not null);
 		}
 	}
 

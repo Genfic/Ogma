@@ -118,3 +118,8 @@ export const Cookies = {
 	DismissedNotifications: "dismissed-notifications",
 } as const;
 
+export const Publication = {
+	MinDelay: "TimeSpan.FromMinutes(5)",
+	MaxDelay: "TimeSpan.FromDays(365 * 5)",
+} as const;
+

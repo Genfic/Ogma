@@ -24,7 +24,6 @@ using Ogma3.Data.Roles;
 using Ogma3.Data.Users;
 using Ogma3.Infrastructure.Attributes;
 using Ogma3.Infrastructure.Compression;
-using Ogma3.Infrastructure.Constants;
 using Ogma3.Infrastructure.Constraints;
 using Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
 using Ogma3.Infrastructure.Extensions;
