@@ -13,6 +13,11 @@
 		<SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
+		<SelfContained>true</SelfContained>
+		<RuntimeIdentifier>linux-x64</RuntimeIdentifier>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<AdditionalFiles Include="$(SolutionDir)/BannedSymbols.txt" />
 	</ItemGroup>
