@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Ogma3.Data;
@@ -18,14 +19,11 @@ using Ogma3.Data.Stories;
 namespace Ogma3.Data.Migrations;
 
 [DbContext(typeof(AppDbContext))]
-partial class AppDbContextModelSnapshot : ModelSnapshot
+[Migration("20260916191859_FixedBlogpostHashtagFilteringMaybe")]
+partial class _20260916191859_FixedBlogpostHashtagFilteringMaybe
 {
-    // If you encounter a merge conflict in the line below, it means you need to
-    // discard one of the migration branches and recreate its migrations on top of
-    // the other branch. See https://aka.ms/efcore-docs-migrations-conflicts for more info.
-    public override string LastMigrationId => "20260916193234_FixedBlogpostHashtagFiltering";
-
-    protected override void BuildModel(ModelBuilder modelBuilder)
+    /// <inheritdoc />
+    protected override void BuildTargetModel(ModelBuilder modelBuilder)
     {
 #pragma warning disable 612, 618
         modelBuilder
@@ -289,11 +287,10 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                     .HasColumnType("integer")
                     .HasDefaultValue(200);
 
-                b.PrimitiveCollection<string[]>("Hashtags")
+                b.Property<string[]>("Hashtags")
                     .IsRequired()
                     .ValueGeneratedOnAdd()
-                    .HasMaxLength(20)
-                    .HasColumnType("character varying(20)[]")
+                    .HasColumnType("text[]")
                     .HasDefaultValue(new string[0]);
 
                 b.Property<bool>("IsLocked")

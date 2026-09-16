@@ -16,7 +16,6 @@
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Proxies"/>
 		<PackageReference Include="NetEscapades.EnumGenerators"/>
 		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL"/>
 		<PackageReference Include="Serilog" />

@@ -10,7 +10,6 @@ public sealed class BlogpostConfiguration : BaseConfiguration<Blogpost>
 {
 	protected override void Config(EntityTypeBuilder<Blogpost> builder)
 	{
-
 		// CONSTRAINTS
 		builder
 			.Property(b => b.Title)
@@ -60,10 +59,11 @@ public sealed class BlogpostConfiguration : BaseConfiguration<Blogpost>
 			.HasDefaultValue(0);
 
 		builder
-			.Property(b => b.Hashtags)
+			.PrimitiveCollection(b => b.Hashtags)
 			.IsRequired()
-			.HasMaxLength(CTConfig.Blogpost.MaxTagsAmount)
-			.HasDefaultValue(Array.Empty<string>());
+			.HasDefaultValue(Array.Empty<string>())
+			.ElementType(e => e.HasMaxLength(CTConfig.Blogpost.MaxTagLength))
+			.HasMaxLength(CTConfig.Blogpost.MaxTagsAmount);
 
 
 		// NAVIGATION

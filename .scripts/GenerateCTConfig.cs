@@ -100,7 +100,67 @@ static object? ParseValue(ExpressionSyntax? expr, Dictionary<string, object> sco
 			_ => [],
 		}).ToArray(),
 
+		InvocationExpressionSyntax inv when TryEvalExpression(inv, scope, out var result) => result,
+
 		not null => expr.ToString(),
+		_ => null,
+	};
+
+static bool TryEvalExpression(InvocationExpressionSyntax inv, Dictionary<string, object> scope, out object? result)
+{
+	result = null;
+
+	if (inv.Expression is not MemberAccessExpressionSyntax member)
+	{
+		return false;
+	}
+
+	if (member.Expression is not IdentifierNameSyntax typeName)
+	{
+		return false;
+	}
+
+	switch (typeName.Identifier.Text)
+	{
+		case nameof(TimeSpan):
+			if (inv.ArgumentList.Arguments is not [var arg])
+			{
+				return false;
+			}
+
+			var value = ParseValue(arg.Expression, scope);
+
+			result = member.Name.Identifier.Text switch
+			{
+				"FromDays" when ToDouble(value) is { } days
+					=> TimeSpan.FromDays(days),
+				"FromHours" when ToDouble(value) is { } hours
+					=> TimeSpan.FromHours(hours),
+				"FromMinutes" when ToDouble(value) is { } minutes
+					=> TimeSpan.FromMinutes(minutes),
+				"FromSeconds" when ToDouble(value) is { } seconds
+					=> TimeSpan.FromSeconds(seconds),
+				"FromMilliseconds" when ToDouble(value) is { } milliseconds
+					=> TimeSpan.FromMilliseconds(milliseconds),
+
+				_ => null,
+			};
+			return result is not null;
+	}
+
+	return false;
+}
+
+static double? ToDouble(object? value)
+	=> value switch
+	{
+		byte v => v,
+		short v => v,
+		int v => v,
+		long v => v,
+		float v => v,
+		double v => v,
+		decimal v => (double)v,
 		_ => null,
 	};
 
@@ -153,5 +213,6 @@ static string ToTs(object? value)
 		string s => $"\"{s}\"",
 		bool b => b ? "true" : "false",
 		object?[] arr => $"[{string.Join(", ", arr.Select(ToTs))}]",
+		object o => '"' + o.ToString() + '"',
 		_ => value?.ToString() ?? "null",
 	};

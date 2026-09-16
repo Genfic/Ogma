@@ -78,7 +78,7 @@
 		"MinBodyLength": 50,
 		"MaxBodyLength": 500000,
 		"ValidateLengthMsg": "The {0} must be at least {2} and at most {1} characters long.",
-		"MaxTagsAmount": 10,
+		"MaxTagsAmount": 20,
 		"MaxTagLength": 20,
 		"ValidateTagsCountMsg": "The {0} can have a maximum of {1} tags.",
 		"CutoffMarker": "\u003C!-- read more --\u003E"
@@ -117,7 +117,7 @@
 		"DismissedNotifications": "dismissed-notifications"
 	},
 	"Publication": {
-		"MinDelay": "TimeSpan.FromMinutes(5)",
-		"MaxDelay": "TimeSpan.FromDays(365 * 5)"
+		"MinDelay": "00:05:00",
+		"MaxDelay": "1825.00:00:00"
 	}
 }

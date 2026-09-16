@@ -109,7 +109,7 @@ public static class CTConfig
 
 		public const string ValidateLengthMsg = "The {0} must be at least {2} and at most {1} characters long.";
 
-		public const int MaxTagsAmount = 10;
+		public const int MaxTagsAmount = 20;
 		public const int MaxTagLength = 20;
 		public const string ValidateTagsCountMsg = "The {0} can have a maximum of {1} tags.";
 

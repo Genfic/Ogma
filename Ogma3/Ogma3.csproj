@@ -106,7 +106,6 @@
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Proxies"/>
 		<PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis"/>
 		<PackageReference Include="Microsoft.IO.RecyclableMemoryStream"/>
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets"/>
