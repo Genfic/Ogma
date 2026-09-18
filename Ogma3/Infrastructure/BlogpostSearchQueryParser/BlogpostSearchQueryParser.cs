@@ -56,7 +56,7 @@ public static class BlogpostSearchQueryParser
 
 		if (segment.StartsWith(authorPrefix, StringComparison.OrdinalIgnoreCase))
 		{
-			return new BlogpostAuthorToken(segment[authorPrefix.Length..].Trim().ToString());
+			return new BlogpostAuthorToken(segment[authorPrefix.Length..].Trim().ToString(), negated);
 		}
 
 		// plain tag

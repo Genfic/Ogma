@@ -56,6 +56,7 @@ Ogma3/logger-tokens.txt
 *.report.html
 *.diag.json
 *.binlog
+TestResults/
 
 # Experimental
 Ogma3/wwwroot/lib/comments/

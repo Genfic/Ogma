@@ -34,7 +34,7 @@ public sealed class FileExtensionValidator<T>(string[] allowedExtensions) : Prop
 		return false;
 	}
 
-	public override string Name => "FileSizeValidator";
+	public override string Name => "FileExtensionValidator";
 
 	protected override string GetDefaultMessageTemplate(string errorCode)
 		=> "Only allowed extensions are {AllowedExtensions}. Your file is {ActualExtension}.";

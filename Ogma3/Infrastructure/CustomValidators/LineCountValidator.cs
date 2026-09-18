@@ -15,7 +15,7 @@ public sealed class LineCountValidator<T>(uint max) : PropertyValidator<T, strin
 			return true;
 		}
 
-		context.MessageFormatter.AppendArgument("MaxLines", max);
+		context.MessageFormatter.AppendArgument("MaxElements", max);
 		return false;
 	}
 
