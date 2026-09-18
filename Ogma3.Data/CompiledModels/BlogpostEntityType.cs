@@ -64,8 +64,10 @@ public partial class BlogpostEntityType
             typeof(long),
             propertyInfo: typeof(Blogpost).GetProperty("AuthorId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
             fieldInfo: typeof(Blogpost).GetField("<AuthorId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            valueGenerated: ValueGenerated.OnAdd,
             sentinel: 0L);
         authorId.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+        authorId.AddAnnotation("Relational:DefaultValue", -1L);
 
         var body = runtimeEntityType.AddProperty(
             "Body",
@@ -247,7 +249,7 @@ public partial class BlogpostEntityType
         var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("AuthorId") },
             principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id") }),
             principalEntityType,
-            deleteBehavior: DeleteBehavior.Cascade,
+            deleteBehavior: DeleteBehavior.SetDefault,
             required: true);
 
         var author = declaringEntityType.AddNavigation("Author",

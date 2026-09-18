@@ -32,11 +32,17 @@ public sealed class CommentConfiguration : BaseConfiguration<Comment>
 		// NAVIGATION
 		builder
 			.HasOne(c => c.Author)
-			.WithMany();
+			.WithMany()
+			.OnDelete(DeleteBehavior.SetDefault);
+		builder
+			.Property(c => c.AuthorId)
+			.HasDefaultValue(SystemUserConstants.Deleted.Id);
 
 		builder
 			.HasOne(c => c.DeletedByUser)
-			.WithMany();
+			.WithMany()
+			.HasForeignKey(c => c.DeletedByUserId)
+			.OnDelete(DeleteBehavior.SetNull);
 
 		builder
 			.HasMany(c => c.Reports)

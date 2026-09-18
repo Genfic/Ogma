@@ -105,7 +105,11 @@ public sealed class StoryConfiguration : BaseConfiguration<Story>
 		builder
 			.HasOne(s => s.Author)
 			.WithMany(u => u.Stories)
-			.HasForeignKey(s => s.AuthorId);
+			.HasForeignKey(s => s.AuthorId)
+			.OnDelete(DeleteBehavior.SetDefault);
+		builder
+			.Property(s => s.AuthorId)
+			.HasDefaultValue(SystemUserConstants.Deleted.Id);
 
 		builder
 			.HasMany(s => s.Votes)

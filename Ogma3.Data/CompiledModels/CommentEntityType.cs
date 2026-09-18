@@ -46,8 +46,10 @@ public partial class CommentEntityType
             typeof(long),
             propertyInfo: typeof(Comment).GetProperty("AuthorId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
             fieldInfo: typeof(Comment).GetField("<AuthorId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            valueGenerated: ValueGenerated.OnAdd,
             sentinel: 0L);
         authorId.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+        authorId.AddAnnotation("Relational:DefaultValue", -1L);
 
         var body = runtimeEntityType.AddProperty(
             "Body",
@@ -112,7 +114,7 @@ public partial class CommentEntityType
         var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("AuthorId") },
             principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id") }),
             principalEntityType,
-            deleteBehavior: DeleteBehavior.Cascade,
+            deleteBehavior: DeleteBehavior.SetDefault,
             required: true);
 
         var author = declaringEntityType.AddNavigation("Author",
@@ -154,7 +156,8 @@ public partial class CommentEntityType
     {
         var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("DeletedByUserId") },
             principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id") }),
-            principalEntityType);
+            principalEntityType,
+            deleteBehavior: DeleteBehavior.SetNull);
 
         var deletedByUser = declaringEntityType.AddNavigation("DeletedByUser",
             runtimeForeignKey,

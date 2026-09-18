@@ -72,7 +72,10 @@ public sealed class BlogpostConfiguration : BaseConfiguration<Blogpost>
 			.HasOne(b => b.Author)
 			.WithMany(u => u.Blogposts)
 			.HasForeignKey(b => b.AuthorId)
-			.OnDelete(DeleteBehavior.Cascade);
+			.OnDelete(DeleteBehavior.SetDefault);
+		builder
+			.Property(b => b.AuthorId)
+			.HasDefaultValue(SystemUserConstants.Deleted.Id);
 
 		builder
 			.HasOne(b => b.CommentThread)

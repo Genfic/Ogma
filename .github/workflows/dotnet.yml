@@ -27,7 +27,7 @@ jobs:
           source-url: https://nuget.pkg.github.com/atulin/index.json
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore -c Release
 
       - name: Build
         run: dotnet build -c Release --no-restore
