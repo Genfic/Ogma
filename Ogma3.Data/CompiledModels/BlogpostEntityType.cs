@@ -108,8 +108,7 @@ public partial class BlogpostEntityType
             typeof(string[]),
             propertyInfo: typeof(Blogpost).GetProperty("Hashtags", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
             fieldInfo: typeof(Blogpost).GetField("<Hashtags>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-            valueGenerated: ValueGenerated.OnAdd,
-            maxLength: 20);
+            valueGenerated: ValueGenerated.OnAdd);
         var hashtagsElementType = hashtags.SetElementType(typeof(string),
             maxLength: 20);
         hashtags.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
@@ -194,7 +193,6 @@ public partial class BlogpostEntityType
 
         var index3 = runtimeEntityType.AddIndex(
             new[] { hashtags });
-        index3.AddAnnotation("Relational:Collation", new[] { "nocase-noaccent" });
         index3.AddAnnotation("Relational:Filter", "\"IsVisible\"");
 
         var index4 = runtimeEntityType.AddIndex(

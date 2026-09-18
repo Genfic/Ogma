@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Ogma3.Data.CommentsThreads;
 using Ogma3.Data.Constants;
+using Ogma3.Data.Helpers;
 
 namespace Ogma3.Data.Users;
 
@@ -57,10 +58,11 @@ public sealed class OgmaUserConfiguration : IEntityTypeConfiguration<OgmaUser>
 			.HasMaxLength(CTConfig.User.MaxBioLength);
 
 		builder
-			.Property(u => u.Links)
+			.PrimitiveCollection(u => u.Links)
 			.IsRequired()
-			.HasMaxLength(CTConfig.User.MaxLinksAmount)
 			.HasDefaultValueSql(PgConstants.EmptyArray);
+		builder
+			.HasMaxCardinality(u => u.Links, CTConfig.User.MaxLinksAmount);
 
 		builder
 			.Property(u => u.RegistrationDate)

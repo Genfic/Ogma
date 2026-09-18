@@ -57,10 +57,9 @@ resharper_web_config_wrong_module_highlighting = warning
 tab_width = 4
 
 [*.{cs,cshtml}]
-# Roslynator.Analyzers rules
 dotnet_diagnostic.rcs1260.severity = warning
-roslynator_trailing_comma_style = omit_when_single_line
-# Roslyn.Analyzers rules
+dotnet_diagnostic.IDE0001.severity = warning
+dotnet_diagnostic.IDE0002.severity = warning
 dotnet_diagnostic.ASYNC0004.severity = silent # use ConfigureAwait()
 dotnet_diagnostic_ASYNC0001.severity = silent # suffix async classes with *Async
 

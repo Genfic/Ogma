@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Ogma3.Data.Bases;
 using Ogma3.Data.CommentsThreads;
 using Ogma3.Data.Constants;
+using Ogma3.Data.Helpers;
 
 namespace Ogma3.Data.Blogposts;
 
@@ -23,8 +24,7 @@ public sealed class BlogpostConfiguration : BaseConfiguration<Blogpost>
 		builder
 			.HasIndex(b => b.Hashtags)
 			.HasMethod(PgConstants.IndexTypes.Gin)
-			.HasFilter($"\"{nameof(Blogpost.IsVisible)}\"")
-			.UseCollation(PgConstants.CollationNames.CaseInsensitiveNoAccent);
+			.HasFilter($"\"{nameof(Blogpost.IsVisible)}\"");
 
 		builder
 			.Property(b => b.Slug)
@@ -62,8 +62,9 @@ public sealed class BlogpostConfiguration : BaseConfiguration<Blogpost>
 			.PrimitiveCollection(b => b.Hashtags)
 			.IsRequired()
 			.HasDefaultValue(Array.Empty<string>())
-			.ElementType(e => e.HasMaxLength(CTConfig.Blogpost.MaxTagLength))
-			.HasMaxLength(CTConfig.Blogpost.MaxTagsAmount);
+			.ElementType(e => e.HasMaxLength(CTConfig.Blogpost.MaxTagLength));
+		builder
+			.HasMaxCardinality(b => b.Hashtags, CTConfig.Blogpost.MaxTagsAmount);
 
 
 		// NAVIGATION

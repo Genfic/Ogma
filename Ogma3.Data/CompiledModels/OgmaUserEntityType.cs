@@ -118,8 +118,8 @@ public partial class OgmaUserEntityType
             typeof(List<string>),
             propertyInfo: typeof(OgmaUser).GetProperty("Links", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
             fieldInfo: typeof(OgmaUser).GetField("<Links>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-            valueGenerated: ValueGenerated.OnAdd,
-            maxLength: 5);
+            valueGenerated: ValueGenerated.OnAdd);
+        var linksElementType = links.SetElementType(typeof(string));
         links.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
         links.AddAnnotation("Relational:DefaultValueSql", "'{}'");
 

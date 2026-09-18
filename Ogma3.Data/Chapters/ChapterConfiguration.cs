@@ -9,7 +9,7 @@ namespace Ogma3.Data.Chapters;
 
 public sealed class ChapterConfiguration : BaseConfiguration<Chapter>
 {
-	private readonly ValueComparer<uint[]> _uintArrayComparer = new(
+	private static readonly ValueComparer<uint[]> UintArrayComparer = new(
 		(a, b) => (a == null && b == null) || (a != null && b != null && Enumerable.SequenceEqual(a, b)),
 		a => a.Aggregate(0, (i, v) => HashCode.Combine(i, v.GetHashCode()))
 	);
@@ -63,13 +63,15 @@ public sealed class ChapterConfiguration : BaseConfiguration<Chapter>
 			.IsRequired(false)
 			.HasMaxLength(CTConfig.Chapter.MaxNotesLength);
 
+		// NOTE: Not `.PrimitiveCollection()` because `PrimitiveCollectionBuilder<T>` does not have `.HasConversion()`
+		//       Depends on https://github.com/npgsql/efcore.pg/issues/3636 to be resolved
 		builder
 			.Property(c => c.Signature)
 			.HasColumnType(PgConstants.Types.IntArray)
 			.HasConversion(
-				v => Array.ConvertAll(v, i => (int)i),
-				v => Array.ConvertAll(v, i => (uint)i),
-				_uintArrayComparer
+				v => Array.ConvertAll(v, i => unchecked((int)i)),
+				v => Array.ConvertAll(v, i => unchecked((uint)i)),
+				UintArrayComparer
 			);
 
 		// NAVIGATION
