@@ -77,4 +77,34 @@ public sealed class TimeTests
 		
 		await Assert.That(result).Contains("11th");
 	}
+
+	[Test]
+	[Arguments(1, "I")]
+	[Arguments(2, "II")]
+	[Arguments(3, "III")]
+	[Arguments(4, "IV")]
+	[Arguments(5, "V")]
+	[Arguments(6, "VI")]
+	[Arguments(7, "VII")]
+	[Arguments(8, "VIII")]
+	[Arguments(9, "IX")]
+	[Arguments(10, "X")]
+	[Arguments(11, "XI")]
+	[Arguments(12, "XII")]
+	public async Task FormatDateWithRomanMonth_DateTime(int month, string expectedRoman)
+	{
+		var date = new DateTime(2023, month, 5);
+		var result = date.FormatDateWithRomanMonth();
+
+		await Assert.That(result).IsEqualTo($"05 {expectedRoman} 2023");
+	}
+
+	[Test]
+	public async Task FormatDateWithRomanMonth_DateTimeOffset()
+	{
+		var date = new DateTimeOffset(2023, 12, 31, 0, 0, 0, TimeSpan.Zero);
+		var result = date.FormatDateWithRomanMonth();
+
+		await Assert.That(result).IsEqualTo("31 XII 2023");
+	}
 }

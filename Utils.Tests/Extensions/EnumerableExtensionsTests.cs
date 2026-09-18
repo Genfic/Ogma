@@ -11,7 +11,7 @@ public sealed class EnumerableExtensionsTests
 	{
 		var input = new[] { 1, 2, 3 };
 		var result = input.Tap(x => x.ToString()).ToList();
-		
+
 		await Assert.That(result.Count()).IsEqualTo(3);
 		await Assert.That(result[0]).IsEqualTo(1);
 		await Assert.That(result[1]).IsEqualTo(2);
@@ -23,7 +23,7 @@ public sealed class EnumerableExtensionsTests
 	{
 		var input = Array.Empty<int>();
 		var result = input.Tap(x => x.ToString()).ToList();
-		
+
 		await Assert.That(result).IsEmpty();
 	}
 
@@ -32,7 +32,7 @@ public sealed class EnumerableExtensionsTests
 	{
 		var input = new[] { 42 };
 		var result = input.Tap(x => x.ToString()).ToList();
-		
+
 		await Assert.That(result.Count()).IsEqualTo(1);
 		await Assert.That(result[0]).IsEqualTo(42);
 	}
@@ -47,9 +47,9 @@ public sealed class EnumerableExtensionsTests
 			new MockGrouping(2, ["c", "d"]),
 			new MockGrouping(3, ["e", "f"])
 		};
-		
+
 		var result = groupings.GetValues(key => key == 1 || key == 2).ToList();
-		
+
 		await Assert.That(result.Count()).IsEqualTo(4);
 		await Assert.That(result).Contains("a");
 		await Assert.That(result).Contains("b");
@@ -63,8 +63,8 @@ public sealed class EnumerableExtensionsTests
 	public async Task GetValues_Empty()
 	{
 		var groups = new List<IGrouping<int, string>>();
-		var result = groups.GetValues(key => true).ToList();
-		
+		var result = groups.GetValues(_ => true).ToList();
+
 		await Assert.That(result).IsEmpty();
 	}
 
@@ -74,11 +74,11 @@ public sealed class EnumerableExtensionsTests
 		var groups = new IGrouping<int, string>[]
 		{
 			new MockGrouping(1, ["a", "b"]),
-			new MockGrouping(2, ["c"])
+			new MockGrouping(2, ["c"]),
 		};
-		
+
 		var result = groups.GetValues(key => key > 10).ToList();
-		
+
 		await Assert.That(result).IsEmpty();
 	}
 
@@ -88,30 +88,64 @@ public sealed class EnumerableExtensionsTests
 		var groups = new IGrouping<int, string>[]
 		{
 			new MockGrouping(1, ["a"]),
-			new MockGrouping(2, ["b"])
+			new MockGrouping(2, ["b"]),
 		};
-		
+
 		var result = groups.GetValues(key => key > 0).ToList();
-		
-		await Assert.That(result.Count()).IsEqualTo(2);
+
+		await Assert.That(result.Count).IsEqualTo(2);
 		await Assert.That(result).Contains("a");
 		await Assert.That(result).Contains("b");
 	}
 
-	// Helper class to mock IGrouping
-	private sealed class MockGrouping : IGrouping<int, string>
+	// Test None()
+	[Test]
+	public async Task None_NoMatch_ReturnsTrue()
 	{
-		public int Key { get; }
-		private readonly IEnumerable<string> _items;
-		
-		public MockGrouping(int key, IEnumerable<string> items)
-		{
-			Key = key;
-			_items = items;
-		}
-		
-		public IEnumerator<string> GetEnumerator() => _items.GetEnumerator();
-		
+		var input = new[] { 1, 2, 3 };
+		var result = input.None(x => x > 10);
+
+		await Assert.That(result).IsTrue();
+	}
+
+	[Test]
+	public async Task None_SomeMatch_ReturnsFalse()
+	{
+		var input = new[] { 1, 2, 3 };
+		var result = input.None(x => x == 2);
+
+		await Assert.That(result).IsFalse();
+	}
+
+	[Test]
+	public async Task None_EmptySource_ReturnsTrue()
+	{
+		var result = Array.Empty<int>().None(_ => true);
+
+		await Assert.That(result).IsTrue();
+	}
+
+	[Test]
+	public async Task None_NullSource_Throws()
+	{
+		IEnumerable<int>? source = null;
+		await Assert.That(() => source!.None(_ => true)).Throws<ArgumentNullException>();
+	}
+
+	[Test]
+	public async Task None_NullPredicate_Throws()
+	{
+		Func<int, bool>? predicate = null;
+		await Assert.That(() => new[] { 1 }.None(predicate!)).Throws<ArgumentNullException>();
+	}
+
+	// Helper class to mock IGrouping
+	private sealed class MockGrouping(int key, IEnumerable<string> items) : IGrouping<int, string>
+	{
+		public int Key { get; } = key;
+
+		public IEnumerator<string> GetEnumerator() => items.GetEnumerator();
+
 		IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 	}
 }

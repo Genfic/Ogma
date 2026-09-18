@@ -200,6 +200,100 @@ public sealed class StringExtensionsTests
 		await Assert.That(result).IsEqualTo("Hello, Wor---");
 	}
 
+	[Test]
+	public async Task Obfuscate_ShorterThanDefaultMax()
+	{
+		const string input = "Hi";
+		var result = input.Obfuscate();
+
+		await Assert.That(result).IsEqualTo("H*");
+	}
+
+	[Test]
+	public async Task Obfuscate_ShorterThanMax()
+	{
+		const string input = "hello";
+		var result = input.Obfuscate(10);
+
+		await Assert.That(result).IsEqualTo("he***");
+	}
+
+	// Test ReadUntil
+	[Test]
+	public async Task ReadUntil_Found()
+	{
+		var input = "hello world".AsSpan();
+		var result = input.ReadUntil("world");
+
+		await Assert.That(result.ToString()).IsEqualTo("hello ");
+	}
+
+	[Test]
+	public async Task ReadUntil_NotFound()
+	{
+		var input = "hello".AsSpan();
+		var result = input.ReadUntil("xyz");
+
+		await Assert.That(result.ToString()).IsEqualTo("hello");
+	}
+
+	[Test]
+	public async Task ReadUntil_EmptySpan()
+	{
+		var result = ReadOnlySpan<char>.Empty.ReadUntil("abc");
+
+		await Assert.That(result.ToString()).IsEqualTo("");
+	}
+
+	[Test]
+	public async Task ReadUntil_IgnoreCase()
+	{
+		var input = "Hello World".AsSpan();
+		var result = input.ReadUntil("WORLD", StringComparison.OrdinalIgnoreCase);
+
+		await Assert.That(result.ToString()).IsEqualTo("Hello ");
+	}
+
+	// Test RemoveChar
+	[Test]
+	public async Task RemoveChar_RemovesAll()
+	{
+		var input = "a-b-c".AsSpan();
+		Span<char> buffer = stackalloc char[input.Length];
+		var result = input.RemoveChar('-', buffer);
+
+		await Assert.That(result.ToString()).IsEqualTo("abc");
+	}
+
+	[Test]
+	public async Task RemoveChar_NoOccurrence()
+	{
+		var input = "abc".AsSpan();
+		Span<char> buffer = stackalloc char[input.Length];
+		var result = input.RemoveChar('-', buffer);
+
+		await Assert.That(result.ToString()).IsEqualTo("abc");
+	}
+
+	[Test]
+	public async Task RemoveChar_EmptySpan()
+	{
+		Span<char> buffer = new char[8];
+		var result = ReadOnlySpan<char>.Empty.RemoveChar('-', buffer);
+
+		await Assert.That(result.ToString()).IsEqualTo("");
+	}
+
+	[Test]
+	public async Task RemoveChar_LeadingAndTrailing()
+	{
+		var input = "-abc-".AsSpan();
+		Span<char> buffer = stackalloc char[input.Length];
+		var result = input.RemoveChar('-', buffer);
+
+		await Assert.That(result.ToString()).IsEqualTo("abc");
+	}
+
 	// Test FindHashtags
 	[Test]
 	public async Task FindHashtags_None()
@@ -529,7 +623,7 @@ public sealed class StringExtensionsTests
 	[Test]
 	public async Task ParseHashtags_EmptyString()
 	{
-		var result = String.ParseHashtags("");
+		var result = "".ParseHashtags();
 
 		await Assert.That(result).IsEmpty();
 	}
@@ -537,7 +631,7 @@ public sealed class StringExtensionsTests
 	[Test]
 	public async Task ParseHashtags_SingleHashtag()
 	{
-		var result = String.ParseHashtags("#tag1");
+		var result = "#tag1".ParseHashtags();
 
 		await Assert.That(result.Count()).IsEqualTo(1);
 		await Assert.That(result[0]).IsEqualTo("tag1");
@@ -546,7 +640,7 @@ public sealed class StringExtensionsTests
 	[Test]
 	public async Task ParseHashtags_MultipleHashtags()
 	{
-		var result = String.ParseHashtags("#tag1, #tag2, #tag3");
+		var result = "#tag1, #tag2, #tag3".ParseHashtags();
 
 		await Assert.That(result.Count()).IsEqualTo(3);
 		await Assert.That(result).Contains("tag1");
@@ -557,7 +651,7 @@ public sealed class StringExtensionsTests
 	[Test]
 	public async Task ParseHashtags_WithHashPrefix()
 	{
-		var result = String.ParseHashtags("#tag1");
+		var result = "#tag1".ParseHashtags();
 
 		await Assert.That(result[0]).IsEqualTo("tag1");
 	}
@@ -565,7 +659,7 @@ public sealed class StringExtensionsTests
 	[Test]
 	public async Task ParseHashtags_DuplicatesRemoved()
 	{
-		var result = String.ParseHashtags("#tag1, #tag1, #tag2");
+		var result = "#tag1, #tag1, #tag2".ParseHashtags();
 
 		await Assert.That(result.Count()).IsEqualTo(2);
 	}
@@ -573,8 +667,49 @@ public sealed class StringExtensionsTests
 	[Test]
 	public async Task ParseHashtags_WithWhitespace()
 	{
-		var result = String.ParseHashtags("  #tag1  ,  #tag2  ");
+		var result = "  #tag1  ,  #tag2  ".ParseHashtags();
 
 		await Assert.That(result.Count()).IsEqualTo(2);
+	}
+
+	[Test]
+	public async Task ParseHashtags_WithoutHashPrefix()
+	{
+		var result = "aaa, bbb, ccc".ParseHashtags();
+
+		await Assert.That(result).IsEquivalentTo(["aaa", "bbb", "ccc"]);
+	}
+
+	[Test]
+	public async Task ParseHashtags_HashWithSpaceInside()
+	{
+		var result = "#aaa,  #bbb  , #  ccc".ParseHashtags();
+
+		await Assert.That(result).IsEquivalentTo(["aaa", "bbb", "ccc"]);
+	}
+
+	[Test]
+	public async Task FindHashtags_Malformed()
+	{
+		var result = "#one#two #buckle/my/shoe #three!@#$%^&*()_+-={}[]:\";'<>?,./~`".FindHashtags();
+
+		await Assert.That(result).IsEmpty();
+	}
+
+	[Test]
+	public async Task FindHashtags_WellFormed()
+	{
+		var result = "#one two #buckle-my shoe #3_4 buckle #some #m #or #e #yeeeeah".FindHashtags();
+
+		await Assert.That(result).IsEquivalentTo(["#one", "#buckle-my", "#3_4", "#some", "#yeeeeah"]);
+	}
+
+	[Test]
+	public async Task Friendlify_WithNumbersAndPluses()
+	{
+		const string input = "aBcD.eFgH iJk++++++L 190.21";
+		var result = input.Friendlify();
+
+		await Assert.That(result).IsEqualTo("abcd-efgh-ijk-l-190-21");
 	}
 }

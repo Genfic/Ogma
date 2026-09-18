@@ -5,9 +5,9 @@ public sealed class GravatarTests
 	[Test]
 	public async Task Generate_BasicEmail()
 	{
-		var email = "test@example.com";
+		const string email = "test@example.com";
 		var result = Gravatar.Generate(email);
-		
+
 		await Assert.That(result).IsNotNull();
 		await Assert.That(result).StartsWith("https://www.gravatar.com/avatar/");
 		await Assert.That(result).DoesNotContain("?");
@@ -16,9 +16,9 @@ public sealed class GravatarTests
 	[Test]
 	public async Task Generate_EmailWithWhitespace()
 	{
-		var email = "  test@example.com  ";
+		const string email = "  test@example.com  ";
 		var result = Gravatar.Generate(email);
-		
+
 		var expected = Gravatar.Generate("test@example.com");
 		await Assert.That(result).IsEqualTo(expected);
 	}
@@ -26,12 +26,12 @@ public sealed class GravatarTests
 	[Test]
 	public async Task Generate_EmailCaseInsensitive()
 	{
-		var email1 = "Test@Example.COM";
-		var email2 = "test@example.com";
-		
+		const string email1 = "Test@Example.COM";
+		const string email2 = "test@example.com";
+
 		var result1 = Gravatar.Generate(email1);
 		var result2 = Gravatar.Generate(email2);
-		
+
 		await Assert.That(result1).IsEqualTo(result2);
 	}
 
@@ -40,7 +40,7 @@ public sealed class GravatarTests
 	{
 		var options = new Gravatar.Options(Default: "mp");
 		var result = Gravatar.Generate("test@example.com", options);
-		
+
 		await Assert.That(result).Contains("d=mp");
 	}
 
@@ -49,7 +49,7 @@ public sealed class GravatarTests
 	{
 		var options = new Gravatar.Options(ForceDefault: true);
 		var result = Gravatar.Generate("test@example.com", options);
-		
+
 		await Assert.That(result).Contains("f=y");
 	}
 
@@ -58,7 +58,7 @@ public sealed class GravatarTests
 	{
 		var options = new Gravatar.Options(Rating: Gravatar.Ratings.PG);
 		var result = Gravatar.Generate("test@example.com", options);
-		
+
 		await Assert.That(result).Contains("r=pg");
 	}
 
@@ -71,7 +71,7 @@ public sealed class GravatarTests
 			Rating: Gravatar.Ratings.G
 		);
 		var result = Gravatar.Generate("test@example.com", options);
-		
+
 		await Assert.That(result).Contains("d=identicon");
 		await Assert.That(result).Contains("f=y");
 		await Assert.That(result).Contains("r=g");
@@ -82,7 +82,7 @@ public sealed class GravatarTests
 	public async Task Generate_WithNullOptions()
 	{
 		var result = Gravatar.Generate("test@example.com", null);
-		
+
 		var expected = Gravatar.Generate("test@example.com");
 		await Assert.That(result).IsEqualTo(expected);
 	}
@@ -96,7 +96,7 @@ public sealed class GravatarTests
 	{
 		var options = new Gravatar.Options(Rating: rating);
 		var result = Gravatar.Generate("test@example.com", options);
-		
+
 		await Assert.That(result).Contains($"r={rating.ToStringFast().ToLower()}");
 	}
 
@@ -113,7 +113,17 @@ public sealed class GravatarTests
 	{
 		var options = new Gravatar.Options(Default: defaultImage);
 		var result = Gravatar.Generate("test@example.com", options);
-		
+
 		await Assert.That(result).Contains($"d={defaultImage}");
+	}
+
+	[Test]
+	public async Task Generate_WithSize()
+	{
+		var options = new Gravatar.Options(Size: 100);
+		var result = Gravatar.Generate("test@example.com", options);
+
+		await Assert.That(result).Contains("s=100");
+		await Assert.That(result).Contains("?");
 	}
 }

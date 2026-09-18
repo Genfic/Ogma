@@ -1,7 +1,40 @@
+using System.Net;
+
 namespace Utils.Tests.Utils;
 
 public sealed class LoremTests
 {
+	private sealed class RecordingHandler : HttpMessageHandler
+	{
+		public Uri? LastRequestUri { get; private set; }
+
+		protected override Task<HttpResponseMessage> SendAsync(
+			HttpRequestMessage request,
+			CancellationToken cancellationToken)
+		{
+			LastRequestUri = request.RequestUri;
+			return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK)
+			{
+				Content = new StringContent("ok"),
+			});
+		}
+	}
+
+	private static async Task<(Uri Uri, string Body)> RunIpsum(int paragraphs, IpsumOptions? options, RecordingHandler handler)
+	{
+		Lorem.Client = new HttpClient(handler);
+		try
+		{
+			var body = await Lorem.Ipsum(paragraphs, options);
+			return (handler.LastRequestUri!, body);
+		}
+		finally
+		{
+			Lorem.Client.Dispose();
+			Lorem.Client = new HttpClient();
+		}
+	}
+
 	[Test]
 	public async Task Picsum_BasicWidth()
 	{
@@ -26,118 +59,67 @@ public sealed class LoremTests
 		await Assert.That(result).IsEqualTo("//picsum.photos/800");
 	}
 
-	// Note: These tests require network access to loripsum.net
-	// They are commented out by default. Uncomment and mock HttpClient for proper testing.
-	// [Test]
-	// public async Task Ipsum_BasicParagraphs()
-	// {
-	// 	var result = await Lorem.Ipsum(1, null);
-	// 	await Assert.That(result).IsNotNull();
-	// 	await Assert.That(result).IsNotEmpty();
-	// }
+	[Test]
+	[NotInParallel("Lorem.Ipsum")]
+	public async Task Ipsum_NoOptions()
+	{
+		var handler = new RecordingHandler();
+		var (uri, body) = await RunIpsum(5, null, handler);
 
-	// [Test]
-	// public async Task Ipsum_MultipleParagraphs()
-	// {
-	// 	var result = await Lorem.Ipsum(3, null);
-	// 	await Assert.That(result).IsNotNull();
-	// 	await Assert.That(result).IsNotEmpty();
-	// }
+		await Assert.That(uri.ToString()).IsEqualTo("https://loripsum.net/api/5");
+		await Assert.That(body).IsEqualTo("ok");
+	}
 
-	// Note: These tests require network access to loripsum.net and are commented out
-	//[Test]
-	//public async Task Ipsum_WithOptions()
-	//{
-	//	var options = new IpsumOptions(
-	//		Length: IpsumLength.Short,
-	//		Decorate: true,
-	//		Link: true,
-	//		Ulist: false,
-	//		Olist: false,
-	//		Dlist: false,
-	//		Blockquotes: false,
-	//		Codeblocks: false,
-	//		Headers: false,
-	//		Allcaps: false,
-	//		Prude: false,
-	//		Plaintext: false
-	//	);
-	//	
-	//	var result = await Lorem.Ipsum(1, options);
-	//	
-	//	await Assert.That(result).IsNotNull();
-	//	await Assert.That(result).Contains("/short");
-	//	await Assert.That(result).Contains("/decorate");
-	//	await Assert.That(result).Contains("/link");
-	//}
+	[Test]
+	[NotInParallel("Lorem.Ipsum")]
+	[Arguments(IpsumLength.Short, "/short")]
+	[Arguments(IpsumLength.Medium, "/medium")]
+	[Arguments(IpsumLength.Long, "/long")]
+	[Arguments(IpsumLength.Verylong, "/verylong")]
+	public async Task Ipsum_Lengths(IpsumLength length, string expectedSegment)
+	{
+		var handler = new RecordingHandler();
+		var options = new IpsumOptions(
+			Length: length,
+			Decorate: false,
+			Link: false,
+			Ulist: false,
+			Olist: false,
+			Dlist: false,
+			Blockquotes: false,
+			Codeblocks: false,
+			Headers: false,
+			Allcaps: false,
+			Prude: false,
+			Plaintext: false
+		);
+		var (uri, _) = await RunIpsum(1, options, handler);
 
-	//[Test]
-	//public async Task Ipsum_WithAllOptions()
-	//{
-	//	var options = new IpsumOptions(
-	//		Length: IpsumLength.Medium,
-	//		Decorate: true,
-	//		Link: true,
-	//		Ulist: true,
-	//		Olist: true,
-	//		Dlist: true,
-	//		Blockquotes: true,
-	//		Codeblocks: true,
-	//		Headers: true,
-	//		Allcaps: true,
-	//		Prude: true,
-	//		Plaintext: true
-	//	);
-	//	
-	//	var result = await Lorem.Ipsum(1, options);
-	//	
-	//	await Assert.That(result).IsNotNull();
-	//	await Assert.That(result).Contains("/medium");
-	//	await Assert.That(result).Contains("/decorate");
-	//	await Assert.That(result).Contains("/link");
-	//	await Assert.That(result).Contains("/ul");
-	//	await Assert.That(result).Contains("/ol");
-	//	await Assert.That(result).Contains("/dl");
-	//	await Assert.That(result).Contains("/bq");
-	//	await Assert.That(result).Contains("/code");
-	//	await Assert.That(result).Contains("/headers");
-	//	await Assert.That(result).Contains("/allcaps");
-	//	await Assert.That(result).Contains("/prude");
-	//	await Assert.That(result).Contains("/plaintext");
-	//}
+		await Assert.That(uri.ToString()).IsEqualTo($"https://loripsum.net/api/1{expectedSegment}");
+	}
 
-	//[Test]
-	//public async Task Ipsum_WithNullOptions()
-	//{
-	//	var result = await Lorem.Ipsum(1, null);
-	//	
-	//	await Assert.That(result).IsNotNull();
-	//	await Assert.That(result).DoesNotContain("/");
-	//}
+	[Test]
+	[NotInParallel("Lorem.Ipsum")]
+	public async Task Ipsum_AllOptions()
+	{
+		var handler = new RecordingHandler();
+		var options = new IpsumOptions(
+			Length: IpsumLength.Short,
+			Decorate: true,
+			Link: true,
+			Ulist: true,
+			Olist: true,
+			Dlist: true,
+			Blockquotes: true,
+			Codeblocks: true,
+			Headers: true,
+			Allcaps: true,
+			Prude: true,
+			Plaintext: true
+		);
+		var (uri, _) = await RunIpsum(3, options, handler);
 
-	//[Test]
-	//[Arguments(IpsumLength.Short)]
-	//[Arguments(IpsumLength.Medium)]
-	//[Arguments(IpsumLength.Long)]
-	//[Arguments(IpsumLength.Verylong)]
-	//public async Task Ipsum_AllLengths(IpsumLength length)
-	//{
-	//	var options = new IpsumOptions(
-	//		Length: length,
-	//		Decorate: false,
-	//		Link: false,
-	//		Ulist: false,
-	//		Olist: false,
-	//		Dlist: false,
-	//		Blockquotes: false,
-	//		Codeblocks: false,
-	//		Headers: false,
-	//		Allcaps: false,
-	//		Prude: false,
-	//		Plaintext: false
-	//	);
-	//	var result = await Lorem.Ipsum(1, options);
-	//	
-	//	await Assert.That(result).Contains($"/{length.ToStringFast().ToLower()}");
-	//}
+		await Assert.That(uri.ToString()).IsEqualTo(
+			"https://loripsum.net/api/3/short/decorate/link/ul/ol/dl/bq/code/headers/allcaps/prude/plaintext");
+	}
 }

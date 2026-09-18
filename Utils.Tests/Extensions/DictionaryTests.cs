@@ -73,4 +73,36 @@ public sealed class DictionaryTests
 		
 		await Assert.That(result).IsEqualTo("default");
 	}
+
+	[Test]
+	public async Task AddOrUpdate_NewKey_AddsAndUpdates()
+	{
+		var dict = new Dictionary<string, int>();
+		var factoryCalls = 0;
+
+		dict.AddOrUpdate(
+			"key",
+			() => { factoryCalls++; return 1; },
+			v => dict["key"] = v + 10
+		);
+
+		await Assert.That(dict["key"]).IsEqualTo(11);
+		await Assert.That(factoryCalls).IsEqualTo(1);
+	}
+
+	[Test]
+	public async Task AddOrUpdate_ExistingKey_SkipsFactoryAndUpdates()
+	{
+		var dict = new Dictionary<string, int> { ["key"] = 1 };
+		var factoryCalls = 0;
+
+		dict.AddOrUpdate(
+			"key",
+			() => { factoryCalls++; return 999; },
+			v => dict["key"] = v + 10
+		);
+
+		await Assert.That(dict["key"]).IsEqualTo(11);
+		await Assert.That(factoryCalls).IsEqualTo(0);
+	}
 }

@@ -6,7 +6,7 @@ namespace Utils;
 
 public static class Lorem
 {
-	private static readonly HttpClient Client = new();
+	internal static HttpClient Client = new();
 
 	public static string Picsum(int x, int? y = null) => y is null ? $"//picsum.photos/{x}" : $"//picsum.photos/{x}/{y}";
 
