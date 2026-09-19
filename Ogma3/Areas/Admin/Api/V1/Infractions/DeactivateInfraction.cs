@@ -5,11 +5,9 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Infractions;
-using Ogma3.Data.ModeratorActions;
-using Ogma3.Infrastructure.Constants;
-using Ogma3.Infrastructure.Extensions;
 using Ogma3.Infrastructure.ServiceRegistrations;
 using Ogma3.Services;
+using Ogma3.Services.ModeratorActionService;
 using Ogma3.Services.UserService;
 
 namespace Ogma3.Areas.Admin.Api.V1.Infractions;
@@ -19,7 +17,7 @@ using ReturnType = Results<Ok, UnauthorizedHttpResult, NotFound, InternalServerE
 [Handler]
 [MapDelete("admin/api/infractions/{infractionId:long}")]
 [Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
-public sealed partial class DeactivateInfraction(AppDbContext context, IUserService userService, BanCache cache)
+public sealed partial class DeactivateInfraction(AppDbContext context, IUserService userService, BanCache cache, IModeratorActionService moderatorActionService)
 {
 	public sealed record Command(long InfractionId);
 
@@ -29,7 +27,6 @@ public sealed partial class DeactivateInfraction(AppDbContext context, IUserServ
 	)
 	{
 		if (userService.UserId is not {} uid) return TypedResults.Unauthorized();
-		if (userService.User?.GetUsername() is not {} modName) return TypedResults.Unauthorized();
 
 		var infraction = await context.Infractions
 			.Where(i => i.Id == request.InfractionId)
@@ -40,12 +37,12 @@ public sealed partial class DeactivateInfraction(AppDbContext context, IUserServ
 		infraction.RemovedAt = DateTimeOffset.UtcNow;
 		infraction.RemovedById = uid;
 
-		var action = new ModeratorAction
-		{
-			StaffMemberId = uid,
-			Description = ModeratorActionTemplates.Infractions.Lift(uid, modName, infraction.Id, infraction.Type),
-		};
-		context.ModeratorActions.Add(action);
+		moderatorActionService.LogInfractionLifted(
+			infraction.UserId,
+			infraction.Id,
+			infraction.ActiveUntil,
+			infraction.RemovedAt,
+			infraction.Type);
 
 		await context.SaveChangesAsync(cancellationToken);
 

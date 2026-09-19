@@ -2,20 +2,20 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using NetEscapades.EnumGenerators;
 using Ogma3.Data;
 using Ogma3.Data.Bases;
 using Ogma3.Data.Blogposts;
 using Ogma3.Data.Chapters;
-using Ogma3.Data.ModeratorActions;
 using Ogma3.Data.Stories;
-using Ogma3.Infrastructure.Constants;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Infrastructure.ServiceRegistrations;
+using Ogma3.Services.ModeratorActionService;
 
 namespace Ogma3.Areas.Admin.Pages;
 
 [Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
-public sealed class ContentBlock(AppDbContext context) : PageModel
+public sealed class ContentBlock(AppDbContext context, IModeratorActionService moderatorActionService) : PageModel
 {
 	[BindProperty] public ItemType? Type { get; set; }
 
@@ -78,22 +78,20 @@ public sealed class ContentBlock(AppDbContext context) : PageModel
 			return Routes.Areas.Admin.Pages.ContentBlock.Get(Type, Id).Redirect(this);
 		}
 
-		if (User.GetNumericId() is not {} staffId) return Unauthorized();
+		if (User.GetNumericId() is null) return Unauthorized();
 		_ = Type switch
 		{
-			ItemType.Story => await TryBlockContent<Story>(id, data.Reason, staffId),
-			ItemType.Chapter => await TryBlockContent<Chapter>(id, data.Reason, staffId),
-			ItemType.Blogpost => await TryBlockContent<Blogpost>(id, data.Reason, staffId),
+			ItemType.Story => await TryBlockContent<Story>(id, data.Reason),
+			ItemType.Chapter => await TryBlockContent<Chapter>(id, data.Reason),
+			ItemType.Blogpost => await TryBlockContent<Blogpost>(id, data.Reason),
 			_ => false,
 		};
 
 		return Routes.Areas.Admin.Pages.ContentBlock.Get(Type, id).Redirect(this);
 	}
 
-	private async Task<bool> TryBlockContent<T>(long itemId, string reason, long uid) where T : BaseModel, IBlockableContent
+	private async Task<bool> TryBlockContent<T>(long itemId, string reason) where T : BaseModel, IBlockableContent
 	{
-		if (User.GetNumericId() is not {} staffId) return false;
-		if (User.GetUsername() is not {} uname) return false;
 		if (Type is not {} type) return false;
 
 		var item = await context.Set<T>()
@@ -115,16 +113,11 @@ public sealed class ContentBlock(AppDbContext context) : PageModel
 		item.ContentBlock = new Data.Blacklists.ContentBlock
 		{
 			Reason = reason,
-			IssuerId = uid,
+			IssuerId = User.GetNumericId()!.Value,
 			Type = typeof(T).Name,
 		};
 
-		// Log the action
-		context.ModeratorActions.Add(new ModeratorAction
-		{
-			StaffMemberId = staffId,
-			Description = ModeratorActionTemplates.ContentBlocked(type.ToString(), title, itemId, uname),
-		});
+		moderatorActionService.LogContentBlocked(type.ToStringFast(), title, itemId);
 
 		await context.SaveChangesAsync();
 		return true;
@@ -150,8 +143,6 @@ public sealed class ContentBlock(AppDbContext context) : PageModel
 
 	private async Task<bool> TryUnblockContent<T>(long itemId) where T : BaseModel, IBlockableContent
 	{
-		if (User.GetNumericId() is not {} staffId) return false;
-		if (User.GetUsername() is not {} uname) return false;
 		if (Type is not {} type) return false;
 
 		var item = await context.Set<T>()
@@ -172,17 +163,13 @@ public sealed class ContentBlock(AppDbContext context) : PageModel
 
 		item.ContentBlock = null;
 
-		// Log the action
-		context.ModeratorActions.Add(new ModeratorAction
-		{
-			StaffMemberId = staffId,
-			Description = ModeratorActionTemplates.ContentUnblocked(type.ToString(), title, itemId, uname),
-		});
+		moderatorActionService.LogContentUnblocked(type.ToStringFast(), title, itemId);
 
 		await context.SaveChangesAsync();
 		return true;
 	}
 
+	[EnumExtensions]
 	public enum ItemType
 	{
 		Blogpost,

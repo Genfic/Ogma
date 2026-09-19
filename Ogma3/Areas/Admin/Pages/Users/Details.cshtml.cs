@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
-using Ogma3.Data.ModeratorActions;
 using Ogma3.Data.Users;
 using Ogma3.Infrastructure.Constants;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Services.ModeratorActionService;
 
 namespace Ogma3.Areas.Admin.Pages.Users;
 
@@ -15,7 +15,8 @@ public sealed class DetailsModel(
 	AppDbContext context,
 	OgmaUserManager userManager,
 	SignInManager<OgmaUser> signInManager,
-	ILogger<DetailsModel> logger) : PageModel
+	ILogger<DetailsModel> logger,
+	IModeratorActionService moderatorActionService) : PageModel
 {
 	public UserDetailsDto? Details { get; set; }
 	public List<RoleDto> Roles { get; set; } = [];
@@ -69,7 +70,7 @@ public sealed class DetailsModel(
 
 	public async Task<IActionResult> OnPostAsync([FromForm] long userId)
 	{
-		if (User.GetNumericId() is not {} uid || User.GetUsername() is not {} username)
+		if (User.GetNumericId() is null || User.GetUsername() is null)
 		{
 			ModelState.AddModelError("", "User not logged in.");
 			return Page();
@@ -101,6 +102,8 @@ public sealed class DetailsModel(
 			return route.Redirect(this);
 		}
 
+		var oldRoles = user.Roles;
+
 		await context.UserRoles
 			.Where(r => r.UserId == user.Id)
 			.ExecuteDeleteAsync();
@@ -118,11 +121,7 @@ public sealed class DetailsModel(
 				RoleId = r,
 			}));
 
-		context.ModeratorActions.Add(new ModeratorAction
-		{
-			StaffMemberId = uid,
-			Description = ModeratorActionTemplates.UserRolesChanged(user.UserName, user.Id, username, user.Roles, [..GivenRoles]),
-		});
+		moderatorActionService.LogUserRolesChanged(user.Id, user.UserName, oldRoles, GivenRoles.ToArray());
 
 		await context.SaveChangesAsync();
 

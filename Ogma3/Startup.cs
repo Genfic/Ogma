@@ -217,6 +217,7 @@ public static class Startup
 			.AddMvc(options => {
 				options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
 				options.Filters.Add<ValidationExceptionFilter>();
+				options.Filters.Add<AuthenticationExceptionFilter>();
 			})
 			.AddJsonOptions(options => ConfigJson(options.JsonSerializerOptions));
 

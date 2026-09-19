@@ -6,10 +6,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
-using Ogma3.Data.ModeratorActions;
 using Ogma3.Infrastructure.Constants;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Infrastructure.ServiceRegistrations;
+using Ogma3.Services.ModeratorActionService;
 using Ogma3.Services.UserService;
 
 namespace Ogma3.Api.V1.CommentThreads;
@@ -20,7 +20,7 @@ using ReturnType = Results<UnauthorizedHttpResult, NotFound, Ok<bool>>;
 [MapGroup<ApiGroup>]
 [MapPost("CommentsThread/lock")]
 [Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
-public sealed partial class LockThread(AppDbContext context, IUserService userService)
+public sealed partial class LockThread(AppDbContext context, IUserService userService, IModeratorActionService moderatorActionService)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint
@@ -32,8 +32,6 @@ public sealed partial class LockThread(AppDbContext context, IUserService userSe
 	)
 	{
 		if (userService.User is not {} user) return TypedResults.Unauthorized();
-		if (user.GetUsername() is not {} uname) return TypedResults.Unauthorized();
-		if (user.GetNumericId() is not {} uid) return TypedResults.Unauthorized();
 		if (!user.HasAnyRole(RoleNames.Admin, RoleNames.Moderator)) return TypedResults.Unauthorized();
 
 		var thread = await context.CommentThreads
@@ -53,15 +51,14 @@ public sealed partial class LockThread(AppDbContext context, IUserService userSe
 			_ => ("unknown", 0),
 		};
 
-		var message = thread.IsLocked
-			? ModeratorActionTemplates.ThreadLocked(type, typeId, thread.Id, uname)
-			: ModeratorActionTemplates.ThreadUnlocked(type, typeId, thread.Id, uname);
-
-		context.ModeratorActions.Add(new ModeratorAction
+		if (thread.IsLocked)
 		{
-			StaffMemberId = uid,
-			Description = message,
-		});
+			moderatorActionService.LogThreadLocked(type, typeId, thread.Id);
+		}
+		else
+		{
+			moderatorActionService.LogThreadUnlocked(type, typeId, thread.Id);
+		}
 
 		await context.SaveChangesAsync(cancellationToken);
 

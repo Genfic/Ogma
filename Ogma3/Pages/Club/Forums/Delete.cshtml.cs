@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.ClubModeratorActions;
 using Ogma3.Data.Clubs;
-using Ogma3.Infrastructure.Constants;
 using Ogma3.Infrastructure.Extensions;
 using Routes.Pages;
 
@@ -77,11 +76,12 @@ public sealed class DeleteModel(AppDbContext context) : PageModel
 
 		if (isModerator)
 		{
+			var uname = User.GetUsername() ?? "[unknown]";
 			context.ClubModeratorActions.Add(new ClubModeratorAction
 			{
 				ModeratorId = uid,
 				ClubId = th.ClubId,
-				Description = ModeratorActionTemplates.ForumThreadDeleted(th.Title, th.Id, User.GetUsername() ?? "[unknown]"),
+				Description = $"Forum thread in club **{th.Title}** with the ID **{th.Id}** was deleted by **{uname}**",
 			});
 		}
 

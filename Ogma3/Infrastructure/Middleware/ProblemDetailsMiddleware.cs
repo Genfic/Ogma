@@ -1,5 +1,6 @@
 using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Mvc;
+using Ogma3.Infrastructure.Exceptions;
 
 namespace Ogma3.Infrastructure.Middleware;
 
@@ -26,6 +27,13 @@ public static class ProblemDetailsMiddleware
 				)
 				{
 					Status = StatusCodes.Status400BadRequest,
+				},
+
+				NotAuthenticatedException => new ProblemDetails
+				{
+					Detail = "Authentication required",
+					Status = StatusCodes.Status401Unauthorized,
+					Title = "Unauthorized",
 				},
 
 				var ex => new ProblemDetails

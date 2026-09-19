@@ -5,11 +5,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
-using Ogma3.Data.ModeratorActions;
 using Ogma3.Data.Users;
-using Ogma3.Infrastructure.Constants;
-using Ogma3.Infrastructure.Extensions;
 using Ogma3.Infrastructure.ServiceRegistrations;
+using Ogma3.Services.ModeratorActionService;
 using Ogma3.Services.UserService;
 
 namespace Ogma3.Api.V1.Users;
@@ -20,7 +18,7 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok, NotFound, StatusCodeHttpR
 [MapGroup<ApiGroup>]
 [MapPost("users/roles")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public sealed partial class UpdateRoles(AppDbContext context, IUserService userService)
+public sealed partial class UpdateRoles(AppDbContext context, IUserService userService, IModeratorActionService moderatorActionService)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint
@@ -31,8 +29,7 @@ public sealed partial class UpdateRoles(AppDbContext context, IUserService userS
 		CancellationToken cancellationToken
 	)
 	{
-		if (userService.UserId is not {} uid) return TypedResults.Unauthorized();
-		if (userService.User?.GetUsername() is not {} username) return TypedResults.Unauthorized();
+		if (userService.UserId is null) return TypedResults.Unauthorized();
 
 		var user = await context.Users
 			.Where(u => u.Id == request.UserId)
@@ -46,6 +43,8 @@ public sealed partial class UpdateRoles(AppDbContext context, IUserService userS
 
 		if (user is null) return TypedResults.NotFound();
 
+		var oldRoles = user.Roles;
+
 		await context.UserRoles
 			.Where(r => r.UserId == user.Id)
 			.ExecuteDeleteAsync(cancellationToken);
@@ -57,14 +56,9 @@ public sealed partial class UpdateRoles(AppDbContext context, IUserService userS
 				RoleId = r,
 			}));
 
-		context.ModeratorActions.Add(new ModeratorAction
-		{
-			StaffMemberId = uid,
-			Description = ModeratorActionTemplates.UserRolesChanged(user.UserName, user.Id, username, user.Roles, request.Roles.ToArray()),
-		});
+		moderatorActionService.LogUserRolesChanged(user.Id, user.UserName, oldRoles, request.Roles.ToArray());
 
 		await context.SaveChangesAsync(cancellationToken);
-
 
 		return TypedResults.Ok();
 	}
