@@ -1,0 +1,35 @@
+@page
+@using Ogma3.Infrastructure.Extensions
+@model Ogma3.Pages.Stories.RestoreModel
+@{
+    ViewData["Title"] = "Restore Story";
+    var route = Routes.Pages.User_Stories.Get(User.GetUsername() ?? "");
+}
+
+<div class="container">
+    <h1>@ViewData["Title"]</h1>
+
+    @if (Model.ErrorMessage != null)
+    {
+        <div class="alert alert-danger">@Model.ErrorMessage</div>
+        <p><a for-route="route" class="btn btn-primary">Back to My Stories</a></p>
+    }
+    else if (Model.SuccessMessage != null)
+    {
+	    <div class="alert alert-success">@Model.SuccessMessage</div>
+
+        if (Model.RestoredStoryId is {} sid)
+        {
+	        var storyRoute = Routes.Pages.Story.Get(sid, null);
+            <p><a for-route="storyRoute" class="btn btn-primary">View Story</a></p>
+        }
+        else
+        {
+            <p><a for-route="route" class="btn btn-primary">Back to My Stories</a></p>
+        }
+    }
+    else
+    {
+        <div class="alert alert-info">Processing restore request...</div>
+    }
+</div>

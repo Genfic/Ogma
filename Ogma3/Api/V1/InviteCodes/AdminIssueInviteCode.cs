@@ -21,7 +21,7 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<InviteCodeDto>>;
 public sealed partial class AdminIssueInviteCode(
 	AppDbContext context,
 	ICodeGenerator codeGenerator,
-	ModeratorActionService moderatorActionService,
+	IModeratorActionService moderatorActionService,
 	IUserService userService)
 {
 	private async ValueTask<ReturnType> HandleAsync(

@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Infrastructure.Extensions;
-using Ogma3.Services.Mailer;
 using Sodium;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage;

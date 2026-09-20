@@ -5,12 +5,15 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Infrastructure.Exceptions;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Services.DeletionTokenService;
+using Ogma3.Services.Mailer;
 using Ogma3.Services.SafetyPinService;
+using Routes.Pages;
 
 namespace Ogma3.Pages.Chapters;
 
 [Authorize]
-public sealed class DeleteModel(AppDbContext context, SafetyPinService pinService) : PageModel
+public sealed class DeleteModel(AppDbContext context, SafetyPinService pinService, IMailer mailer, IDeletionTokenService tokenService) : PageModel
 {
 	[BindProperty]
 	public required GetData Chapter { get; set; }
@@ -69,6 +72,7 @@ public sealed class DeleteModel(AppDbContext context, SafetyPinService pinServic
 		{
 			return Unauthorized();
 		}
+		if (User.GetEmail() is not {} email) return Unauthorized();
 
 		HasPin = await pinService.HasPin(uid);
 
@@ -101,18 +105,34 @@ public sealed class DeleteModel(AppDbContext context, SafetyPinService pinServic
 			.Where(c => c.Id == id)
 			.Where(c => c.Story.AuthorId == User.GetNumericId())
 			.Include(c => c.Story)
+			.ThenInclude(s => s.Author)
 			.FirstOrDefaultAsync();
 
 		if (chapter is null) return NotFound();
+
+		// Schedule for deletion in 7 days
+		var scheduledFor = DateTimeOffset.UtcNow.AddDays(7);
+		chapter.ScheduledForDeletion = scheduledFor;
+
+		var undoToken = tokenService.GenerateToken(chapter.Id, scheduledFor, "chapter");
 
 		// Recalculate words and chapters in the story
 		chapter.Story.WordCount -= chapter.WordCount;
 		chapter.Story.ChapterCount -= 1;
 
-		context.Chapters.Remove(chapter);
+		// Send email with undo link
+		var undoUrl = Chapters_Restore.Get(undoToken).Url(Url, Request.Scheme);
+		await mailer.SendEmailTemplateAsync(email, "content-scheduled-for-deletion", new()
+		{
+			["name"] = chapter.Story.Author.UserName,
+			["content_title"] = $"{chapter.Story.Title}: {chapter.Title}",
+			["content_type"] = "chapter",
+			["scheduled_for"] = scheduledFor.ToString("yyyy-MM-dd HH:mm UTC"),
+			["undo_url"] = undoUrl ?? "",
+		});
 
 		await context.SaveChangesAsync();
 
-		return Routes.Pages.Story.Get(chapter.StoryId, null).Redirect(this);
+		return Story.Get(chapter.StoryId, null).Redirect(this);
 	}
 }

@@ -43,21 +43,43 @@ public sealed class PostmarkMailer(IOptions<PostmarkOptions> options, ILogger<Po
 		LogResult(result);
 	}
 
-	private void LogResult(PostmarkResponse? result)
+	public async Task SendBulkEmailTemplateAsync(List<BulkEmail> emails)
 	{
-		if (result is null)
+		var messages = emails
+			.Select(e => new TemplatedPostmarkMessage
+			{
+				To = e.Email,
+				From = $"admin@{_options.Domain}",
+				TrackOpens = true,
+				TemplateAlias = e.TemplateName,
+				TemplateModel = e.Model,
+				MessageStream = "outbound",
+			})
+			.ToArray();
+
+		var results = await _client.SendEmailsWithTemplateAsync(messages);
+
+		foreach (var result in results)
 		{
-			return;
+			LogResult(result);
 		}
+	}
+
+	private void LogResult(PostmarkResponse result)
+	{
 		if (result.Status == PostmarkStatus.Success)
 		{
-			logger.LogInformation("Email {EmailId} sent to {Email} at {Time}", result.MessageID, ObfuscateEmail(result.To), result.SubmittedAt);
+			logger.LogInformation("Email {EmailId} sent to {Email} at {Time}",
+				result.MessageID,
+				ObfuscateEmail(result.To),
+				result.SubmittedAt);
 		}
 		else
 		{
-			logger.LogError(
-				"Postmark email sending error. Status: {Status}, Message: {Message}, Error: {ErrorCode}",
-				result.Status, result.Message, result.ErrorCode
+			logger.LogError("Postmark email sending error. Status: {Status}, Message: {Message}, Error: {ErrorCode}",
+				result.Status,
+				result.Message,
+				result.ErrorCode
 			);
 		}
 	}
@@ -69,4 +91,5 @@ public sealed class PostmarkMailer(IOptions<PostmarkOptions> options, ILogger<Po
 		var end = email[(at + 1)..];
 		return $"{start}@{end}";
 	}
+
 }

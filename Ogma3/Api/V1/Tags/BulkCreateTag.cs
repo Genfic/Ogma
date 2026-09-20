@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
-using Ogma3.Data.Tags;
 using Ogma3.Infrastructure.ServiceRegistrations;
 using Ogma3.Services.ModeratorActionService;
 using Ogma3.Services.TagCache;

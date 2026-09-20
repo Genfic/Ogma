@@ -6,14 +6,15 @@ using Ogma3.Data;
 using Ogma3.Data.Stories;
 using Ogma3.Infrastructure.Exceptions;
 using Ogma3.Infrastructure.Extensions;
-using Ogma3.Services.FileUploader;
+using Ogma3.Services.DeletionTokenService;
+using Ogma3.Services.Mailer;
 using Ogma3.Services.SafetyPinService;
 using Routes.Pages;
 
 namespace Ogma3.Pages.Stories;
 
 [Authorize]
-public sealed class DeleteModel(AppDbContext context, IFileUploader uploader, SafetyPinService pinService) : PageModel
+public sealed class DeleteModel(AppDbContext context, SafetyPinService pinService, IMailer mailer, IDeletionTokenService tokenService) : PageModel
 {
 	public sealed class GetData
 	{
@@ -76,6 +77,7 @@ public sealed class DeleteModel(AppDbContext context, IFileUploader uploader, Sa
 		if (id is null) return NotFound();
 		if (User.GetNumericId() is not { } uid) return Unauthorized();
 		if (User.GetUsername() is not {} uname) return Unauthorized();
+		if (User.GetEmail() is not {} email) return Unauthorized();
 
 		HasPin = await pinService.HasPin(uid);
 
@@ -106,22 +108,30 @@ public sealed class DeleteModel(AppDbContext context, IFileUploader uploader, Sa
 		// Get the story and make sure the logged-in user matches author
 		var story = await context.Stories
 			.Where(s => s.Id == id)
-			.Include(story => story.Cover)
+			.Include(s => s.Author)
 			.FirstOrDefaultAsync();
 
 		if (story is null) return NotFound();
 		if (story.AuthorId != uid) return Unauthorized();
 
-		// Remove story
-		context.Stories.Remove(story);
+		// Schedule for deletion in 7 days
+		var scheduledFor = DateTimeOffset.UtcNow.AddDays(7);
+		story.ScheduledForDeletion = scheduledFor;
 
-		// Delete cover
-		if (story.Cover is { ETag: not null })
+		// Generate secure undo token
+		var undoToken = tokenService.GenerateToken(story.Id, scheduledFor, "story");
+
+		// Send email with undo link
+		var undoUrl = Stories_Restore.Get(undoToken).Url(Url, Request.Scheme);
+		await mailer.SendEmailTemplateAsync(email, "content-scheduled-for-deletion", new()
 		{
-			await uploader.Delete(story.Cover.Url);
-		}
+			["name"] = story.Author.UserName,
+			["content_title"] = story.Title,
+			["content_type"] = "story",
+			["scheduled_for"] = scheduledFor.ToString("yyyy-MM-dd HH:mm UTC"),
+			["undo_url"] = undoUrl ?? "",
+		});
 
-		// Save
 		await context.SaveChangesAsync();
 
 		return User_Stories.Get(uname).Redirect(this);

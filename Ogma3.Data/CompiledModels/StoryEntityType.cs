@@ -30,7 +30,7 @@ public partial class StoryEntityType
             "Ogma3.Data.Stories.Story",
             typeof(Story),
             baseEntityType,
-            propertyCount: 20,
+            propertyCount: 21,
             complexPropertyCount: 1,
             navigationCount: 7,
             skipNavigationCount: 3,
@@ -171,6 +171,14 @@ public partial class StoryEntityType
             fieldInfo: typeof(Story).GetField("<ScheduledFor>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
             nullable: true);
         scheduledFor.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+
+        var scheduledForDeletion = runtimeEntityType.AddProperty(
+            "ScheduledForDeletion",
+            typeof(DateTimeOffset?),
+            propertyInfo: typeof(Story).GetProperty("ScheduledForDeletion", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            fieldInfo: typeof(Story).GetField("<ScheduledForDeletion>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            nullable: true);
+        scheduledForDeletion.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
         var slug = runtimeEntityType.AddProperty(
             "Slug",

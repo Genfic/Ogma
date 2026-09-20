@@ -11,6 +11,7 @@ public static class JobsHelper
 			.AddHostedService<DeleteStaleNotificationsRecurringJob>()
 			.AddHostedService<ReconcileBanCacheRecurringJob>()
 			.AddHostedService<PublishScheduledContentRecurringJob>()
+			.AddHostedService<ProcessSoftDeletesRecurringJob>()
 			;
 	}
 }

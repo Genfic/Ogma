@@ -28,7 +28,7 @@ public partial class ChapterEntityType
             "Ogma3.Data.Chapters.Chapter",
             typeof(Chapter),
             baseEntityType,
-            propertyCount: 15,
+            propertyCount: 16,
             navigationCount: 4,
             foreignKeyCount: 2,
             unnamedIndexCount: 6,
@@ -112,6 +112,14 @@ public partial class ChapterEntityType
             fieldInfo: typeof(Chapter).GetField("<ScheduledFor>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
             nullable: true);
         scheduledFor.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+
+        var scheduledForDeletion = runtimeEntityType.AddProperty(
+            "ScheduledForDeletion",
+            typeof(DateTimeOffset?),
+            propertyInfo: typeof(Chapter).GetProperty("ScheduledForDeletion", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            fieldInfo: typeof(Chapter).GetField("<ScheduledForDeletion>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            nullable: true);
+        scheduledForDeletion.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
         var signature = runtimeEntityType.AddProperty(
             "Signature",

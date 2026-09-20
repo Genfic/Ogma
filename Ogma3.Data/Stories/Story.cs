@@ -14,7 +14,7 @@ using Ogma3.Data.Votes;
 namespace Ogma3.Data.Stories;
 
 [AutoDbSet]
-public sealed class Story : BaseModel, IBlockableContent, IReportableContent, IDateableContent, ISchedulableContent
+public sealed class Story : BaseModel, IBlockableContent, IReportableContent, IDateableContent, ISchedulableContent, ISoftDeletableContent
 {
 	public OgmaUser Author { get; set; } = null!;
 	public long AuthorId { get; set; }
@@ -49,6 +49,8 @@ public sealed class Story : BaseModel, IBlockableContent, IReportableContent, ID
 	public int ChapterCount { get; set; }
 
 	public bool IsLocked { get; set; }
+
+	public DateTimeOffset? ScheduledForDeletion { get; set; }
 
 	// Just for relationship purposes
 	public List<Folder> Folders { get; set; } = [];

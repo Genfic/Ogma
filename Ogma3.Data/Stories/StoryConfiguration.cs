@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Ogma3.Data.Bases;
 using Ogma3.Data.Constants;
+using Ogma3.Data.Helpers;
 
 namespace Ogma3.Data.Stories;
 
@@ -9,9 +10,11 @@ public sealed class StoryConfiguration : BaseConfiguration<Story>
 {
 	protected override void Config(EntityTypeBuilder<Story> builder)
 	{
+		builder.HasQueryFilter(s => s.ScheduledForDeletion == null);
 
 		// CONSTRAINTS
 		builder.HasIndex(s => s.AuthorId);
+		builder.HasPartialIndex(s => s.ScheduledForDeletion);
 
 		builder
 			.Property(s => s.Title)

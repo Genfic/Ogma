@@ -1,6 +1,5 @@
 using Immediate.Injections.Shared;
 using JetBrains.Annotations;
-using Ogma3.Data.Tags;
 using StackExchange.Redis;
 using StackExchange.Redis.KeyspaceIsolation;
 

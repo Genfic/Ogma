@@ -29,7 +29,7 @@ public partial class CommentThreadEntityType
             "Ogma3.Data.CommentsThreads.CommentThread",
             typeof(CommentThread),
             baseEntityType,
-            propertyCount: 11,
+            propertyCount: 12,
             navigationCount: 6,
             skipNavigationCount: 1,
             foreignKeyCount: 5,
@@ -131,6 +131,19 @@ public partial class CommentThreadEntityType
         source.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
         source.AddAnnotation("Relational:ComputedColumnSql", "CASE\r\n	WHEN \"ChapterId\" IS NOT NULL THEN 0\r\n	WHEN \"BlogpostId\" IS NOT NULL THEN 1\r\n	WHEN \"UserId\" IS NOT NULL THEN 2\r\n	WHEN \"ClubThreadId\" IS NOT NULL THEN 3\r\n	WHEN \"NewsId\" IS NOT NULL THEN 4\r\nEND");
         source.AddAnnotation("Relational:IsStored", true);
+
+        var sourceId = runtimeEntityType.AddProperty(
+            "SourceId",
+            typeof(long),
+            propertyInfo: typeof(CommentThread).GetProperty("SourceId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            fieldInfo: typeof(CommentThread).GetField("<SourceId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            valueGenerated: ValueGenerated.OnAddOrUpdate,
+            beforeSaveBehavior: PropertySaveBehavior.Ignore,
+            afterSaveBehavior: PropertySaveBehavior.Ignore,
+            sentinel: 0L);
+        sourceId.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+        sourceId.AddAnnotation("Relational:ComputedColumnSql", "CASE\r\n	WHEN \"ChapterId\" IS NOT NULL THEN \"ChapterId\"\r\n	WHEN \"BlogpostId\" IS NOT NULL THEN \"BlogpostId\"\r\n	WHEN \"UserId\" IS NOT NULL THEN \"UserId\"\r\n	WHEN \"ClubThreadId\" IS NOT NULL THEN \"ClubThreadId\"\r\n	WHEN \"NewsId\" IS NOT NULL THEN \"NewsId\"\r\nEND");
+        sourceId.AddAnnotation("Relational:IsStored", true);
 
         var userId = runtimeEntityType.AddProperty(
             "UserId",

@@ -1,4 +1,3 @@
-using System.Runtime.CompilerServices;
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
 using Immediate.Validations.Shared;

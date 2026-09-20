@@ -8,7 +8,7 @@ using Ogma3.Data.Stories;
 namespace Ogma3.Data.Chapters;
 
 [AutoDbSet]
-public sealed class Chapter : BaseModel, IBlockableContent, IReportableContent, IDateableContent, ISchedulableContent
+public sealed class Chapter : BaseModel, IBlockableContent, IReportableContent, IDateableContent, ISchedulableContent, ISoftDeletableContent
 {
 	public uint Order { get; set; }
 	public DateTimeOffset CreationDate { get; set; }
@@ -28,4 +28,6 @@ public sealed class Chapter : BaseModel, IBlockableContent, IReportableContent, 
 	public long? ContentBlockId { get; set; }
 	public List<Report> Reports { get; set; } = [];
 	public uint[] Signature { get; set; } = [];
+
+	public DateTimeOffset? ScheduledForDeletion { get; set; }
 }

@@ -48,4 +48,5 @@ public interface IModeratorActionService
     void LogRoleCreated(long roleId, string name, bool isStaff);
     void LogRoleUpdated(long roleId, string name, bool isStaff);
     void LogRoleDeleted(long roleId, string name);
+    void LogInviteCodeCreated();
 }
