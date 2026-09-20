@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Ogma3.Data.Bases;
 using Ogma3.Data.CommentsThreads;
 using Ogma3.Data.Constants;
+using Ogma3.Data.Helpers;
 
 namespace Ogma3.Data.Chapters;
 
@@ -16,6 +17,7 @@ public sealed class ChapterConfiguration : BaseConfiguration<Chapter>
 
 	protected override void Config(EntityTypeBuilder<Chapter> builder)
 	{
+		builder.HasQueryFilter(c => c.ScheduledForDeletion == null);
 
 		builder
 			.HasIndex(c => c.Signature)
@@ -23,6 +25,7 @@ public sealed class ChapterConfiguration : BaseConfiguration<Chapter>
 
 		builder.HasIndex(c => c.PublicationDate);
 		builder.HasIndex(c => c.CreationDate);
+		builder.HasPartialIndex(c => c.ScheduledForDeletion);
 
 		// CONSTRAINTS
 		builder

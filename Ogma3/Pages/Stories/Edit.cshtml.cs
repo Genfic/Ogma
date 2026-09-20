@@ -9,7 +9,6 @@ using Ogma3.Data.Images;
 using Ogma3.Data.Notifications;
 using Ogma3.Data.Ratings;
 using Ogma3.Data.Stories;
-using Ogma3.Data.Tags;
 using Ogma3.Infrastructure.CustomValidators;
 using Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
 using Ogma3.Infrastructure.Extensions;

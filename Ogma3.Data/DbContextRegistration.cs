@@ -13,7 +13,7 @@ public static class DbContextRegistration
 	{
 		var dev = builder.Environment.IsDevelopment();
 
-		builder.Services.AddDbContextPool<AppDbContext>(options => {
+		builder.Services.AddPooledDbContextFactory<AppDbContext>(options => {
 			var conn = builder.Configuration.GetConnectionString("ogma3-db");
 
 			if (conn is null)

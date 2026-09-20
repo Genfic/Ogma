@@ -7,7 +7,6 @@ public abstract class BaseRecurringJob(IServiceProvider serviceProvider, ILogger
 
 	protected override async Task ExecuteAsync(CancellationToken stoppingToken)
 	{
-
 		try
 		{
 			await DelayUntilNextBoundary(stoppingToken);

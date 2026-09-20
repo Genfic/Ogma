@@ -11,6 +11,8 @@ public sealed class BlogpostConfiguration : BaseConfiguration<Blogpost>
 {
 	protected override void Config(EntityTypeBuilder<Blogpost> builder)
 	{
+		builder.HasQueryFilter(b => b.ScheduledForDeletion == null);
+
 		// CONSTRAINTS
 		builder
 			.Property(b => b.Title)
@@ -20,6 +22,7 @@ public sealed class BlogpostConfiguration : BaseConfiguration<Blogpost>
 
 		builder.HasIndex(b => b.Title);
 		builder.HasIndex(b => b.PublicationDate);
+		builder.HasPartialIndex(b => b.ScheduledForDeletion);
 
 		builder
 			.HasIndex(b => b.Hashtags)

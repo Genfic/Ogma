@@ -1,10 +1,16 @@
 using System.Diagnostics;
 using System.Globalization;
+using System.Runtime.InteropServices.JavaScript;
 
 namespace Utils.Extensions;
 
 public static class Time
 {
+	public static bool MicrosecondEqual(this DateTimeOffset a, DateTimeOffset b)
+	{
+		return Math.Abs((a - b).Ticks) < TimeSpan.TicksPerMicrosecond;
+	}
+
 	public static string FormatDateWithDaySuffix(this DateTime dateTime)
 	{
 		var suffix = dateTime.Day.GetOrdinalSuffix();

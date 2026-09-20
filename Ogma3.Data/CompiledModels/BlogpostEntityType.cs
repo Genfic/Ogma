@@ -27,7 +27,7 @@ public partial class BlogpostEntityType
             "Ogma3.Data.Blogposts.Blogpost",
             typeof(Blogpost),
             baseEntityType,
-            propertyCount: 16,
+            propertyCount: 17,
             navigationCount: 6,
             foreignKeyCount: 4,
             unnamedIndexCount: 8,
@@ -149,6 +149,14 @@ public partial class BlogpostEntityType
             fieldInfo: typeof(Blogpost).GetField("<ScheduledFor>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
             nullable: true);
         scheduledFor.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
+
+        var scheduledForDeletion = runtimeEntityType.AddProperty(
+            "ScheduledForDeletion",
+            typeof(DateTimeOffset?),
+            propertyInfo: typeof(Blogpost).GetProperty("ScheduledForDeletion", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            fieldInfo: typeof(Blogpost).GetField("<ScheduledForDeletion>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+            nullable: true);
+        scheduledForDeletion.AddAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.None);
 
         var slug = runtimeEntityType.AddProperty(
             "Slug",

@@ -10,7 +10,7 @@ using Ogma3.Data.Users;
 namespace Ogma3.Data.Blogposts;
 
 [AutoDbSet]
-public sealed class Blogpost : BaseModel, IBlockableContent, IReportableContent, IDateableContent, ISchedulableContent
+public sealed class Blogpost : BaseModel, IBlockableContent, IReportableContent, IDateableContent, ISchedulableContent, ISoftDeletableContent
 {
 	public string Title { get; set; } = null!;
 	public string Slug { get; set; } = null!;
@@ -38,4 +38,6 @@ public sealed class Blogpost : BaseModel, IBlockableContent, IReportableContent,
 	public long? ContentBlockId { get; set; }
 
 	public List<Report> Reports { get; set; } = null!;
+
+	public DateTimeOffset? ScheduledForDeletion { get; set; }
 }

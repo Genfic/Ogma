@@ -5,12 +5,15 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Infrastructure.Exceptions;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Services.DeletionTokenService;
+using Ogma3.Services.Mailer;
 using Ogma3.Services.SafetyPinService;
+using Routes.Pages;
 
 namespace Ogma3.Pages.Blog;
 
 [Authorize]
-public sealed class DeleteModel(AppDbContext context, SafetyPinService pinService) : PageModel
+public sealed class DeleteModel(AppDbContext context, SafetyPinService pinService, IMailer mailer, IDeletionTokenService tokenService) : PageModel
 {
 	[BindProperty]
 	public required GetData Blogpost { get; set; }
@@ -67,6 +70,7 @@ public sealed class DeleteModel(AppDbContext context, SafetyPinService pinServic
 		var uname = User.GetUsername();
 		if (uname is null) return Unauthorized();
 		if (User.GetNumericId() is not { } uid) return Unauthorized();
+		if (User.GetEmail() is not {} email) return Unauthorized();
 
 		HasPin = await pinService.HasPin(uid);
 
@@ -94,13 +98,34 @@ public sealed class DeleteModel(AppDbContext context, SafetyPinService pinServic
 			}
 		}
 
-		var rows = await context.Blogposts
+		// Get blogpost
+		var blogpost = await context.Blogposts
 			.Where(b => b.Id == id)
 			.Where(b => b.AuthorId == uid)
-			.ExecuteDeleteAsync();
+			.Include(b => b.Author)
+			.FirstOrDefaultAsync();
 
-		if (rows <= 0) return NotFound();
+		if (blogpost is null) return NotFound();
 
-		return Routes.Pages.User_Blog.Get(uname).Redirect(this);
+		// Schedule for deletion in 7 days
+		var scheduledFor = DateTimeOffset.UtcNow.AddDays(7);
+		blogpost.ScheduledForDeletion = scheduledFor;
+
+		var undoToken = tokenService.GenerateToken(blogpost.Id, scheduledFor, "blogpost");
+
+		// Send email with undo link
+		var undoUrl = Blog_Restore.Get(undoToken).Url(Url, Request.Scheme);
+		await mailer.SendEmailTemplateAsync(email, "content-scheduled-for-deletion", new()
+		{
+			["name"] = blogpost.Author.UserName,
+			["content_title"] = blogpost.Title,
+			["content_type"] = "blogpost",
+			["scheduled_for"] = scheduledFor.ToString("yyyy-MM-dd HH:mm UTC"),
+			["undo_url"] = undoUrl ?? "",
+		});
+
+		await context.SaveChangesAsync();
+
+		return User_Blog.Get(uname).Redirect(this);
 	}
 }

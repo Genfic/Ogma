@@ -1,5 +1,4 @@
 using MemoryPack;
-using Ogma3.Infrastructure.Extensions;
 using Riok.Mapperly.Abstractions;
 
 namespace Ogma3.Data.Tags;
