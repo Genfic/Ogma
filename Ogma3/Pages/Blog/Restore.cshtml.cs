@@ -17,6 +17,7 @@ public sealed class RestoreModel(AppDbContext context, IDeletionTokenService tok
 
 	public string? ErrorMessage { get; set; }
 	public string? SuccessMessage { get; set; }
+	public long? RestoredBlogpostId { get; set; }
 
 	public async Task<IActionResult> OnGetAsync()
 	{
@@ -67,6 +68,7 @@ public sealed class RestoreModel(AppDbContext context, IDeletionTokenService tok
 		await context.SaveChangesAsync();
 
 		SuccessMessage = $"""Blog post "{blogpost.Title}" has been restored successfully.""";
+		RestoredBlogpostId = blogpost.Id;
 
 		return Page();
 	}

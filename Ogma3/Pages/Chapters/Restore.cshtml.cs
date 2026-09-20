@@ -17,6 +17,8 @@ public sealed class RestoreModel(AppDbContext context, IDeletionTokenService tok
 
 	public string? ErrorMessage { get; set; }
 	public string? SuccessMessage { get; set; }
+	public long? RestoredChapterId { get; set; }
+	public long? RestoredStoryId { get; set; }
 
 	public async Task<IActionResult> OnGetAsync()
 	{
@@ -73,6 +75,8 @@ public sealed class RestoreModel(AppDbContext context, IDeletionTokenService tok
 		await context.SaveChangesAsync();
 
 		SuccessMessage = $"""Chapter "{chapter.Title}" has been restored successfully.""";
+		RestoredChapterId = chapter.Id;
+		RestoredStoryId = chapter.StoryId;
 
 		return Page();
 	}

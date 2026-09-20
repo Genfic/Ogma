@@ -1,9 +1,10 @@
 @page
 @using Ogma3.Infrastructure.Extensions
+@using Routes.Pages
 @model Ogma3.Pages.Blog.RestoreModel
 @{
     ViewData["Title"] = "Restore Blog Post";
-    var route = Routes.Pages.User_Blog.Get(User.GetUsername() ?? "");
+    var route = User_Blog.Get(User.GetUsername() ?? "");
 }
 
 <div class="container">
@@ -17,7 +18,16 @@
     else if (Model.SuccessMessage != null)
     {
         <div class="alert alert-success">@Model.SuccessMessage</div>
-        <p><a for-route="route" class="btn btn-primary">Back to My Blog</a></p>
+
+        if (Model.RestoredBlogpostId is {} bid)
+        {
+            var blogRoute = Blog_Post.Get(bid, null);
+            <p><a for-route="blogRoute" class="btn btn-primary">View Blog Post</a></p>
+        }
+        else
+        {
+            <p><a for-route="route" class="btn btn-primary">Back to My Blog</a></p>
+        }
     }
     else
     {
