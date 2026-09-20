@@ -11,12 +11,13 @@ using Ogma3.Data;
 using Ogma3.Data.Documents;
 using Ogma3.Infrastructure.Constants;
 using Ogma3.Infrastructure.ServiceRegistrations;
+using Ogma3.Services.ModeratorActionService;
 using Routes.Areas.Admin.Pages;
 
 namespace Ogma3.Areas.Admin.Pages.Documents;
 
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public sealed class EditModel(AppDbContext context) : PageModel
+public sealed class EditModel(AppDbContext context, IModeratorActionService moderatorActionService) : PageModel
 {
 	[BindProperty] public required InputModel Input { get; set; }
 
@@ -84,7 +85,7 @@ public sealed class EditModel(AppDbContext context) : PageModel
 
 		var admin = User.IsInRole(RoleNames.Admin);
 
-		context.Documents.Add(new Document
+		var newDoc = new Document
 		{
 			Title = oldVersion.Title,
 			Slug = oldVersion.Slug,
@@ -96,11 +97,16 @@ public sealed class EditModel(AppDbContext context) : PageModel
 			CreationTime = now,
 			RevisionDate = null,
 			Headers = toc,
-		});
+		};
+
+		context.Documents.Add(newDoc);
 
 		oldVersion.RevisionDate = now;
 
 		await context.SaveChangesAsync();
+
+		moderatorActionService.LogDocumentUpdated(newDoc.Slug, newDoc.Title, newDoc.Version);
+
 		return Documents_Index.Get().Redirect(this);
 	}
 }

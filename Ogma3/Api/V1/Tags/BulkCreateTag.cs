@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Tags;
 using Ogma3.Infrastructure.ServiceRegistrations;
+using Ogma3.Services.ModeratorActionService;
 using Ogma3.Services.TagCache;
 using Utils.Extensions;
 
@@ -22,7 +23,7 @@ using ReturnType = Results<BadRequest<string>, Ok<string>>;
 [MapPost("tags/bulk")]
 [UsedImplicitly]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public sealed partial class BulkCreateTag(AppDbContext context, TagCache cache, ILogger<BulkCreateTag.Handler> logger)
+public sealed partial class BulkCreateTag(AppDbContext context, TagCache cache, ILogger<BulkCreateTag.Handler> logger, IModeratorActionService moderatorActionService)
 {
 	private async ValueTask<ReturnType> HandleAsync(
 		Command request,
@@ -65,11 +66,16 @@ public sealed partial class BulkCreateTag(AppDbContext context, TagCache cache, 
 			INSERT INTO "Tags" ("Name", "Slug", "NamespaceId")
 			SELECT u.name, u.slug, n."Id"
 			FROM UNNEST({names}, {slugs}, {namespaces}) AS u(name, slug, ns_slug)
-			JOIN "TagNamespace" n ON n."Slug" = u.ns_slug
+			JOIN "TagNamespaces" n ON n."Slug" = u.ns_slug
 			ON CONFLICT DO NOTHING
 			RETURNING "Id", "Slug", n."Name";
 			""")
 			.ToListAsync(cancellationToken);
+
+		foreach (var tag in inserted)
+		{
+			moderatorActionService.LogTagCreated(tag.Id, tag.TagName, tag.NamespaceSlug ?? "unknown");
+		}
 
 		await cache.AddManyAsync(inserted);
 

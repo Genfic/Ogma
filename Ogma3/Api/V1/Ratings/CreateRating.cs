@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Ogma3.Data;
 using Ogma3.Data.Ratings;
 using Ogma3.Infrastructure.ServiceRegistrations;
+using Ogma3.Services.ModeratorActionService;
 
 namespace Ogma3.Api.V1.Ratings;
 
@@ -13,7 +14,7 @@ namespace Ogma3.Api.V1.Ratings;
 [MapGroup<ApiGroup>]
 [MapPost("ratings")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public sealed partial class CreateRating(AppDbContext context)
+public sealed partial class CreateRating(AppDbContext context, IModeratorActionService moderatorActionService)
 {
 
 	private static readonly Func<Rating, RatingApiDto> Mapper = RatingMapper.ToApiDto.Compile();
@@ -34,10 +35,11 @@ public sealed partial class CreateRating(AppDbContext context)
 			Order = request.Order,
 			Color = request.Color,
 		};
-
 		context.Ratings.Add(rating);
 
 		await context.SaveChangesAsync(cancellationToken);
+
+		moderatorActionService.LogRatingCreated(rating.Id, rating.Name);
 
 		return TypedResults.CreatedAtRoute(Mapper(rating), nameof(GetRatingById), new GetRatingById.Query(rating.Id));
 	}

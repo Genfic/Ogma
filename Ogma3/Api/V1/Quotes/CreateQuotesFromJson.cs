@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Ogma3.Data;
 using Ogma3.Data.Quotes;
 using Ogma3.Infrastructure.ServiceRegistrations;
+using Ogma3.Services.ModeratorActionService;
 
 namespace Ogma3.Api.V1.Quotes;
 
@@ -15,7 +16,7 @@ using ResponseType = Ok<int>;
 [MapGroup<ApiGroup>]
 [MapPost("quotes/json")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public sealed partial class CreateQuotesFromJson(AppDbContext context)
+public sealed partial class CreateQuotesFromJson(AppDbContext context, IModeratorActionService moderatorActionService)
 {
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)
 		=> endpoint
@@ -27,16 +28,24 @@ public sealed partial class CreateQuotesFromJson(AppDbContext context)
 		CancellationToken cancellationToken
 	)
 	{
-		var quotes = request.Quotes.Select(q => new Quote
-		{
-			Body = q.Body,
-			Author = q.Author,
-		});
+		var quotes = request.Quotes
+			.Select(q => new Quote
+			{
+				Body = q.Body,
+				Author = q.Author,
+			})
+			.ToArray();
 
 		context.Quotes.AddRange(quotes);
 
-		var insertedRows = await context.SaveChangesAsync(cancellationToken);
-		return TypedResults.Ok(insertedRows);
+		await context.SaveChangesAsync(cancellationToken);
+
+		foreach (var quote in quotes)
+		{
+			moderatorActionService.LogQuoteCreated(quote.Id, quote.Author);
+		}
+
+		return TypedResults.Ok(quotes.Length);
 
 	}
 

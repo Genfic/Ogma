@@ -4,8 +4,10 @@ using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
+using Ogma3.Data;
 using Ogma3.Data.Roles;
 using Ogma3.Infrastructure.ServiceRegistrations;
+using Ogma3.Services.ModeratorActionService;
 
 namespace Ogma3.Api.V1.Roles;
 
@@ -15,7 +17,7 @@ using ReturnType = Results<Conflict<string>, CreatedAtRoute<RoleDto>>;
 [MapGroup<ApiGroup>]
 [MapPost("roles")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public sealed partial class CreateRole(RoleManager<OgmaRole> roleManager)
+public sealed partial class CreateRole(AppDbContext context, RoleManager<OgmaRole> roleManager, IModeratorActionService moderatorActionService)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint
@@ -38,6 +40,8 @@ public sealed partial class CreateRole(RoleManager<OgmaRole> roleManager)
 		};
 
 		await roleManager.CreateAsync(role);
+
+		moderatorActionService.LogRoleCreated(role.Id, role.Name, role.IsStaff);
 
 		return TypedResults.CreatedAtRoute(role.ToDto(), nameof(GetRoleById), new GetRoleById.Query(role.Id));
 	}

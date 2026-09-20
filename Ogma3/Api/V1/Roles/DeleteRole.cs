@@ -4,8 +4,10 @@ using Immediate.Validations.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
+using Ogma3.Data;
 using Ogma3.Data.Roles;
 using Ogma3.Infrastructure.ServiceRegistrations;
+using Ogma3.Services.ModeratorActionService;
 
 namespace Ogma3.Api.V1.Roles;
 
@@ -15,7 +17,7 @@ using ReturnType = Results<Ok<long>, NotFound>;
 [MapGroup<ApiGroup>]
 [MapDelete("roles")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public sealed partial class DeleteRole(RoleManager<OgmaRole> roleManager)
+public sealed partial class DeleteRole(AppDbContext context, RoleManager<OgmaRole> roleManager, IModeratorActionService moderatorActionService)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint
@@ -33,6 +35,8 @@ public sealed partial class DeleteRole(RoleManager<OgmaRole> roleManager)
 		if (role is null) return TypedResults.NotFound();
 
 		await roleManager.DeleteAsync(role);
+
+		moderatorActionService.LogRoleDeleted(role.Id, role.Name);
 
 		return TypedResults.Ok(role.Id);
 	}

@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
-using Ogma3.Data.Tags;
 using Ogma3.Infrastructure.ServiceRegistrations;
+using Ogma3.Services.ModeratorActionService;
 using Ogma3.Services.TagCache;
 using Utils.Extensions;
 
@@ -18,7 +18,7 @@ using ReturnType = Results<Ok, NotFound, Conflict<string>>;
 [MapGroup<ApiGroup>]
 [MapPut("tags")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public sealed partial class UpdateTag(AppDbContext context, TagCache cache)
+public sealed partial class UpdateTag(AppDbContext context, TagCache cache, IModeratorActionService moderatorActionService)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint
@@ -62,13 +62,18 @@ public sealed partial class UpdateTag(AppDbContext context, TagCache cache)
 
 		var names = await context.Tags
 			.Where(t => t.Id == request.Id)
-			.Select(t => new { Ns = t.Namespace!.Name, Slug = t.Slug })
+			.Select(t => new {
+				Ns = t.Namespace!.Name,
+				t.Slug,
+			})
 			.FirstOrDefaultAsync(cancellationToken);
 
 		if (names is null)
 		{
 			return TypedResults.NotFound();
 		}
+
+		moderatorActionService.LogTagUpdated(tag.Id, tag.TagName, tag.NamespaceSlug ?? "unknown");
 
 		await cache.UpdateAsync(tag, new(request.Id, names.Slug, names.Ns));
 

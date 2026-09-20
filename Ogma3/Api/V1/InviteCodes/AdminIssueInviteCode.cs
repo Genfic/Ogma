@@ -7,6 +7,7 @@ using Ogma3.Data;
 using Ogma3.Data.InviteCodes;
 using Ogma3.Infrastructure.ServiceRegistrations;
 using Ogma3.Services.CodeGenerator;
+using Ogma3.Services.ModeratorActionService;
 using Ogma3.Services.UserService;
 
 namespace Ogma3.Api.V1.InviteCodes;
@@ -17,7 +18,11 @@ using ReturnType = Results<UnauthorizedHttpResult, Ok<InviteCodeDto>>;
 [MapGroup<ApiGroup>]
 [MapPost("InviteCodes/no-limit")]
 [Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
-public sealed partial class AdminIssueInviteCode(AppDbContext context, ICodeGenerator codeGenerator, IUserService userService)
+public sealed partial class AdminIssueInviteCode(
+	AppDbContext context,
+	ICodeGenerator codeGenerator,
+	ModeratorActionService moderatorActionService,
+	IUserService userService)
 {
 	private async ValueTask<ReturnType> HandleAsync(
 		Command _,
@@ -36,10 +41,12 @@ public sealed partial class AdminIssueInviteCode(AppDbContext context, ICodeGene
 
 		await context.SaveChangesAsync(cancellationToken);
 
+		moderatorActionService.LogInviteCodeCreated();
+
 		var newCode = await context.InviteCodes
 			.Where(ic => ic.Id == code.Id)
 			.ProjectToDto()
-			.FirstOrDefaultAsync(cancellationToken: cancellationToken);
+			.FirstOrDefaultAsync(cancellationToken);
 
 		return TypedResults.Ok(newCode);
 	}

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Ogma3.Data;
 using Ogma3.Data.Quotes;
 using Ogma3.Infrastructure.ServiceRegistrations;
+using Ogma3.Services.ModeratorActionService;
 
 namespace Ogma3.Api.V1.Quotes;
 
@@ -15,7 +16,7 @@ using ReturnType = Results<StatusCodeHttpResult, CreatedAtRoute<FullQuoteDto>>;
 [MapGroup<ApiGroup>]
 [MapPost("quotes")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public sealed partial class CreateQuote(AppDbContext context, ILogger<CreateQuote.Handler> logger)
+public sealed partial class CreateQuote(AppDbContext context, IModeratorActionService moderatorActionService)
 {
 	internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint)
 		=> endpoint
@@ -36,7 +37,7 @@ public sealed partial class CreateQuote(AppDbContext context, ILogger<CreateQuot
 
 		await context.SaveChangesAsync(cancellationToken);
 
-		logger.LogInformation("Quote created at route {Name}", nameof(GetSingleQuote));
+		moderatorActionService.LogQuoteCreated(quote.Id, quote.Author);
 
 		return TypedResults.CreatedAtRoute(
 			new FullQuoteDto(quote.Id, quote.Body, quote.Author),

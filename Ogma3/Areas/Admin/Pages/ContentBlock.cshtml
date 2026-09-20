@@ -11,7 +11,7 @@
 	<form method="GET" class="auto">
 		<label for="type">Type</label>
 		<select name="type" id="type">
-			@foreach (var t in Enum.GetNames<ContentBlock.ItemType>())
+			@foreach (var t in ItemTypeExtensions.GetNames())
 			{
 				<option value="@t">@t</option>
 			}
@@ -26,7 +26,7 @@
 else
 {
 	var handler = Model.Item.Blocked ? "Unblock" : "Block";
-	
+
 	<h3>
 		<span class="text-faded">@(Model.Item.Type):</span> @Model.Item.Title
 	</h3>

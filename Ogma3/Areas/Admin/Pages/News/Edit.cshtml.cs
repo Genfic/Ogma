@@ -6,13 +6,14 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Infrastructure.OgmaConfig;
 using Ogma3.Infrastructure.ServiceRegistrations;
+using Ogma3.Services.ModeratorActionService;
 using Routes.Areas.Admin.Pages;
 using Utils.Extensions;
 
 namespace Ogma3.Areas.Admin.Pages.News;
 
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public sealed class EditModel(AppDbContext ctx, OgmaConfig config) : PageModel
+public sealed class EditModel(AppDbContext ctx, OgmaConfig config, IModeratorActionService moderatorActionService) : PageModel
 {
 	[BindProperty] public required InputModel Input { get; set; }
 
@@ -73,6 +74,10 @@ public sealed class EditModel(AppDbContext ctx, OgmaConfig config) : PageModel
 				.SetProperty(n => n.ExcerptCutoff, cutoff)
 				.SetProperty(n => n.IsVisible, Input.Published)
 				.SetProperty(n => n.PublicationDate, n => n.PublicationDate == null ? DateTimeOffset.UtcNow : n.PublicationDate));
+
+		await ctx.SaveChangesAsync();
+
+		moderatorActionService.LogNewsUpdated(Input.Id, Input.Title);
 
 		return News_Index.Get().Redirect(this);
 	}

@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Tags;
 using Ogma3.Infrastructure.ServiceRegistrations;
+using Ogma3.Services.ModeratorActionService;
 using Ogma3.Services.TagCache;
 using Utils.Extensions;
 
@@ -18,7 +19,7 @@ using ReturnType = Results<Conflict<string>, CreatedAtRoute<TagDto>>;
 [MapGroup<ApiGroup>]
 [MapPost("tags")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public sealed partial class CreateTag(AppDbContext context, TagCache cache)
+public sealed partial class CreateTag(AppDbContext context, TagCache cache, IModeratorActionService moderatorActionService)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint
@@ -52,6 +53,8 @@ public sealed partial class CreateTag(AppDbContext context, TagCache cache)
 			.Where(n => n.Id == tag.NamespaceId)
 			.Select(n => n.Name)
 			.FirstOrDefaultAsync(cancellationToken);
+
+		moderatorActionService.LogTagCreated(tag.Id, tag.Name, nsName ?? "unknown");
 
 		await cache.AddAsync(new(tag.Id, tag.Slug, nsName));
 

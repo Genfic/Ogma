@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
+using Ogma3.Data.Comments;
 using Ogma3.Infrastructure.Constants;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Infrastructure.ServiceRegistrations;
@@ -38,26 +39,20 @@ public sealed partial class LockThread(AppDbContext context, IUserService userSe
 			.Where(ct => ct.Id == request.ThreadId)
 			.FirstOrDefaultAsync(cancellationToken);
 
-		if (thread is null) return TypedResults.NotFound();
+		if (thread is null)
+		{
+			return TypedResults.NotFound();
+		}
 
 		thread.LockDate = thread.LockDate is null ? DateTimeOffset.UtcNow : null;
 
-		var (type, typeId) = thread switch
-		{
-			{ BlogpostId: {} id } => ("blogpost", id),
-			{ ChapterId: {} id } => ("chapter", id),
-			{ ClubThreadId: {} id } => ("club", id),
-			{ UserId: {} id } => ("user profile", id),
-			_ => ("unknown", 0),
-		};
-
 		if (thread.IsLocked)
 		{
-			moderatorActionService.LogThreadLocked(type, typeId, thread.Id);
+			moderatorActionService.LogThreadLocked(thread.Source.ToStringFast(), thread.SourceId, thread.Id);
 		}
 		else
 		{
-			moderatorActionService.LogThreadUnlocked(type, typeId, thread.Id);
+			moderatorActionService.LogThreadUnlocked(thread.Source.ToStringFast(), thread.SourceId, thread.Id);
 		}
 
 		await context.SaveChangesAsync(cancellationToken);

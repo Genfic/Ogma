@@ -22,6 +22,7 @@ public sealed class CommentThread : BaseModel
 	public DateTimeOffset LastChange { get; set; }
 
 	public CommentSource Source { get; private set; }
+	public long SourceId { get; private set; }
 
 	public OgmaUser? User { get; set; }
 	public long? UserId { get; set; }

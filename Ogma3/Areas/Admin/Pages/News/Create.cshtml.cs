@@ -7,13 +7,14 @@ using Ogma3.Data.CommentsThreads;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Infrastructure.OgmaConfig;
 using Ogma3.Infrastructure.ServiceRegistrations;
+using Ogma3.Services.ModeratorActionService;
 using Routes.Areas.Admin.Pages;
 using Utils.Extensions;
 
 namespace Ogma3.Areas.Admin.Pages.News;
 
 [Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
-public sealed class CreateModel(AppDbContext ctx, OgmaConfig config) : PageModel
+public sealed class CreateModel(AppDbContext ctx, OgmaConfig config, IModeratorActionService moderatorActionService) : PageModel
 {
 	[BindProperty] public required InputModel Input { get; set; }
 
@@ -70,7 +71,10 @@ public sealed class CreateModel(AppDbContext ctx, OgmaConfig config) : PageModel
 		};
 
 		ctx.News.Add(news);
+
 		await ctx.SaveChangesAsync();
+
+		moderatorActionService.LogNewsCreated(news.Id, news.Title);
 
 		return News_Index.Get().Redirect(this);
 	}

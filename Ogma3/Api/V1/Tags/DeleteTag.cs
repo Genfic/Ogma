@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Infrastructure.ServiceRegistrations;
+using Ogma3.Services.ModeratorActionService;
 using Ogma3.Services.TagCache;
 
 namespace Ogma3.Api.V1.Tags;
@@ -16,7 +17,7 @@ using ReturnType = Results<Ok<long>, NotFound>;
 [MapGroup<ApiGroup>]
 [MapDelete("tags")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public sealed partial class DeleteTag(AppDbContext context, TagCache cache)
+public sealed partial class DeleteTag(AppDbContext context, TagCache cache, IModeratorActionService moderatorActionService)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint
@@ -45,6 +46,8 @@ public sealed partial class DeleteTag(AppDbContext context, TagCache cache)
 		{
 			return TypedResults.NotFound();
 		}
+
+		moderatorActionService.LogTagDeleted(tag.Id, tag.TagName, tag.NamespaceSlug ?? "unknown");
 
 		await cache.DeleteAsync(tag);
 		return TypedResults.Ok(request.TagId);

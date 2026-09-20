@@ -10,13 +10,14 @@ using Ogma3.Data;
 using Ogma3.Data.Documents;
 using Ogma3.Infrastructure.Constants;
 using Ogma3.Infrastructure.ServiceRegistrations;
+using Ogma3.Services.ModeratorActionService;
 using Routes.Areas.Admin.Pages;
 using Utils.Extensions;
 
 namespace Ogma3.Areas.Admin.Pages.Documents;
 
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public sealed class CreateModel(AppDbContext context) : PageModel
+public sealed class CreateModel(AppDbContext context, IModeratorActionService moderatorActionService) : PageModel
 {
 	[BindProperty] public required InputModel Input { get; set; }
 
@@ -56,7 +57,7 @@ public sealed class CreateModel(AppDbContext context) : PageModel
 
 		var admin = User.IsInRole(RoleNames.Admin);
 
-		context.Documents.Add(new Document
+		var doc = new Document
 		{
 			Title = Input.Title,
 			Slug = Input.Title.Friendlify(),
@@ -68,9 +69,14 @@ public sealed class CreateModel(AppDbContext context) : PageModel
 			CreationTime = DateTimeOffset.UtcNow,
 			RevisionDate = null,
 			Headers = toc,
-		});
+		};
+
+		context.Documents.Add(doc);
 
 		await context.SaveChangesAsync();
+
+		moderatorActionService.LogDocumentCreated(doc.Slug, doc.Title);
+
 		return Documents_Index.Get().Redirect(this);
 	}
 }

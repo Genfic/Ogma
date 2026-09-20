@@ -44,6 +44,18 @@ public sealed class CommentsThreadConfiguration : BaseConfiguration<CommentThrea
 				END
 				""", stored: true);
 
+		builder.Property(ct => ct.SourceId)
+			.HasComputedColumnSql(
+				$"""
+				CASE
+					WHEN "{nameof(CommentThread.ChapterId)}" IS NOT NULL THEN "{nameof(CommentThread.ChapterId)}"
+					WHEN "{nameof(CommentThread.BlogpostId)}" IS NOT NULL THEN "{nameof(CommentThread.BlogpostId)}"
+					WHEN "{nameof(CommentThread.UserId)}" IS NOT NULL THEN "{nameof(CommentThread.UserId)}"
+					WHEN "{nameof(CommentThread.ClubThreadId)}" IS NOT NULL THEN "{nameof(CommentThread.ClubThreadId)}"
+					WHEN "{nameof(CommentThread.NewsId)}" IS NOT NULL THEN "{nameof(CommentThread.NewsId)}"
+				END
+				""", stored: true);
+
 		// NAVIGATION
 		builder
 			.HasMany(ct => ct.Comments)

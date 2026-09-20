@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Infrastructure.Constants;
 using Ogma3.Infrastructure.ServiceRegistrations;
+using Ogma3.Services.ModeratorActionService;
 
 namespace Ogma3.Api.V1.Faqs;
 
@@ -17,7 +18,7 @@ using ReturnType = Results<NotFound, Ok>;
 [MapGroup<ApiGroup>]
 [MapPut("faqs")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public sealed partial class UpdateFaq(AppDbContext context)
+public sealed partial class UpdateFaq(AppDbContext context, IModeratorActionService moderatorActionService)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint
@@ -28,6 +29,16 @@ public sealed partial class UpdateFaq(AppDbContext context)
 		CancellationToken cancellationToken
 	)
 	{
+		var faq = await context.Faqs
+			.Where(f => f.Id == request.Id)
+			.Select(f => new { f.Id, f.Question })
+			.FirstOrDefaultAsync(cancellationToken);
+
+		if (faq is null)
+		{
+			return TypedResults.NotFound();
+		}
+
 		var rendered = Markdown.ToHtml(request.Answer, MarkdownPipelines.All);
 
 		var res = await context.Faqs
@@ -37,6 +48,11 @@ public sealed partial class UpdateFaq(AppDbContext context)
 					.SetProperty(propertyExpression: x => x.Answer, request.Answer)
 					.SetProperty(propertyExpression: x => x.AnswerRendered, rendered),
 				cancellationToken);
+
+		if (res > 0)
+		{
+			moderatorActionService.LogFaqUpdated(faq.Id, faq.Question);
+		}
 
 		return res > 0 ? TypedResults.Ok() : TypedResults.NotFound();
 	}

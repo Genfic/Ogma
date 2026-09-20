@@ -160,8 +160,6 @@ public sealed class DetailsModel(
 			return Forbid();
 		}
 
-		logger.LogWarning("User {UserId} is impersonating {Target}", currentId, target.UserName);
-
 		var addedClaims = new List<Claim>
 		{
 			new(ClaimTypes.ImpersonatingUserId, currentId.ToString()),
@@ -169,6 +167,9 @@ public sealed class DetailsModel(
 
 		await signInManager.SignOutAsync();
 		await signInManager.SignInWithClaimsAsync(target, isPersistent: false, addedClaims);
+
+		logger.LogWarning("User {UserId} is impersonating {Target}", currentId, target.UserName);
+		moderatorActionService.LogUserImpersonated(target.Id, target.UserName);
 
 		return Routes.Pages.Index.Get().Redirect(this);
 	}
