@@ -5,6 +5,61 @@ namespace Utils.Tests.Extensions;
 public sealed class TimeTests
 {
 	[Test]
+	[Arguments(0)]
+	[Arguments(1)]
+	[Arguments(5)]
+	[Arguments(9)]
+	public async Task MicrosecondEqual_WithinMicrosecond_ReturnsTrue(int ticksOffset)
+	{
+		var a = new DateTimeOffset(2023, 6, 15, 12, 30, 45, TimeSpan.Zero);
+		var b = a.AddTicks(ticksOffset);
+		
+		await Assert.That(a.MicrosecondEqual(b)).IsTrue();
+		await Assert.That(b.MicrosecondEqual(a)).IsTrue();
+	}
+
+	[Test]
+	[Arguments(10)]
+	[Arguments(11)]
+	[Arguments(100)]
+	[Arguments(10000)]
+	public async Task MicrosecondEqual_ExceedsMicrosecond_ReturnsFalse(int ticksOffset)
+	{
+		var a = new DateTimeOffset(2023, 6, 15, 12, 30, 45, TimeSpan.Zero);
+		var b = a.AddTicks(ticksOffset);
+		
+		await Assert.That(a.MicrosecondEqual(b)).IsFalse();
+		await Assert.That(b.MicrosecondEqual(a)).IsFalse();
+	}
+
+	[Test]
+	public async Task MicrosecondEqual_ExactlyEqual_ReturnsTrue()
+	{
+		var a = new DateTimeOffset(2023, 6, 15, 12, 30, 45, 123, TimeSpan.Zero);
+		var b = new DateTimeOffset(2023, 6, 15, 12, 30, 45, 123, TimeSpan.Zero);
+		
+		await Assert.That(a.MicrosecondEqual(b)).IsTrue();
+	}
+
+	[Test]
+	public async Task MicrosecondEqual_DifferentOffsets_SameInstant_ReturnsTrue()
+	{
+		var a = new DateTimeOffset(2023, 6, 15, 12, 30, 45, TimeSpan.FromHours(2));
+		var b = new DateTimeOffset(2023, 6, 15, 10, 30, 45, TimeSpan.Zero);
+		
+		await Assert.That(a.MicrosecondEqual(b)).IsTrue();
+	}
+
+	[Test]
+	public async Task MicrosecondEqual_NegativeOffset_ReturnsTrue()
+	{
+		var a = new DateTimeOffset(2023, 6, 15, 12, 30, 45, TimeSpan.Zero);
+		var b = a.AddTicks(-5);
+		
+		await Assert.That(a.MicrosecondEqual(b)).IsTrue();
+		await Assert.That(b.MicrosecondEqual(a)).IsTrue();
+	}
+	[Test]
 	[Arguments(1, "1st")]
 	[Arguments(2, "2nd")]
 	[Arguments(3, "3rd")]
