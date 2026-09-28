@@ -16,15 +16,20 @@ public sealed class DeleteDraftsRecurringJob
 		using var scope = ServiceProvider.CreateScope();
 		var ctx = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-		var safeUsers = ctx.Subscriptions
-			.Where(s => s.Tier != null && (s.Tier.Entitlements & Entitlement.DraftsLastForever) != 0)
-			.Select(s => s.UserId);
-
-		var longerUsers = ctx.Subscriptions
-			.Where(s => s.Tier != null && (s.Tier.Entitlements & Entitlement.DraftsLastLonger) != 0)
-			.Select(s => s.UserId);
-
 		var now = DateTimeOffset.UtcNow;
+
+		var active = ctx.Subscriptions
+			.Where(SubscriptionEntitlements.IsActive(TimeSpan.FromDays(config.EntitlementGraceDays), now))
+			.Where(s => s.Tier != null);
+
+		var safeUsers = active
+			.Where(s => (s.Tier!.Entitlements & Entitlement.DraftsLastForever) != 0)
+			.Select(s => s.UserId);
+
+		var longerUsers = active
+			.Where(s => (s.Tier!.Entitlements & Entitlement.DraftsLastLonger) != 0)
+			.Select(s => s.UserId);
+
 		var chapterCount = await ctx.Chapters
 			.Where(c => c.PublicationDate == null)
 			.Where(c => !safeUsers.Contains(c.Story.AuthorId))

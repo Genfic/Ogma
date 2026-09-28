@@ -56,7 +56,7 @@ public sealed partial class CreateInfraction(AppDbContext context, IUserService 
 			return TypedResults.Ok();
 		}
 
-		var res = await cache.Ban(uid, dateTime);
+		var res = await cache.Ban(userId, dateTime);
 
 		return res ? TypedResults.Ok() : TypedResults.InternalServerError("Could not ban user!");
 	}

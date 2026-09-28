@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Ogma3.Data;
 using Ogma3.Data.Subscriptions;
+using Ogma3.Services.EntitlementService;
 
 namespace Ogma3.Api.Hooks.Patreon;
 
@@ -28,6 +29,7 @@ public sealed partial class HandlePatreonWebhook
 	AppDbContext context,
 	IHttpContextAccessor httpContextAccessor,
 	OgmaUserManager userManager,
+	EntitlementService entitlementService,
 	ILogger<HandlePatreonWebhook.Handler> logger)
 {
 	private static readonly FrozenSet<string> AllowedEvents =
@@ -143,6 +145,7 @@ public sealed partial class HandlePatreonWebhook
 						.SetProperty(propertyExpression: s => s.PatreonStatus, status)
 						.SetProperty(propertyExpression: s => s.PatreonTierIds, tierIds)
 						.SetProperty(propertyExpression: s => s.TierId, tierId)
+						.SetProperty(propertyExpression: s => s.RevokedAt, (DateTimeOffset?)null)
 						.SetProperty(propertyExpression: s => s.LastChange, DateTimeOffset.UtcNow),
 					cancellationToken);
 		}
@@ -161,22 +164,49 @@ public sealed partial class HandlePatreonWebhook
 			await context.SaveChangesAsync(cancellationToken);
 		}
 
+		await entitlementService.Clear(user.Id);
+
 		return TypedResults.Ok();
 	}
 
+	/// <summary>
+	///     Marks the subscription revoked rather than deleting it. Entitlements remain in force for the
+	///     configured grace period and are purged later by <see cref="PurgeRevokedSubscriptionsRecurringJob" />.
+	///     A failed payment or an out-of-order webhook therefore cannot, on its own, drop a patron's drafts.
+	/// </summary>
 	private async Task RevokeSubscription(string patronId, long? userId = null, CancellationToken cancellationToken = default)
 	{
-		var rows = await context.Subscriptions
+		// Every affected user needs invalidating, including the ones we cannot resolve a login for
+		var affected = await context.Subscriptions
 			.Where(s => s.PatreonUserId == patronId)
-			.ExecuteDeleteAsync(cancellationToken);
+			.Select(s => s.UserId)
+			.ToListAsync(cancellationToken);
 
 		if (userId is not null)
 		{
-			logger.LogInformation("Deleted {Rows} subscriptions tied to user {UserId} (Patreon: {PatreonId}).", rows, userId, patronId);
+			affected.Add(userId.Value);
+		}
+
+		// Only stamp the first report, so a stream of updates cannot keep pushing the
+		// purge deadline out indefinitely
+		var rows = await context.Subscriptions
+			.Where(s => s.PatreonUserId == patronId && s.RevokedAt == null)
+			.ExecuteUpdateAsync(setters => setters
+				.SetProperty(s => s.RevokedAt, DateTimeOffset.UtcNow),
+				cancellationToken);
+
+		foreach (var id in affected.Distinct())
+		{
+			await entitlementService.Clear(id);
+		}
+
+		if (userId is not null)
+		{
+			logger.LogInformation("Revoked {Rows} subscriptions tied to user {UserId} (Patreon: {PatreonId}).", rows, userId, patronId);
 		}
 		else
 		{
-			logger.LogInformation("Deleted {Rows} subscriptions tied to Patreon user {UserId}.", rows, patronId);
+			logger.LogInformation("Revoked {Rows} subscriptions tied to Patreon user {UserId}.", rows, patronId);
 		}
 	}
 

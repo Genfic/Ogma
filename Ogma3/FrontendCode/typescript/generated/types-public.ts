@@ -45,7 +45,6 @@ export type CommentSource = "Blogpost" | "Chapter" | "ForumPost" | "Profile";
 export type CreateCommentCommand = {
     body: string;
     thread: number;
-    source: CommentSource;
     powToken: string;
     powNonce: number;
     powHash: string;

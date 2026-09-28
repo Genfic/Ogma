@@ -29,20 +29,40 @@ public sealed partial class DeleteVote(AppDbContext context, IUserService userSe
 	{
 		if (userService.UserId is not {} uid) return TypedResults.Unauthorized();
 
+		// The transaction must be opened *before* the delete: ExecuteDeleteAsync outside a
+		// transaction auto-commits, which would leave the vote gone even when the story
+		// adjustment below fails and we return NotFound.
+		await using var transaction = await context.Database.BeginTransactionAsync(cancellationToken);
+
 		var res = await context.Votes
 			.Where(v => v.StoryId == request.StoryId)
 			.Where(v => v.UserId == uid)
 			.ExecuteDeleteAsync(cancellationToken);
 
-		if (res <= 0) return TypedResults.NotFound();
+		if (res <= 0)
+		{
+			await transaction.RollbackAsync(cancellationToken);
+			return TypedResults.NotFound();
+		}
 
-		var count = await context.Votes
-			.Where(v => v.StoryId == request.StoryId)
-			.CountAsync(cancellationToken);
+		var updated = await context.Stories
+			.Where(s => s.Id == request.StoryId)
+			.ExecuteUpdateAsync(setters => setters
+					.SetProperty(s => s.VoteCount, s => s.VoteCount > 0 ? s.VoteCount - 1 : 0),
+				cancellationToken);
 
-		await context.Stories.ExecuteUpdateAsync(setters => setters
-				.SetProperty(s => s.VoteCount, count),
-			cancellationToken);
+		if (updated <= 0)
+		{
+			await transaction.RollbackAsync(cancellationToken);
+			return TypedResults.NotFound();
+		}
+
+		var count = await context.Stories
+			.Where(s => s.Id == request.StoryId)
+			.Select(s => s.VoteCount)
+			.FirstOrDefaultAsync(cancellationToken);
+
+		await transaction.CommitAsync(cancellationToken);
 
 		return TypedResults.Ok(new VoteResult(false, count));
 	}

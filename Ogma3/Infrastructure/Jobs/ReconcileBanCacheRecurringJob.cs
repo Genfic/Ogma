@@ -23,6 +23,7 @@ public sealed class ReconcileBanCacheRecurringJob
 
 		var bans = await ctx.Infractions
 			.Where(i => i.Type == InfractionType.Ban)
+			.Where(i => i.RemovedAt == null)
 			.Where(i => i.ActiveUntil > DateTimeOffset.UtcNow)
 			.Select(i => new BanCache.ActiveBan(i.UserId, i.ActiveUntil))
 			.ToListAsync(ct);

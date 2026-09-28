@@ -45,6 +45,7 @@ public sealed class OgmaConfig
 	// Premium account settings
 	[AutoformCategory("Premium")] public int DraftRetentionDays { get; set; } = 90;
 	[AutoformCategory("Premium")] public int PremiumDraftRetentionDays { get; set; } = 180;
+	[AutoformCategory("Premium")] public int EntitlementGraceDays { get; set; } = 7;
 }
 
 [Mapper]

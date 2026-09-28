@@ -31,7 +31,8 @@ public sealed class Index (AppDbContext context) : PageModel
 					u.Stories.Count(s => s.IsVisible),
 					u.Stories.Where(s => s.IsVisible).Sum(s => s.ChapterCount),
 					u.Blogposts.Count(b => b.IsVisible),
-					u.EmailConfirmed && u.DeletedAt == null && u.Infractions.All(i => i.Type != InfractionType.Ban)))
+					u.EmailConfirmed && u.DeletedAt == null && !u.Infractions.Any(
+						i => i.Type == InfractionType.Ban && i.RemovedAt == null && i.ActiveUntil > DateTimeOffset.UtcNow)))
 			.ToListAsync();
 
 		Pagination = new()

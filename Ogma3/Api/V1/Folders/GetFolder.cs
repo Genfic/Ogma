@@ -28,6 +28,7 @@ public sealed partial class GetFolder(AppDbContext context, IUserService userSer
 
 		var folders = await context.Folders
 			.Where(f => f.ClubId == request.ClubId)
+			.Where(f => f.Club.ClubMembers.Any(c => c.MemberId == uid))
 			.Select(f => new Result(
 				f.Id,
 				f.Name,

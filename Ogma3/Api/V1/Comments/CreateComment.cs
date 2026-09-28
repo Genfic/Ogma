@@ -59,7 +59,7 @@ public sealed partial class CreateComment
 			return TypedResults.Unauthorized();
 		}
 
-		var isBlocked = await CheckIfBlocked(context, thread.UserId, uid, request.Source, cancellationToken);
+		var isBlocked = await CheckIfBlocked(context, thread.UserId, uid, thread.Source, cancellationToken);
 		if (isBlocked)
 		{
 			return TypedResults.Unauthorized();
@@ -121,7 +121,6 @@ public sealed partial class CreateComment
 		[MinLength(CTConfig.Comment.MinBodyLength)]
 		public required string Body { get; init; }
 		public required long Thread { get; init; }
-		public required CommentSource Source { get; init; }
 		public required string PowToken { get; init; }
 		public required int PowNonce { get; init; }
 		public required string PowHash { get; init; }

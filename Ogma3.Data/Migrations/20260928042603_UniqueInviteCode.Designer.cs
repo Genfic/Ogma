@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Ogma3.Data;
@@ -18,14 +19,11 @@ using Ogma3.Data.Stories;
 namespace Ogma3.Data.Migrations;
 
 [DbContext(typeof(AppDbContext))]
-partial class AppDbContextModelSnapshot : ModelSnapshot
+[Migration("20260928042603_UniqueInviteCode")]
+partial class _20260928042603_UniqueInviteCode
 {
-    // If you encounter a merge conflict in the line below, it means you need to
-    // discard one of the migration branches and recreate its migrations on top of
-    // the other branch. See https://aka.ms/efcore-docs-migrations-conflicts for more info.
-    public override string LastMigrationId => "20260928061544_AddSubscriptionRevokedAt";
-
-    protected override void BuildModel(ModelBuilder modelBuilder)
+    /// <inheritdoc />
+    protected override void BuildTargetModel(ModelBuilder modelBuilder)
     {
 #pragma warning disable 612, 618
         modelBuilder
@@ -351,9 +349,6 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                 b.HasIndex("ScheduledFor")
                     .HasFilter("\"ScheduledFor\" IS NOT NULL");
 
-                b.HasIndex("ScheduledForDeletion")
-                    .HasFilter("\"ScheduledForDeletion\" IS NOT NULL");
-
                 b.HasIndex("Title");
 
                 b.ToTable("Blogposts", t =>
@@ -440,9 +435,6 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                 b.HasIndex("ScheduledFor")
                     .HasFilter("\"ScheduledFor\" IS NOT NULL");
 
-                b.HasIndex("ScheduledForDeletion")
-                    .HasFilter("\"ScheduledForDeletion\" IS NOT NULL");
-
                 var index = b.HasIndex("Signature");
 
                 NpgsqlIndexBuilderExtensions.HasMethod(index, "gin");
@@ -493,12 +485,10 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                     .HasMaxLength(5000)
                     .HasColumnType("character varying(5000)");
 
-                b.Property<long?>("ModeratorId")
+                b.Property<long>("ModeratorId")
                     .HasColumnType("bigint");
 
                 b.HasKey("Id");
-
-                b.HasIndex("ClubId");
 
                 b.HasIndex("ModeratorId");
 
@@ -1650,9 +1640,6 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                 b.HasIndex("ScheduledFor")
                     .HasFilter("\"ScheduledFor\" IS NOT NULL");
 
-                b.HasIndex("ScheduledForDeletion")
-                    .HasFilter("\"ScheduledForDeletion\" IS NOT NULL");
-
                 b.ToTable("Stories");
             });
 
@@ -1703,9 +1690,6 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                     .HasMaxLength(128)
                     .HasColumnType("character varying(128)");
 
-                b.Property<DateTimeOffset?>("RevokedAt")
-                    .HasColumnType("timestamp with time zone");
-
                 b.Property<long?>("TierId")
                     .HasColumnType("bigint");
 
@@ -1713,8 +1697,6 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                     .HasColumnType("bigint");
 
                 b.HasKey("Id");
-
-                b.HasIndex("RevokedAt");
 
                 b.HasIndex("TierId");
 
@@ -2288,14 +2270,15 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
             {
                 b.HasOne("Ogma3.Data.Clubs.Club", "Club")
                     .WithMany()
-                    .HasForeignKey("ClubId")
+                    .HasForeignKey("ModeratorId")
                     .OnDelete(DeleteBehavior.Cascade)
                     .IsRequired();
 
                 b.HasOne("Ogma3.Data.Users.OgmaUser", "Moderator")
                     .WithMany()
                     .HasForeignKey("ModeratorId")
-                    .OnDelete(DeleteBehavior.SetNull);
+                    .OnDelete(DeleteBehavior.SetNull)
+                    .IsRequired();
 
                 b.Navigation("Club");
 

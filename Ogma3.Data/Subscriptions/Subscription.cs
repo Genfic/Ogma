@@ -19,4 +19,6 @@ public sealed class Subscription : BaseModel
 
 	public DateTimeOffset CreationDate { get; set; }
 	public DateTimeOffset LastChange { get; set; }
+
+	public DateTimeOffset? RevokedAt { get; set; }
 }

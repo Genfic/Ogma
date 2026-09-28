@@ -255,13 +255,6 @@ export const GetApiCommentsLocate = async (threadId: number, commentId: string, 
     options,
 );
 
-export const GetApiCommentsMd = async (commentId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: string; 400: undefined; 404: undefined }, undefined>(`/api/comments/${commentId}/md`,
-    GET,
-    undefined,
-    headers,
-    options,
-);
-
 export const GetApiCommentsRevisions = async (commentId: string, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: GetRevisionResult[]; 400: undefined; 404: undefined }, undefined>(`/api/comments/${commentId}/revisions`,
     GET,
     undefined,

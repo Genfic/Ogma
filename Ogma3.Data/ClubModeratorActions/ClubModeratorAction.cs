@@ -12,7 +12,7 @@ namespace Ogma3.Data.ClubModeratorActions;
 public sealed class ClubModeratorAction : BaseModel
 {
 	public OgmaUser Moderator { get; set; } = null!;
-	public long ModeratorId { get; set; }
+	public long? ModeratorId { get; set; }
 	public required string Description { get; set; }
 	public DateTimeOffset CreationDate { get; set; }
 	public Club Club { get; set; } = null!;
@@ -39,7 +39,7 @@ public sealed class ClubModeratorAction : BaseModel
 			builder
 				.HasOne(ma => ma.Club)
 				.WithMany()
-				.HasForeignKey(ma => ma.ModeratorId)
+				.HasForeignKey(ma => ma.ClubId)
 				.OnDelete(DeleteBehavior.Cascade);
 		}
 	}

@@ -38,5 +38,7 @@ public sealed class SubscriptionConfig : BaseConfiguration<Subscription>
 		builder
 			.Property(s => s.LastChange)
 			.HasDefaultValueSql(PgConstants.CurrentTimestamp);
+
+		builder.HasIndex(s => s.RevokedAt);
 	}
 }

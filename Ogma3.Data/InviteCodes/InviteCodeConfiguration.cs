@@ -22,6 +22,10 @@ public sealed class InviteCodeConfiguration : BaseConfiguration<InviteCode>
 			.HasMaxLength(32);
 
 		builder
+			.HasIndex(ic => ic.Code)
+			.IsUnique();
+
+		builder
 			.Property(ic => ic.UsedDate)
 			.HasDefaultValue(null);
 

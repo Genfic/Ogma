@@ -6,13 +6,14 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.EntityFrameworkCore;
-using Ogma3.Data;
 using Ogma3.Data.Images;
 using Ogma3.Data.Users;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Infrastructure.ServiceRegistrations;
 using Ogma3.Services.GeneratedImagesService;
+using Ogma3.Services.InviteCodeService;
 using Ogma3.Services.Mailer;
 using Routes.Areas.Identity.Pages;
 
@@ -23,10 +24,10 @@ public sealed class ExternalLoginModel
 (
 	SignInManager<OgmaUser> signInManager,
 	UserManager<OgmaUser> userManager,
-	AppDbContext context,
 	ILogger<ExternalLoginModel> logger,
 	IMailer emailSender,
-	GeneratedImagesService imagesService)
+	GeneratedImagesService imagesService,
+	InviteCodeService inviteCodeService)
 	: PageModel
 {
 
@@ -104,6 +105,7 @@ public sealed class ExternalLoginModel
 		return Page();
 	}
 
+	[EnableRateLimiting(policyName: RateLimiting.Registration)]
 	public async Task<IActionResult> OnPostConfirmationAsync(string? returnUrl = null)
 	{
 		returnUrl ??= Url.Content("~/");
@@ -130,21 +132,22 @@ public sealed class ExternalLoginModel
 
 		if (ModelState.IsValid)
 		{
-			// Check if invite code is correct
-			var inviteCode = await context.InviteCodes
-				.Where(ic => Input.InviteCode != null && ic.Code == Input.InviteCode)
-				.FirstOrDefaultAsync();
+			LoginProvider = info.LoginProvider;
+			ReturnUrl = returnUrl;
 
-			if (inviteCode is null)
-			{
-				ModelState.TryAddModelError("InviteCode", "Incorrect invite code");
-				return Page();
-			}
+			var reservation = await inviteCodeService.ReserveAsync(Input.InviteCode, HttpContext.RequestAborted);
 
-			if (inviteCode.UsedDate is not null)
+			switch (reservation)
 			{
-				ModelState.TryAddModelError("InviteCode", "This invite code has been used");
-				return Page();
+				case InviteCodeReservationResult.NotFound:
+					ModelState.TryAddModelError(nameof(Input.InviteCode), "Incorrect invite code");
+					return Page();
+				case InviteCodeReservationResult.AlreadyClaimed:
+					ModelState.TryAddModelError(nameof(Input.InviteCode), "This invite code has been used");
+					return Page();
+				case InviteCodeReservationResult.Reserved:
+				default:
+					break;
 			}
 
 			var user = new OgmaUser
@@ -157,12 +160,33 @@ public sealed class ExternalLoginModel
 				},
 			};
 			var result = await userManager.CreateAsync(user);
-			if (result.Succeeded)
+			if (!result.Succeeded)
+			{
+				// CreateAsync rolled back, so there is no user to undo and nothing is attached
+				// to the reservation. Hand the code straight back rather than burning it on a
+				// validation failure the user can fix by correcting their username.
+				await inviteCodeService.ReleaseAsync(Input.InviteCode, HttpContext.RequestAborted);
+			}
+			else
 			{
 				result = await userManager.AddLoginAsync(user, info);
 				if (result.Succeeded)
 				{
 					logger.LogInformation("User created an account using {Name} provider", info.LoginProvider);
+
+					if (!await inviteCodeService.AttachAsync(Input.InviteCode, user.Id, HttpContext.RequestAborted))
+					{
+						// The reservation vanished mid-flight, so this registration cannot be tied to a
+						// code. Undo it rather than leave an account nothing is accountable to.
+						var undo = await userManager.DeleteAsync(user);
+						if (!undo.Succeeded)
+						{
+							logger.LogError("Failed to delete user {UserId} whose invite reservation was lost; code stays consumed.", user.Id);
+						}
+
+						ModelState.TryAddModelError(nameof(Input.InviteCode), "Incorrect invite code");
+						return Page();
+					}
 
 					var userName = await userManager.GetUserNameAsync(user);
 					var code = await userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -198,7 +222,11 @@ public sealed class ExternalLoginModel
 				var deleteResult = await userManager.DeleteAsync(user);
 				if (!deleteResult.Succeeded)
 				{
-					logger.LogError("Failed to delete user {UserId} after failed external login linking.", user.Id);
+					logger.LogError("Failed to delete user {UserId} after failed external login linking; invite code stays consumed.", user.Id);
+				}
+				else
+				{
+					await inviteCodeService.ReleaseAsync(Input.InviteCode, HttpContext.RequestAborted);
 				}
 			}
 

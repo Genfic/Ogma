@@ -65,10 +65,21 @@ public sealed class DeleteModel(AppDbContext context, IFileUploader uploader, IL
 
 		var icon = await context.Clubs
 			.Where(c => c.Id == id)
+			.Where(c => c.ClubMembers
+				.Where(cm => cm.MemberId == uid)
+				.Any(cm => cm.Role == EClubMemberRoles.Founder || cm.Role == EClubMemberRoles.Admin))
 			.Select(c => c.Icon)
+			.AsNoTracking()
 			.FirstOrDefaultAsync();
 
+		if (icon is null)
+		{
+			logger.LogInformation("User {UserId} did not succeed in deleting club {ClubId}", uid, id);
+			return NotFound();
+		}
+
 		var rows = await context.Clubs
+			.Where(c => c.Id == id)
 			.Where(c => c.ClubMembers
 				.Where(cm => cm.MemberId == uid)
 				.Any(cm => cm.Role == EClubMemberRoles.Founder || cm.Role == EClubMemberRoles.Admin))
@@ -82,13 +93,13 @@ public sealed class DeleteModel(AppDbContext context, IFileUploader uploader, IL
 
 		logger.LogInformation("User {UserId} succeeded in deleting club {ClubId}", uid, id);
 
-		if (icon is { ETag: not null })
+		if (icon.ETag is not null)
 		{
 			await uploader.Delete(icon.Url);
 		}
 
 		var imageRows = await context.Images
-			.Where(i => i.Id == (icon == null ? null : icon.Id))
+			.Where(i => i.Id == icon.Id)
 			.ExecuteDeleteAsync();
 
 		if (imageRows <= 0)

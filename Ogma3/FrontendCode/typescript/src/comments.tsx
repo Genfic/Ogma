@@ -147,7 +147,6 @@ const Comments = (props: Props) => {
 			{
 				body: body,
 				thread: props.threadId,
-				source: threadData().source,
 				powToken: powResult.token,
 				powNonce: powResult.nonce,
 				powHash: powResult.hash,

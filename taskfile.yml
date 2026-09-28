@@ -50,13 +50,21 @@ tasks:
       - ogma-tool bundle-size {{.SRC}}
 
   # EF helpers
-  db-migrate: dotnet ef migrations add {{.CLI_ARGS}}
-  db-unmigrate: dotnet ef migrations remove --offline {{.CLI_ARGS}}
-  db-compile: dotnet ef dbcontext optimize --output-dir CompiledModels --namespace CompiledModels {{.CLI_ARGS}}
-  db-all:
+  db-migrate:
+    aliases: [ dbm ]
     cmds:
-      - task: db-migrate
-      - task: db-compile
+      - dotnet ef migrations add {{.CLI_ARGS}}
+
+  db-unmigrate:
+    aliases: [ dbu ]
+    cmds:
+      - dotnet ef migrations remove --offline {{.CLI_ARGS}}
+
+  db-compile:
+    aliases: [ dbc ]
+    prompt: Currently blocked by https://github.com/dotnet/efcore/issues/24897. Do you want to continue?
+    cmds:
+      - dotnet ef dbcontext optimize --output-dir CompiledModels --namespace CompiledModels {{.CLI_ARGS}}
 
   # Frontend
   build-front:

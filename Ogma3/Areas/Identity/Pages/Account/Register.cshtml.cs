@@ -8,12 +8,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Users;
 using Ogma3.Infrastructure.CustomValidators;
 using Ogma3.Infrastructure.ServiceRegistrations;
 using Ogma3.Services.EmailBlocklistProvider;
+using Ogma3.Services.InviteCodeService;
 using Ogma3.Services.Mailer;
 using Ogma3.Services.PowService;
 using Ogma3.Services.SpeedTrapService;
@@ -31,8 +31,8 @@ public sealed class RegisterModel(
 	ITurnstileService turnstile,
 	PowService powService,
 	ISpeedTrapService speedTrap,
-	AppDbContext context,
 	IUserService userService,
+	InviteCodeService inviteCodeService,
 	ILogger<RegisterModel> logger) : PageModel
 {
 	[BindProperty] public InputModel Input { get; set; } = new();
@@ -150,29 +150,25 @@ public sealed class RegisterModel(
 			return Page();
 		}
 
-		// Check if invite code is correct
-		var inviteCode = await context.InviteCodes
-			.Where(ic => Input.InviteCode != null && ic.Code == Input.InviteCode)
-			.FirstOrDefaultAsync();
-
-		if (inviteCode is null)
-		{
-			ModelState.TryAddModelError("InviteCode", "Incorrect invite code");
-			return Page();
-		}
-
-		if (inviteCode.UsedDate is not null)
-		{
-			ModelState.TryAddModelError("InviteCode", "This invite code has been used");
-			return Page();
-		}
-
 		// Check PoW
 		var powResponse = await powService.VerifyChallenge(Input.PowToken, Input.PowNonce, Input.PowHash);
 		if (powResponse is not PowVerificationResult.Ok)
 		{
 			ModelState.AddModelError("PoW", "Incorrect PoW response");
 			logger.LogInformation("PoW verification for {User} failed during registration: {Result}", Input.Name, powResponse.ToStringFast());
+			return Page();
+		}
+
+		var reservation = await inviteCodeService.ReserveAsync(Input.InviteCode, HttpContext.RequestAborted);
+
+		if (reservation is not InviteCodeReservationResult.Reserved)
+		{
+			ModelState.TryAddModelError(
+				nameof(Input.InviteCode),
+				reservation is InviteCodeReservationResult.AlreadyClaimed
+					? "This invite code has been used"
+					: "Incorrect invite code"
+			);
 			return Page();
 		}
 
@@ -184,10 +180,19 @@ public sealed class RegisterModel(
 		{
 			logger.LogInformation("User {Name} created an account!", Input.Name);
 
-			// Modify invite code
-			inviteCode.UsedById = result.User.Id;
-			inviteCode.UsedDate = DateTimeOffset.UtcNow;
-			await context.SaveChangesAsync();
+			if (!await inviteCodeService.AttachAsync(Input.InviteCode, result.User.Id, HttpContext.RequestAborted))
+			{
+				// The reservation vanished mid-flight, so this registration cannot be tied to a
+				// code. Undo it rather than leave an account nothing is accountable to.
+				var undo = await userManager.DeleteAsync(result.User);
+				if (!undo.Succeeded)
+				{
+					logger.LogError("Failed to delete user {UserId} whose invite reservation was lost; code stays consumed.", result.User.Id);
+				}
+
+				ModelState.TryAddModelError(nameof(Input.InviteCode), "Incorrect invite code");
+				return Page();
+			}
 
 			// Send confirmation code
 			var code = await userManager.GenerateEmailConfirmationTokenAsync(result.User);
@@ -213,6 +218,9 @@ public sealed class RegisterModel(
 
 			return LocalRedirect(returnUrl);
 		}
+
+		// Nothing was created, so hand the code back rather than burning it on a failed signup.
+		await inviteCodeService.ReleaseAsync(Input.InviteCode, HttpContext.RequestAborted);
 
 		foreach (var error in result.Errors)
 		{
