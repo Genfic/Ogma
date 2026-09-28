@@ -17,6 +17,11 @@
         <PackageReference Include="Aspire.Hosting.Garnet" />
         <PackageReference Include="Aspire.Hosting.PostgreSQL" />
         <PackageReference Include="LibGit2Sharp" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" />
+        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" />
+        <PackageReference Include="OpenTelemetry.Extensions.Hosting" />
+        <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" />
+        <PackageReference Include="SSH.NET" />
     </ItemGroup>
 
     <ItemGroup>

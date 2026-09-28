@@ -7,4 +7,5 @@ public enum PinVerificationResult
 	LockedOut,
 	NoPin,
 	NotFound,
+	NotProvided,
 }

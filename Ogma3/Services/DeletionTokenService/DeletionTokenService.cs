@@ -1,6 +1,7 @@
 using Immediate.Injections.Shared;
 using MemoryPack;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.WebUtilities;
 
 namespace Ogma3.Services.DeletionTokenService;
 
@@ -11,10 +12,10 @@ public sealed class DeletionTokenService(IDataProtectionProvider dataProtection)
 
 	public string GenerateToken(long contentId, DateTimeOffset scheduledFor, string contentType)
 	{
-		var token = new Token(contentId, scheduledFor, contentType);
+		var token = new DeletionToken(contentId, scheduledFor, contentType);
 		var packed = MemoryPackSerializer.Serialize(token);
 		var bytes = _protector.Protect(packed);
-		return Convert.ToBase64String(bytes);
+		return WebEncoders.Base64UrlEncode(bytes);
 	}
 
 	public bool TryParseToken(string token, out long contentId, out DateTimeOffset scheduledFor, out string contentType)
@@ -25,9 +26,9 @@ public sealed class DeletionTokenService(IDataProtectionProvider dataProtection)
 
 		try
 		{
-			var bytes = Convert.FromBase64String(token);
+			var bytes = WebEncoders.Base64UrlDecode(token);
 			var decrypted = _protector.Unprotect(bytes);
-			var unpacked = MemoryPackSerializer.Deserialize<Token>(decrypted);
+			var unpacked = MemoryPackSerializer.Deserialize<DeletionToken>(decrypted);
 
 			if (unpacked is null)
 			{
@@ -48,10 +49,4 @@ public sealed class DeletionTokenService(IDataProtectionProvider dataProtection)
 }
 
 [MemoryPackable]
-public sealed partial record Token(long ContentId, DateTimeOffset ScheduledFor, string ContentType);
-
-public interface IDeletionTokenService
-{
-	string GenerateToken(long contentId, DateTimeOffset scheduledFor, string contentType);
-	bool TryParseToken(string token, out long contentId, out DateTimeOffset scheduledFor, out string contentType);
-}
+public sealed partial record DeletionToken(long ContentId, DateTimeOffset ScheduledFor, string ContentType);

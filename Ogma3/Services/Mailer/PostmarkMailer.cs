@@ -54,6 +54,7 @@ public sealed class PostmarkMailer(IOptions<PostmarkOptions> options, ILogger<Po
 				TemplateAlias = e.TemplateName,
 				TemplateModel = e.Model,
 				MessageStream = "outbound",
+				Attachments = e.Attachments ?? [],
 			})
 			.ToArray();
 

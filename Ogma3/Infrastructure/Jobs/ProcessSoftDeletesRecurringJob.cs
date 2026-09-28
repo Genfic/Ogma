@@ -28,101 +28,192 @@ public sealed class ProcessSoftDeletesRecurringJob
 		var now = DateTimeOffset.UtcNow;
 		var cutoff = now.AddDays(-7);
 
-		// Process stories
+		var ids = await ctx.Database.SqlQuery<ResultRow>( // lang=sql
+				$"""
+				 SELECT "Id", {(byte)ContentType.Story} as "Type" FROM "Stories" WHERE "ScheduledForDeletion" IS NOT NULL AND "ScheduledForDeletion" <= {cutoff}
+				 UNION ALL
+				 SELECT "Id", {(byte)ContentType.Chapter} as "Type" FROM "Chapters" WHERE "ScheduledForDeletion" IS NOT NULL AND "ScheduledForDeletion" <= {cutoff}
+				 UNION ALL
+				 SELECT "Id", {(byte)ContentType.Blogpost} as "Type" FROM "Blogposts" WHERE "ScheduledForDeletion" IS NOT NULL AND "ScheduledForDeletion" <= {cutoff}
+				 """)
+			.ToListAsync(ct);
+
+		if (ids.Count <= 0)
+		{
+			return;
+		}
+
+		var groups = ids
+			.GroupBy(r => r.Type)
+			.Where(g => g.Any())
+			.ToDictionary(
+				g => g.Key,
+				g => g.Select(x => x.Id).ToList()
+			);
+
+		if (groups.TryGetValue(ContentType.Story, out var storyIds))
+		{
+			await ProcessStories(ctx, storyIds, ct);
+		}
+
+		if (groups.TryGetValue(ContentType.Chapter, out var chapterIds))
+		{
+			await ProcessChapters(ctx, chapterIds, ct);
+		}
+
+		if (groups.TryGetValue(ContentType.Blogpost, out var blogpostIds))
+		{
+			await ProcessBlogposts(ctx, blogpostIds, ct);
+		}
+
+		try
+		{
+			foreach (var chunk in _emails.Chunk(250))
+			{
+				await mailer.SendBulkEmailTemplateAsync([.. chunk]);
+			}
+		}
+		finally
+		{
+			_emails.Clear();
+		}
+	}
+
+	private async Task ProcessStories(AppDbContext ctx, List<long> ids, CancellationToken ct)
+	{
+		await using var transaction = await ctx.Database.BeginTransactionAsync(ct);
+
 		var storiesToDelete = await ctx.Stories
 			.IgnoreQueryFilters()
-			.Where(s => s.ScheduledForDeletion != null && s.ScheduledForDeletion <= cutoff)
-			.Include(s => s.Author)
-			.Include(s => s.Cover)
+			.Where(s => ids.Contains(s.Id))
+			.Select(s => new
+			{
+				s.Id,
+				s.Title,
+				HasCover = s.Cover != null && s.Cover.ETag != null,
+				CoverUrl = s.Cover == null ? null : s.Cover.Url,
+				AuthorEmail = s.Author.Email,
+				AuthorUserName = s.Author.UserName,
+				s.ScheduledForDeletion,
+			})
 			.ToListAsync(ct);
+
+		if (storiesToDelete.Count <= 0)
+		{
+			return;
+		}
+
+		using var fileScope = ServiceProvider.CreateScope();
+		var uploader = fileScope.ServiceProvider.GetRequiredService<IFileUploader>();
+
+		var rows = await ctx.Stories
+			.Where(s => storiesToDelete.Select(sd => sd.Id).Contains(s.Id))
+			.ExecuteDeleteAsync(ct);
+
+		if (rows != storiesToDelete.Count)
+		{
+			await transaction.RollbackAsync(ct);
+			return;
+		}
 
 		foreach (var story in storiesToDelete)
 		{
-			try
+			if (story.HasCover && story.CoverUrl is not null)
 			{
-				// Delete cover if exists
-				if (story.Cover is { ETag: not null })
-				{
-					using var fileScope = ServiceProvider.CreateScope();
-					var uploader = fileScope.ServiceProvider.GetRequiredService<IFileUploader>();
-					await uploader.Delete(story.Cover.Url, ct);
-				}
-
-				ctx.Stories.Remove(story);
-				logger.LogInformation("Deleted story {StoryId} ({Title}) scheduled for {ScheduledFor}", story.Id, story.Title,
-					story.ScheduledForDeletion);
-
-				QueueEmail(story.Author.Email, story.Author.UserName, story.Title, "story");
+				await uploader.Delete(story.CoverUrl, ct);
 			}
-			catch (Exception)
-			{
-				logger.LogError("Error deleting story {StoryId}", story.Id);
-			}
+			logger.LogInformation("Deleted story {StoryId} ({Title}) scheduled for {ScheduledFor}", story.Id, story.Title,
+				story.ScheduledForDeletion);
+
+			QueueEmail(story.AuthorEmail, story.AuthorUserName, story.Title, "story");
 		}
 
-		// Process chapters
+		await transaction.CommitAsync(ct);
+	}
+
+	private async Task ProcessChapters(AppDbContext ctx, List<long> ids, CancellationToken ct)
+	{
+		await using var transaction = await ctx.Database.BeginTransactionAsync(ct);
+
 		var chaptersToDelete = await ctx.Chapters
 			.IgnoreQueryFilters()
-			.Where(c => c.ScheduledForDeletion != null && c.ScheduledForDeletion <= cutoff)
-			.Include(c => c.Story)
-			.ThenInclude(s => s.Author)
+			.Where(s => ids.Contains(s.Id))
+			.Select(s => new
+			{
+				s.Id,
+				s.Title,
+				StoryTitle = s.Story.Title,
+				AuthorEmail = s.Story.Author.Email,
+				AuthorUserName = s.Story.Author.UserName,
+				s.ScheduledForDeletion,
+			})
 			.ToListAsync(ct);
+
+		if (chaptersToDelete.Count <= 0)
+		{
+			return;
+		}
+
+		var rows = await ctx.Chapters
+			.Where(s => chaptersToDelete.Select(sd => sd.Id).Contains(s.Id))
+			.ExecuteDeleteAsync(ct);
+
+		if (rows != chaptersToDelete.Count)
+		{
+			await transaction.RollbackAsync(ct);
+			return;
+		}
 
 		foreach (var chapter in chaptersToDelete)
 		{
-			try
-			{
-				ctx.Chapters.Remove(chapter);
-				logger.LogInformation("Deleted chapter {ChapterId} ({Title}) scheduled for {ScheduledFor}", chapter.Id, chapter.Title,
-					chapter.ScheduledForDeletion);
-
-				QueueEmail(chapter.Story.Author.Email, chapter.Story.Author.UserName, chapter.Title, "chapter", chapter.Story.Title);
-			}
-			catch (Exception)
-			{
-				logger.LogError("Error deleting chapter {ChapterId}", chapter.Id);
-			}
+			logger.LogInformation("Deleted chapter {ChapterId} ({Title}) scheduled for {ScheduledFor}", chapter.Id, chapter.Title,
+				chapter.ScheduledForDeletion);
+			QueueEmail(chapter.AuthorEmail, chapter.AuthorUserName, chapter.Title, "chapter", chapter.StoryTitle);
 		}
 
-		// Process blogposts
+		await transaction.CommitAsync(ct);
+	}
+
+	private async Task ProcessBlogposts(AppDbContext ctx, List<long> ids, CancellationToken ct)
+	{
+		await using var transaction = await ctx.Database.BeginTransactionAsync(ct);
+
 		var blogpostsToDelete = await ctx.Blogposts
 			.IgnoreQueryFilters()
-			.Where(b => b.ScheduledForDeletion != null && b.ScheduledForDeletion <= cutoff)
-			.Include(b => b.Author)
+			.Where(s => ids.Contains(s.Id))
+			.Select(s => new
+			{
+				s.Id,
+				s.Title,
+				AuthorEmail = s.Author.Email,
+				AuthorUserName = s.Author.UserName,
+				s.ScheduledForDeletion,
+			})
 			.ToListAsync(ct);
+
+		if (blogpostsToDelete.Count <= 0)
+		{
+			return;
+		}
+
+		var rows = await ctx.Blogposts
+			.Where(s => blogpostsToDelete.Select(sd => sd.Id).Contains(s.Id))
+			.ExecuteDeleteAsync(ct);
+
+		if (rows != blogpostsToDelete.Count)
+		{
+			await transaction.RollbackAsync(ct);
+			return;
+		}
 
 		foreach (var blogpost in blogpostsToDelete)
 		{
-			try
-			{
-				ctx.Blogposts.Remove(blogpost);
-				logger.LogInformation("Deleted blogpost {BlogpostId} ({Title}) scheduled for {ScheduledFor}", blogpost.Id, blogpost.Title,
-					blogpost.ScheduledForDeletion);
-
-				QueueEmail(blogpost.Author.Email, blogpost.Author.UserName, blogpost.Title, "blogpost");
-			}
-			catch (Exception)
-			{
-				logger.LogError("Error deleting blogpost {BlogpostId}", blogpost.Id);
-			}
+			logger.LogInformation("Deleted blogpost {BlogpostId} ({Title}) scheduled for {ScheduledFor}", blogpost.Id, blogpost.Title,
+				blogpost.ScheduledForDeletion);
+			QueueEmail(blogpost.AuthorEmail, blogpost.AuthorUserName, blogpost.Title, "blogpost");
 		}
 
-		if (storiesToDelete.Count > 0 || chaptersToDelete.Count > 0 || blogpostsToDelete.Count > 0)
-		{
-			try
-			{
-				await ctx.SaveChangesAsync(ct);
-
-				foreach (var chunk in _emails.Chunk(250))
-				{
-					await mailer.SendBulkEmailTemplateAsync([..chunk]);
-				}
-			}
-			finally
-			{
-				_emails.Clear();
-			}
-		}
+		await transaction.CommitAsync(ct);
 	}
 
 	private void QueueEmail(string email, string username, string title, string contentType, string? parentTitle = null)
@@ -135,4 +226,6 @@ public sealed class ProcessSoftDeletesRecurringJob
 		};
 		_emails.Add(new BulkEmail(email, "content-deleted", model));
 	}
+
+	private sealed record ResultRow(long Id, ContentType Type);
 }

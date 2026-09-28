@@ -78,23 +78,19 @@ public sealed class DeleteModel(AppDbContext context, SafetyPinService pinServic
 
 		if (HasPin)
 		{
-			if (Pin is not {} pin)
+			var msg = await pinService.VerifyPin(uid, Pin) switch
 			{
-				ModelState.AddModelError("Pin", "Pin required");
-				return Page();
-			}
+				PinVerificationResult.Invalid => "Incorrect PIN",
+				PinVerificationResult.LockedOut => "PIN recently changed, lockout",
+				PinVerificationResult.NoPin => "No PIN set",
+				PinVerificationResult.NotFound => "User not found",
+				PinVerificationResult.NotProvided => "PIN required",
+				PinVerificationResult.Valid => null,
+				var r => throw new UnexpectedEnumValueException<PinVerificationResult>(r),
+			};
 
-			var res = await pinService.VerifyPin(uid, pin);
-			if (res != PinVerificationResult.Valid)
+			if (msg is not null)
 			{
-				var msg = res switch
-				{
-					PinVerificationResult.Invalid => "Incorrect PIN",
-					PinVerificationResult.LockedOut => "PIN recently changed, lockout",
-					PinVerificationResult.NoPin => "No PIN set",
-					PinVerificationResult.NotFound => "User not found",
-					_ => throw new UnexpectedEnumValueException<PinVerificationResult>(res),
-				};
 				ModelState.AddModelError("Pin", msg);
 				return Page();
 			}

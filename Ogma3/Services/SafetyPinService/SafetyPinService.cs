@@ -18,8 +18,13 @@ public sealed class SafetyPinService(AppDbContext ctx)
 			.FirstOrDefaultAsync();
 	}
 
-	public async Task<PinVerificationResult> VerifyPin(long uid, string pin)
+	public async Task<PinVerificationResult> VerifyPin(long uid, string? pin)
 	{
+		if (string.IsNullOrWhiteSpace(pin))
+		{
+			return PinVerificationResult.NotProvided;
+		}
+
 		var data = await ctx.Users
 			.Where(u => u.Id == uid)
 			.Select(u => new PinData(u.SafetyPinHash, u.SafetyPinLockedOutUntil))
