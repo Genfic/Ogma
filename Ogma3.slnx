@@ -7,4 +7,13 @@
   <Project Path="Ogma3\Ogma3.csproj" />
   <Project Path="Utils.Tests\Utils.Tests.csproj" />
   <Project Path="Utils\Utils.csproj" />
+
+	<Folder Name="/Items/">
+		<File Path="taskfile.yml" />
+		<File Path="README.md" />
+		<File Path="NuGet.config" />
+		<File Path="Directory.Build.props" />
+		<File Path="Directory.Build.targets" />
+		<File Path="Directory.Packages.props" />
+	</Folder>
 </Solution>

@@ -80,6 +80,10 @@ tasks:
       - task: build-front
       - aspire deploy -e Production
 
+  bump:patch: dotnet run --file ./.scripts/Bump.cs -- patch
+  bump:minor: dotnet run --file ./.scripts/Bump.cs -- minor
+  bump:major: dotnet run --file ./.scripts/Bump.cs -- major
+
   ngrok: ngrok http https://localhost:5001
 
   aspire-update: aspire update --self --channel stable && aspire update
