@@ -16,8 +16,11 @@ jobs:
     env:
       DOTNET_TEST_USE_MODERN_OUTPUT: true
       NUGET_AUTH_TOKEN: ${{ secrets.NUGET_PAT }}
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
     steps:
       - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
@@ -25,6 +28,18 @@ jobs:
           dotnet-version: '11.0.x'
           dotnet-quality: 'preview'
           source-url: https://nuget.pkg.github.com/atulin/index.json
+
+      - name: Install SonarScanner for .NET
+        run: |
+          dotnet tool install --global dotnet-sonarscanner
+          echo "$HOME/.dotnet/tools" >> "$GITHUB_PATH"
+
+      - name: Begin SonarQube analysis
+        run: >-
+          dotnet sonarscanner begin
+          /k:"${{ vars.SONAR_PROJECT_KEY }}"
+          /d:sonar.host.url="${{ vars.SONAR_HOST_URL }}"
+          /d:sonar.token="$SONAR_TOKEN"
 
       - name: Restore dependencies
         run: dotnet restore -p:Configuration=Release -r linux-x64
@@ -34,6 +49,9 @@ jobs:
 
       - name: Test
         run: dotnet test -c Release -- --coverage --coverage-output-format cobertura
+
+      - name: End SonarQube analysis
+        run: dotnet sonarscanner end /d:sonar.token="$SONAR_TOKEN"
 
       - name: Coveralls
         uses: coverallsapp/github-action@648a8eb78e6d50909eff900e4ec85cab4524a45b

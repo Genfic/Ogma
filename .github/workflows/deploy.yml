@@ -1,0 +1,89 @@
+name: Deploy
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  actions: read
+  contents: read
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  check-deployed:
+    runs-on: ubuntu-latest
+    outputs:
+      should-deploy: ${{ steps.check.outputs.should-deploy }}
+    steps:
+      - name: Check for a successful deployment of this tag
+        id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          already_deployed=$(gh api --paginate "repos/${GITHUB_REPOSITORY}/actions/workflows/deploy.yml/runs?per_page=100" \
+            | jq -s --arg tag "$GITHUB_REF_NAME" --arg run_id "$GITHUB_RUN_ID" \
+              'any(.[].workflow_runs[]; .head_branch == $tag and .conclusion == "success" and (.id | tostring) != $run_id)')
+
+          if [ "$already_deployed" = "true" ]; then
+            echo "Tag $GITHUB_REF_NAME has already been deployed successfully."
+            echo "should-deploy=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "should-deploy=true" >> "$GITHUB_OUTPUT"
+          fi
+
+  deploy:
+    needs: check-deployed
+    if: needs.check-deployed.outputs.should-deploy == 'true'
+    runs-on: ubuntu-latest
+    env:
+      NUGET_AUTH_TOKEN: ${{ secrets.NUGET_PAT }}
+      Parameters__postgres-password: ${{ secrets.POSTGRES_PASSWORD }}
+      Parameters__garnet-password: ${{ secrets.GARNET_PASSWORD }}
+      Parameters__infisical-project-id: ${{ secrets.INFISICAL_PROJECT_ID }}
+      Parameters__infisical-client-secret: ${{ secrets.INFISICAL_CLIENT_SECRET }}
+      Parameters__infisical-machine-id: ${{ secrets.INFISICAL_MACHINE_ID }}
+      DockerSSH__SshKeyPath: ${{ runner.temp }}/deploy_key
+      DockerSSH__SshPassword: ${{ secrets.DEPLOY_SSH_PASSWORD }}
+      DockerSSH__SshUsername: ${{ vars.DEPLOY_SSH_USERNAME }}
+      DockerSSH__TargetHost: ${{ vars.DEPLOY_SSH_HOST }}
+      DiscordWebhook__Url: ${{ secrets.DISCORD_WEBHOOK_URL }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '11.0.x'
+          dotnet-quality: preview
+          source-url: https://nuget.pkg.github.com/atulin/index.json
+
+      - name: Install Aspire CLI
+        run: |
+          dotnet tool install --global Aspire.Cli --prerelease --add-source https://api.nuget.org/v3/index.json
+          echo "$HOME/.dotnet/tools" >> "$GITHUB_PATH"
+
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Install frontend dependencies
+        working-directory: Ogma3/FrontendCode
+        run: bun install --frozen-lockfile
+
+      - name: Build frontend
+        working-directory: Ogma3/FrontendCode
+        run: bun run --parallel "*:prod" fonts
+
+      - name: Prepare SSH key
+        env:
+          DEPLOY_SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
+        run: |
+          install -m 600 /dev/null "$DockerSSH__SshKeyPath"
+          printf '%s' "$DEPLOY_SSH_PRIVATE_KEY" > "$DockerSSH__SshKeyPath"
+
+      - name: Deploy with Aspire
+        run: aspire deploy -e Production
