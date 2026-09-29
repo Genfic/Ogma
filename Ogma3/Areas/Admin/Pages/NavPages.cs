@@ -22,6 +22,7 @@ public static class NavPages
 	public static string Infractions => "Infractions";
 	public static string Subscriptions => "Subscriptions";
 	public static string Notifications => "Notifications";
+	public static string SystemStats => "SystemStats";
 
 	public static string PageNavClass(ViewContext viewContext, string? page)
 	{

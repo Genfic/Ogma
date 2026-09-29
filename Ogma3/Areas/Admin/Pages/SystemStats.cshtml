@@ -1,0 +1,67 @@
+@page
+@model Ogma3.Areas.Admin.Pages.SystemStats
+
+@{
+	ViewData["Title"] = "System resources";
+	ViewData["ActivePage"] = NavPages.SystemStats;
+}
+
+<p>Sampled at <time-display class="monospace" utc-date="@Model.SampledAt"></time-display></p>
+
+<br>
+
+<h2>Host</h2>
+<dl class="rows">
+	<dt>CPU usage</dt>
+	<dd>@(Model.Snapshot.CpuUsagePercentage is { } cpu ? $"{cpu:N1}%" : "Unavailable on this platform")</dd>
+
+	<dt>Memory used</dt>
+	<dd>
+		@if (Model.Snapshot.Memory is { TotalBytes: > 0 } memory)
+		{
+			@($"{FormatBytes(memory.UsedBytes)} / {FormatBytes(memory.TotalBytes)} ({memory.UsedBytes * 100d / memory.TotalBytes:N1}%)")
+		}
+		else
+		{
+			<text>Unavailable on this platform</text>
+		}
+	</dd>
+
+	<dt>Memory available</dt>
+	<dd>@(Model.Snapshot.Memory is { } ram ? FormatBytes(ram.AvailableBytes) : "Unavailable")</dd>
+
+	<dt>Root filesystem used</dt>
+	<dd>@(Model.Snapshot.Disk is { TotalBytes: > 0 } disk ? $"{FormatBytes(disk.UsedBytes)} / {FormatBytes(disk.TotalBytes)} ({disk.UsedBytes * 100d / disk.TotalBytes:N1}%)" : "Unavailable")</dd>
+
+	<dt>Root filesystem free</dt>
+	<dd>@(Model.Snapshot.Disk is { } storage ? FormatBytes(storage.AvailableBytes) : "Unavailable")</dd>
+</dl>
+
+<br>
+
+<h2>Service usage</h2>
+<dl class="rows">
+	<dt>Ogma process memory (working set)</dt>
+	<dd>@FormatBytes(Model.Snapshot.OgmaWorkingSetBytes)</dd>
+
+	<dt>Ogma process CPU</dt>
+	<dd>@($"{Model.Snapshot.OgmaCpuUsagePercentage:N1}%")</dd>
+
+	<dt>Garnet process private memory</dt>
+	<dd>@(Model.GarnetMemoryBytes is { } garnetMemory ? FormatBytes(garnetMemory) : "Unavailable")</dd>
+
+	<dt>PostgreSQL database size</dt>
+	<dd>@(Model.PostgresDatabaseBytes is { } databaseSize ? FormatBytes(databaseSize) : "Unavailable")</dd>
+</dl>
+
+<br>
+<hr>
+
+<p>
+	Garnet and PostgreSQL container CPU and total RAM are not exposed to Ogma by the current deployment.
+	PostgreSQL size is the database’s disk footprint, not the whole PostgreSQL container or volume.
+</p>
+
+@functions {
+	private static string FormatBytes(long bytes) => Humanizer.ByteSize.FromBytes(bytes).ToString();
+}

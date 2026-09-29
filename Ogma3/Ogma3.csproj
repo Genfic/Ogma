@@ -9,6 +9,7 @@
 		<NeutralLanguage>en</NeutralLanguage>
 		<EnableNETAnalyzers>true</EnableNETAnalyzers>
 		<AnalysisLevel>latest</AnalysisLevel>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 		<ContainerImageName>Ogma3</ContainerImageName>
@@ -169,5 +170,9 @@
 		<_ContentIncludedByDefault Remove="wwwroot/svg/spritesheet.svg.br"/>
 		<_ContentIncludedByDefault Remove="wwwroot/svg/spritesheet.svg.gz"/>
 		<_ContentIncludedByDefault Remove="wwwroot/svg/spritesheet.svg.zst"/>
+	</ItemGroup>
+	<ItemGroup>
+	  <Compile Remove="Infrastructure\Filters\PageHandlerRateLimitAttribute.cs" />
+	  <Compile Remove="Infrastructure\Filters\PageHandlerRateLimitFilter.cs" />
 	</ItemGroup>
 </Project>

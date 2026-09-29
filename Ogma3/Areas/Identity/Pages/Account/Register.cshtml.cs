@@ -32,7 +32,6 @@ public sealed class RegisterModel(
 	PowService powService,
 	ISpeedTrapService speedTrap,
 	IUserService userService,
-	InviteCodeService inviteCodeService,
 	ILogger<RegisterModel> logger) : PageModel
 {
 	[BindProperty] public InputModel Input { get; set; } = new();
@@ -159,40 +158,18 @@ public sealed class RegisterModel(
 			return Page();
 		}
 
-		var reservation = await inviteCodeService.ReserveAsync(Input.InviteCode, HttpContext.RequestAborted);
-
-		if (reservation is not InviteCodeReservationResult.Reserved)
-		{
-			ModelState.TryAddModelError(
-				nameof(Input.InviteCode),
-				reservation is InviteCodeReservationResult.AlreadyClaimed
-					? "This invite code has been used"
-					: "Incorrect invite code"
-			);
-			return Page();
-		}
-
-		// Create user
-		var result = await userService.CreateAsync(Input.Name, Input.Email, Input.Password);
+		var result = await userService.CreateAsync(
+			Input.Name,
+			Input.Email,
+			Input.Password,
+			inviteCode: Input.InviteCode,
+			cancellationToken: HttpContext.RequestAborted
+		);
 
 		// If everything went fine...
 		if (result.Succeeded)
 		{
 			logger.LogInformation("User {Name} created an account!", Input.Name);
-
-			if (!await inviteCodeService.AttachAsync(Input.InviteCode, result.User.Id, HttpContext.RequestAborted))
-			{
-				// The reservation vanished mid-flight, so this registration cannot be tied to a
-				// code. Undo it rather than leave an account nothing is accountable to.
-				var undo = await userManager.DeleteAsync(result.User);
-				if (!undo.Succeeded)
-				{
-					logger.LogError("Failed to delete user {UserId} whose invite reservation was lost; code stays consumed.", result.User.Id);
-				}
-
-				ModelState.TryAddModelError(nameof(Input.InviteCode), "Incorrect invite code");
-				return Page();
-			}
 
 			// Send confirmation code
 			var code = await userManager.GenerateEmailConfirmationTokenAsync(result.User);
@@ -219,8 +196,16 @@ public sealed class RegisterModel(
 			return LocalRedirect(returnUrl);
 		}
 
-		// Nothing was created, so hand the code back rather than burning it on a failed signup.
-		await inviteCodeService.ReleaseAsync(Input.InviteCode, HttpContext.RequestAborted);
+		if (result.InviteCode is not null)
+		{
+			ModelState.TryAddModelError(
+				nameof(Input.InviteCode),
+				result.InviteCode is InviteCodeRedemptionResult.AlreadyClaimed
+					? "This invite code has been used"
+					: "Incorrect invite code"
+			);
+			return Page();
+		}
 
 		foreach (var error in result.Errors)
 		{

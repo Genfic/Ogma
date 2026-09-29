@@ -2,6 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using Microsoft.AspNetCore.Identity;
 using Ogma3.Data.Users;
+using Ogma3.Services.InviteCodeService;
 
 namespace Ogma3.Services.UserService;
 
@@ -16,9 +17,25 @@ public sealed class UserCreationResult
 
 	public IEnumerable<IdentityError> Errors => _errors;
 
-	public static UserCreationResult Success(OgmaUser user)
+	/// <summary>
+	/// Why the invite code could not be redeemed, or <see langword="null" /> when the caller did not
+	/// require one or the user was rejected before any code was touched.
+	/// </summary>
+	public InviteCodeRedemptionResult? InviteCode { get; private init; }
+
+	public static UserCreationResult Success(OgmaUser user, InviteCodeRedemptionResult? inviteCode = null)
 	{
-		var result = new UserCreationResult { User = user, Succeeded = true };
+		var result = new UserCreationResult { User = user, Succeeded = true, InviteCode = inviteCode };
+		return result;
+	}
+
+	/// <summary>
+	/// Rejects the whole creation because the invite code behind it could not be claimed. The
+	/// transaction that created the user has been rolled back, so there is nothing to clean up.
+	/// </summary>
+	public static UserCreationResult Failed(InviteCodeRedemptionResult inviteCode)
+	{
+		var result = new UserCreationResult { InviteCode = inviteCode };
 		return result;
 	}
 

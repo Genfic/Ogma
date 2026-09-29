@@ -8,6 +8,7 @@ on:
 permissions:
   actions: read
   contents: read
+  packages: write
 
 concurrency:
   group: deploy-${{ github.ref }}
@@ -41,15 +42,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       NUGET_AUTH_TOKEN: ${{ secrets.NUGET_PAT }}
-      Parameters__postgres-password: ${{ secrets.POSTGRES_PASSWORD }}
-      Parameters__garnet-password: ${{ secrets.GARNET_PASSWORD }}
-      Parameters__infisical-project-id: ${{ secrets.INFISICAL_PROJECT_ID }}
-      Parameters__infisical-client-secret: ${{ secrets.INFISICAL_CLIENT_SECRET }}
-      Parameters__infisical-machine-id: ${{ secrets.INFISICAL_MACHINE_ID }}
-      DockerSSH__SshPassword: ${{ secrets.DEPLOY_SSH_PASSWORD }}
-      DockerSSH__SshUsername: ${{ vars.DEPLOY_SSH_USERNAME }}
-      DockerSSH__TargetHost: ${{ vars.DEPLOY_SSH_HOST }}
-      DiscordWebhook__Url: ${{ secrets.DISCORD_WEBHOOK_URL }}
+
     steps:
       - uses: actions/checkout@v6
         with:
@@ -63,11 +56,18 @@ jobs:
           source-url: https://nuget.pkg.github.com/atulin/index.json
 
       - name: Install Aspire CLI
-        run: |
-          dotnet tool install --global Aspire.Cli --prerelease --add-source https://api.nuget.org/v3/index.json
-          echo "$HOME/.dotnet/tools" >> "$GITHUB_PATH"
+        run: curl -sSL https://aspire.dev/install.sh | bash
 
-      - uses: oven-sh/setup-bun@v2
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Setup SSH agent
+        uses: webfactory/ssh-agent@v0.10.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Add known hosts
+        run: ssh-keyscan -H ${{ secrets.TARGET_HOST }} >> ~/.ssh/known_hosts
 
       - name: Install frontend dependencies
         working-directory: Ogma3/FrontendCode
@@ -77,14 +77,15 @@ jobs:
         working-directory: Ogma3/FrontendCode
         run: bun run --parallel "*:prod" fonts
 
-      - name: Prepare SSH key
-        env:
-          DEPLOY_SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
-        run: |
-          ssh_key_path="$RUNNER_TEMP/deploy_key"
-          install -m 600 /dev/null "$ssh_key_path"
-          printf '%s' "$DEPLOY_SSH_PRIVATE_KEY" > "$ssh_key_path"
-          echo "DockerSSH__SshKeyPath=$ssh_key_path" >> "$GITHUB_ENV"
-
       - name: Deploy with Aspire
         run: aspire deploy -e Production
+        env:
+          DockerSSH__TargetHost: ${{ secrets.TARGET_HOST }}
+          DockerSSH__SshUsername: ${{ secrets.SSH_USERNAME }}
+          DockerRegistry__RegistryUsername: ${{ github.actor }}
+          DockerRegistry__RegistryPassword: ${{ secrets.GITHUB_TOKEN }}
+          Parameters__postgres-password: ${{ secrets.POSTGRES_PASSWORD }}
+          Parameters__garnet-password: ${{ secrets.GARNET_PASSWORD }}
+          Parameters__infisical-project-id: ${{ secrets.INFISICAL_PROJECT_ID }}
+          Parameters__infisical-client-secret: ${{ secrets.INFISICAL_CLIENT_SECRET }}
+          Parameters__infisical-machine-id: ${{ secrets.INFISICAL_MACHINE_ID }}

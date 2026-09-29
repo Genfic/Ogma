@@ -5,17 +5,22 @@ using Ogma3.Data.Images;
 using Ogma3.Data.Shelves;
 using Ogma3.Data.Users;
 using Ogma3.Infrastructure.Extensions;
+using Ogma3.Services.InviteCodeService;
 using Utils;
 
 namespace Ogma3.Services.UserService;
 
 [RegisterScoped<IUserService>]
-public sealed class UserService(IHttpContextAccessor? accessor, OgmaUserManager userManager, AppDbContext context) : IUserService
+public sealed class UserService(
+	IHttpContextAccessor? accessor,
+	OgmaUserManager userManager,
+	AppDbContext context,
+	InviteCodeService.InviteCodeService inviteCodes) : IUserService
 {
 	public ClaimsPrincipal? User => accessor?.HttpContext?.User;
 	public long? UserId => User?.GetNumericId();
 
-	public async Task<UserCreationResult> CreateAsync(string username, string email, string password, bool activated = false)
+	public async Task<UserCreationResult> CreateAsync(string username, string email, string password, bool activated = false, string? inviteCode = null, CancellationToken cancellationToken = default)
 	{
 		var user = new OgmaUser
 		{
@@ -29,12 +34,18 @@ public sealed class UserService(IHttpContextAccessor? accessor, OgmaUserManager 
 			},
 		};
 
-		return await CreateAsync(user, password);
+		return await CreateAsync(user, password, inviteCode, cancellationToken);
 	}
 
-	public async Task<UserCreationResult> CreateAsync(OgmaUser user, string password)
+	/// <remarks>
+	/// Everything written here — the user, their shelves and, when <paramref name="inviteCode" />
+	/// is given, the claim on that code — commits as one unit. A registration therefore cannot
+	/// leave a user behind without the invite code that authorised it, and a rejected code cannot
+	/// burn itself on a user that is rolled back with it.
+	/// </remarks>
+	public async Task<UserCreationResult> CreateAsync(OgmaUser user, string password, string? inviteCode = null, CancellationToken cancellationToken = default)
 	{
-		await using var transaction = await context.Database.BeginTransactionAsync();
+		await using var transaction = await context.Database.BeginTransactionAsync(cancellationToken);
 
 		try
 		{
@@ -42,7 +53,7 @@ public sealed class UserService(IHttpContextAccessor? accessor, OgmaUserManager 
 
 			if (!createResult.Succeeded)
 			{
-				await transaction.RollbackAsync();
+				await transaction.RollbackAsync(cancellationToken);
 				return UserCreationResult.Failed(createResult.Errors.ToList());
 			}
 
@@ -66,14 +77,25 @@ public sealed class UserService(IHttpContextAccessor? accessor, OgmaUserManager 
 				}
 			);
 
-			await context.SaveChangesAsync();
-			await transaction.CommitAsync();
+			await context.SaveChangesAsync(cancellationToken);
 
-			return UserCreationResult.Success(user);
+			var redemption = inviteCode is null
+				? null
+				: (InviteCodeRedemptionResult?)await inviteCodes.RedeemAsync(inviteCode, user.Id, cancellationToken);
+
+			if (redemption is not null and not InviteCodeRedemptionResult.Redeemed)
+			{
+				await transaction.RollbackAsync(cancellationToken);
+				return UserCreationResult.Failed(redemption.Value);
+			}
+
+			await transaction.CommitAsync(cancellationToken);
+
+			return UserCreationResult.Success(user, redemption);
 		}
 		catch
 		{
-			await transaction.RollbackAsync();
+			await transaction.RollbackAsync(cancellationToken);
 			throw;
 		}
 	}

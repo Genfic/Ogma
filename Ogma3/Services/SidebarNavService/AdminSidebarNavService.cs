@@ -42,6 +42,7 @@ public sealed class AdminSidebarNavService(SidebarNavDataCache navData, IAuthori
 		],
 		["Other"] =
 		[
+			new(SystemStats.Get(), "System resources"),
 			new(Reports.Get()),
 			new(ModLog.Get()),
 			new(Faq.Get()),

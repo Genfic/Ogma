@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.AspNetCore.WebUtilities;
+using Ogma3.Data;
 using Ogma3.Data.Images;
 using Ogma3.Data.Users;
 using Ogma3.Infrastructure.Extensions;
@@ -24,6 +25,7 @@ public sealed class ExternalLoginModel
 (
 	SignInManager<OgmaUser> signInManager,
 	UserManager<OgmaUser> userManager,
+	AppDbContext context,
 	ILogger<ExternalLoginModel> logger,
 	IMailer emailSender,
 	GeneratedImagesService imagesService,
@@ -121,123 +123,92 @@ public sealed class ExternalLoginModel
 		var avatar = info.Principal.FindFirstValue(ClaimTypes.Avatar);
 		var email = info.Principal.FindFirstValue(ClaimTypes.Email);
 
+		LoginProvider = info.LoginProvider;
+		ReturnUrl = returnUrl;
+
 		if (Input.Email is null && email is null)
 		{
 			ModelState.AddModelError(nameof(Input.Email), "Email is required.");
-
-			LoginProvider = info.LoginProvider;
-			ReturnUrl = returnUrl;
 			return Page();
 		}
 
-		if (ModelState.IsValid)
+		if (!ModelState.IsValid) return Page();
+
+		var user = new OgmaUser
 		{
-			LoginProvider = info.LoginProvider;
-			ReturnUrl = returnUrl;
-
-			var reservation = await inviteCodeService.ReserveAsync(Input.InviteCode, HttpContext.RequestAborted);
-
-			switch (reservation)
+			UserName = Input.UserName,
+			Email = email ?? Input.Email ?? "",
+			Avatar = new Image
 			{
-				case InviteCodeReservationResult.NotFound:
-					ModelState.TryAddModelError(nameof(Input.InviteCode), "Incorrect invite code");
-					return Page();
-				case InviteCodeReservationResult.AlreadyClaimed:
-					ModelState.TryAddModelError(nameof(Input.InviteCode), "This invite code has been used");
-					return Page();
-				case InviteCodeReservationResult.Reserved:
-				default:
-					break;
-			}
+				Url = avatar ?? imagesService.GenerateAvatarUrl(Input.UserName),
+			},
+		};
 
-			var user = new OgmaUser
-			{
-				UserName = Input.UserName,
-				Email = email ?? Input.Email ?? "",
-				Avatar = new Image
-				{
-					Url = avatar ?? imagesService.GenerateAvatarUrl(Input.UserName),
-				},
-			};
-			var result = await userManager.CreateAsync(user);
-			if (!result.Succeeded)
-			{
-				// CreateAsync rolled back, so there is no user to undo and nothing is attached
-				// to the reservation. Hand the code straight back rather than burning it on a
-				// validation failure the user can fix by correcting their username.
-				await inviteCodeService.ReleaseAsync(Input.InviteCode, HttpContext.RequestAborted);
-			}
-			else
-			{
-				result = await userManager.AddLoginAsync(user, info);
-				if (result.Succeeded)
-				{
-					logger.LogInformation("User created an account using {Name} provider", info.LoginProvider);
+		await using var transaction = await context.Database.BeginTransactionAsync(HttpContext.RequestAborted);
 
-					if (!await inviteCodeService.AttachAsync(Input.InviteCode, user.Id, HttpContext.RequestAborted))
-					{
-						// The reservation vanished mid-flight, so this registration cannot be tied to a
-						// code. Undo it rather than leave an account nothing is accountable to.
-						var undo = await userManager.DeleteAsync(user);
-						if (!undo.Succeeded)
-						{
-							logger.LogError("Failed to delete user {UserId} whose invite reservation was lost; code stays consumed.", user.Id);
-						}
+		var result = await userManager.CreateAsync(user);
+		if (result.Succeeded)
+		{
+			result = await userManager.AddLoginAsync(user, info);
+		}
 
-						ModelState.TryAddModelError(nameof(Input.InviteCode), "Incorrect invite code");
-						return Page();
-					}
-
-					var userName = await userManager.GetUserNameAsync(user);
-					var code = await userManager.GenerateEmailConfirmationTokenAsync(user);
-
-					if (email is not null)
-					{
-						await userManager.ConfirmEmailAsync(user, code);
-						await signInManager.SignInAsync(user, false);
-						return LocalRedirect(returnUrl);
-					}
-
-					code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-					var callbackUrl = Url.Page(
-						"/Account/ConfirmEmail",
-						null,
-						new { area = "Identity", userName, code },
-						Request.Scheme);
-
-					await emailSender.SendEmailAsync(Input.Email!, "Confirm your email",
-						$"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl!)}'>clicking here</a>.");
-
-					Response.Cookies.Append("Message", "Confirmation link sent. Please check your email.", new CookieOptions
-					{
-						Secure = true,
-						SameSite = SameSiteMode.Strict,
-						HttpOnly = true,
-						MaxAge = TimeSpan.FromSeconds(0),
-					});
-
-					return LocalRedirect(returnUrl);
-				}
-
-				var deleteResult = await userManager.DeleteAsync(user);
-				if (!deleteResult.Succeeded)
-				{
-					logger.LogError("Failed to delete user {UserId} after failed external login linking; invite code stays consumed.", user.Id);
-				}
-				else
-				{
-					await inviteCodeService.ReleaseAsync(Input.InviteCode, HttpContext.RequestAborted);
-				}
-			}
+		if (!result.Succeeded)
+		{
+			await transaction.RollbackAsync(HttpContext.RequestAborted);
 
 			foreach (var error in result.Errors)
 			{
 				ModelState.AddModelError(string.Empty, error.Description);
 			}
+
+			return Page();
 		}
 
-		LoginProvider = info.LoginProvider;
-		ReturnUrl = returnUrl;
-		return Page();
+		var redemption = await inviteCodeService.RedeemAsync(Input.InviteCode, user.Id, HttpContext.RequestAborted);
+		if (redemption is not InviteCodeRedemptionResult.Redeemed)
+		{
+			await transaction.RollbackAsync(HttpContext.RequestAborted);
+			ModelState.TryAddModelError(
+				nameof(Input.InviteCode),
+				redemption is InviteCodeRedemptionResult.AlreadyClaimed
+					? "This invite code has been used"
+					: "Incorrect invite code"
+			);
+			return Page();
+		}
+
+		await transaction.CommitAsync(HttpContext.RequestAborted);
+
+		logger.LogInformation("User created an account using {Name} provider", info.LoginProvider);
+
+		var userName = await userManager.GetUserNameAsync(user);
+		var code = await userManager.GenerateEmailConfirmationTokenAsync(user);
+
+		if (email is not null)
+		{
+			await userManager.ConfirmEmailAsync(user, code);
+			await signInManager.SignInAsync(user, false);
+			return LocalRedirect(returnUrl);
+		}
+
+		code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+		var callbackUrl = Url.Page(
+			"/Account/ConfirmEmail",
+			null,
+			new { area = "Identity", userName, code },
+			Request.Scheme);
+
+		await emailSender.SendEmailAsync(Input.Email!, "Confirm your email",
+			$"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl!)}'>clicking here</a>.");
+
+		Response.Cookies.Append("Message", "Confirmation link sent. Please check your email.", new CookieOptions
+		{
+			Secure = true,
+			SameSite = SameSiteMode.Strict,
+			HttpOnly = true,
+			MaxAge = TimeSpan.FromSeconds(0),
+		});
+
+		return LocalRedirect(returnUrl);
 	}
 }
