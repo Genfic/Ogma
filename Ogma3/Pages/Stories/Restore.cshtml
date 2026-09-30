@@ -30,6 +30,12 @@
     }
     else
     {
-        <div class="alert alert-info">Processing restore request...</div>
+        <div class="alert alert-info">
+            Restore "@Model.ContentTitle"? It will become visible again immediately.
+        </div>
+        <form method="post">
+            <input type="hidden" asp-for="Token" />
+            <button type="submit" class="btn btn-primary">Restore Story</button>
+        </form>
     }
 </div>

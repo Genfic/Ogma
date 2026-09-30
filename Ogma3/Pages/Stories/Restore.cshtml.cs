@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
+using Ogma3.Data.Stories;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.DeletionTokenService;
 using Utils.Extensions;
@@ -17,25 +18,52 @@ public sealed class RestoreModel(AppDbContext context, IDeletionTokenService tok
 
 	public string? ErrorMessage { get; set; }
 	public string? SuccessMessage { get; set; }
+	public string? ContentTitle { get; set; }
 	public long? RestoredStoryId { get; set; }
 
 	public async Task<IActionResult> OnGetAsync()
 	{
+		await Resolve();
+		return Page();
+	}
+
+	public async Task<IActionResult> OnPostAsync()
+	{
+		if (await Resolve() is not { } story)
+		{
+			return Page();
+		}
+
+		story.ScheduledForDeletion = null;
+		await context.SaveChangesAsync();
+
+		SuccessMessage = $"""Story "{story.Title}" has been restored successfully.""";
+		RestoredStoryId = story.Id;
+
+		return Page();
+	}
+
+	/// <summary>
+	/// Validates the token and resolves the story it points at, or populates <see cref="ErrorMessage"/>.
+	/// </summary>
+	private async Task<Story?> Resolve()
+	{
 		if (!tokenService.TryParseToken(Token, out var contentId, out var scheduledFor, out var contentType))
 		{
 			ErrorMessage = "Invalid or expired restore token.";
-			return Page();
+			return null;
 		}
 
 		if (contentType != "story")
 		{
 			ErrorMessage = "Invalid token for this content type.";
-			return Page();
+			return null;
 		}
 
 		if (User.GetNumericId() is not { } uid)
 		{
-			return Unauthorized();
+			ErrorMessage = "You need to be signed in to restore this content.";
+			return null;
 		}
 
 		var story = await context.Stories
@@ -47,29 +75,23 @@ public sealed class RestoreModel(AppDbContext context, IDeletionTokenService tok
 		if (story is null)
 		{
 			ErrorMessage = "Story not found or you don't have permission to restore it.";
-			return Page();
+			return null;
 		}
 
 		if (story.ScheduledForDeletion is not {} storySchedule)
 		{
 			ErrorMessage = "This restore link has expired or is invalid.";
-			return Page();
+			return null;
 		}
 
 		// Verify scheduled time matches
 		if (!storySchedule.MicrosecondEqual(scheduledFor))
 		{
 			ErrorMessage = "This restore link has expired or is invalid.";
-			return Page();
+			return null;
 		}
 
-		// Restore the story
-		story.ScheduledForDeletion = null;
-		await context.SaveChangesAsync();
-
-		SuccessMessage = $"""Story "{story.Title}" has been restored successfully.""";
-		RestoredStoryId = story.Id;
-
-		return Page();
+		ContentTitle = story.Title;
+		return story;
 	}
 }

@@ -115,6 +115,10 @@ public sealed class DeleteModel
 
 		var undoToken = tokenService.GenerateToken(blogpost.Id, scheduledFor, "blogpost");
 
+		// Persist before emailing, so the undo link can never point at content that was not
+		// actually scheduled.
+		await context.SaveChangesAsync();
+
 		// Send email with undo link
 		var undoUrl = Blog_Restore.Get(undoToken).Url(Url, Request.Scheme);
 		await mailer.SendEmailTemplateAsync(email, "content-scheduled-for-deletion", new()
@@ -125,8 +129,6 @@ public sealed class DeleteModel
 			["scheduled_for"] = scheduledFor.ToString("yyyy-MM-dd HH:mm UTC"),
 			["undo_url"] = undoUrl ?? "",
 		});
-
-		await context.SaveChangesAsync();
 
 		return User_Blog.Get(uname).Redirect(this);
 	}

@@ -30,13 +30,39 @@ public sealed class DeleteDraftsRecurringJob
 			.Where(s => (s.Tier!.Entitlements & Entitlement.DraftsLastLonger) != 0)
 			.Select(s => s.UserId);
 
-		var chapterCount = await ctx.Chapters
+		var doomedChapters = ctx.Chapters
 			.Where(c => c.PublicationDate == null)
 			.Where(c => !safeUsers.Contains(c.Story.AuthorId))
 			.Where(c => c.CreationDate < (longerUsers.Contains(c.Story.AuthorId)
 				? now.AddDays(-config.PremiumDraftRetentionDays)
-				: now.AddDays(-config.DraftRetentionDays)))
-			.ExecuteDeleteAsync(ct);
+				: now.AddDays(-config.DraftRetentionDays)));
+
+		await using var transaction = await ctx.Database.BeginTransactionAsync(ct);
+
+		// The aggregate has to be read up front: `ExecuteDeleteAsync` bypasses change tracking, so
+		// the parent story's denormalized counters would otherwise drift upwards forever.
+		var perStory = await doomedChapters
+			.GroupBy(c => c.StoryId)
+			.Select(g => new
+			{
+				StoryId = g.Key,
+				Chapters = g.Count(),
+				Words = g.Sum(c => c.WordCount),
+			})
+			.ToListAsync(ct);
+
+		var chapterCount = await doomedChapters.ExecuteDeleteAsync(ct);
+
+		foreach (var story in perStory)
+		{
+			await ctx.Stories
+				.Where(s => s.Id == story.StoryId)
+				.ExecuteUpdateAsync(setters => setters
+					.SetProperty(s => s.ChapterCount, s => s.ChapterCount - story.Chapters < 0 ? 0 : s.ChapterCount - story.Chapters)
+					.SetProperty(s => s.WordCount, s => s.WordCount - story.Words < 0 ? 0 : s.WordCount - story.Words), ct);
+		}
+
+		await transaction.CommitAsync(ct);
 
 		logger.LogInformation("Deleted {ChapterCount} chapter drafts", chapterCount);
 

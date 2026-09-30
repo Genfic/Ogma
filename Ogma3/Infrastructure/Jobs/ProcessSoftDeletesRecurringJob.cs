@@ -15,7 +15,7 @@ public sealed class ProcessSoftDeletesRecurringJob
 	protected override TimeSpan Interval => TimeSpan.FromHours(1);
 	protected override string Name => nameof(ProcessSoftDeletesRecurringJob);
 
-	private readonly List<BulkEmail> _emails = [];
+	private const int EmailChunkSize = 250;
 
 	protected override async Task Run(CancellationToken ct)
 	{
@@ -25,8 +25,9 @@ public sealed class ProcessSoftDeletesRecurringJob
 		var ctx = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 		var mailer = scope.ServiceProvider.GetRequiredService<IMailer>();
 
-		var now = DateTimeOffset.UtcNow;
-		var cutoff = now.AddDays(-7);
+		// Content is scheduled for deletion exactly 7 days out, so by the time a row
+		// reaches this cutoff its grace period has already elapsed.
+		var cutoff = DateTimeOffset.UtcNow;
 
 		var ids = await ctx.Database.SqlQuery<ResultRow>( // lang=sql
 				$"""
@@ -51,35 +52,59 @@ public sealed class ProcessSoftDeletesRecurringJob
 				g => g.Select(x => x.Id).ToList()
 			);
 
+		var emails = new List<BulkEmail>();
+		List<string>? coversToDelete = null;
+
 		if (groups.TryGetValue(ContentType.Story, out var storyIds))
 		{
-			await ProcessStories(ctx, storyIds, ct);
+			coversToDelete = await ProcessStories(ctx, storyIds, emails, ct);
 		}
 
 		if (groups.TryGetValue(ContentType.Chapter, out var chapterIds))
 		{
-			await ProcessChapters(ctx, chapterIds, ct);
+			await ProcessChapters(ctx, chapterIds, emails, ct);
 		}
 
 		if (groups.TryGetValue(ContentType.Blogpost, out var blogpostIds))
 		{
-			await ProcessBlogposts(ctx, blogpostIds, ct);
+			await ProcessBlogposts(ctx, blogpostIds, emails, ct);
 		}
 
-		try
+		// Covers are removed only after the deletion is committed, so a failure here can never
+		// leave a surviving story pointing at an object that is already gone from storage.
+		if (coversToDelete is { Count: > 0 })
 		{
-			foreach (var chunk in _emails.Chunk(250))
+			using var fileScope = ServiceProvider.CreateScope();
+			var uploader = fileScope.ServiceProvider.GetRequiredService<IFileUploader>();
+
+			foreach (var coverUrl in coversToDelete)
+			{
+				try
+				{
+					await uploader.Delete(coverUrl, ct);
+				}
+				catch (Exception e)
+				{
+					logger.LogError(e, "Failed to delete cover {CoverUrl} of a deleted story", coverUrl);
+				}
+			}
+		}
+
+		// The content is already gone at this point, so a failed batch must not abandon the rest.
+		foreach (var chunk in emails.Chunk(EmailChunkSize))
+		{
+			try
 			{
 				await mailer.SendBulkEmailTemplateAsync([.. chunk]);
 			}
-		}
-		finally
-		{
-			_emails.Clear();
+			catch (Exception e)
+			{
+				logger.LogError(e, "Failed to send {Count} content-deleted notifications", chunk.Length);
+			}
 		}
 	}
 
-	private async Task ProcessStories(AppDbContext ctx, List<long> ids, CancellationToken ct)
+	private async Task<List<string>?> ProcessStories(AppDbContext ctx, List<long> ids, List<BulkEmail> emails, CancellationToken ct)
 	{
 		await using var transaction = await ctx.Database.BeginTransactionAsync(ct);
 
@@ -100,38 +125,41 @@ public sealed class ProcessSoftDeletesRecurringJob
 
 		if (storiesToDelete.Count <= 0)
 		{
-			return;
+			return null;
 		}
 
-		using var fileScope = ServiceProvider.CreateScope();
-		var uploader = fileScope.ServiceProvider.GetRequiredService<IFileUploader>();
-
+		// Rows scheduled for deletion are hidden by the global query filter, so it has to be
+		// bypassed here – without it this deletes nothing and the transaction is rolled back.
 		var rows = await ctx.Stories
+			.IgnoreQueryFilters()
 			.Where(s => storiesToDelete.Select(sd => sd.Id).Contains(s.Id))
 			.ExecuteDeleteAsync(ct);
 
 		if (rows != storiesToDelete.Count)
 		{
 			await transaction.RollbackAsync(ct);
-			return;
+			return null;
 		}
 
+		List<string>? covers = null;
 		foreach (var story in storiesToDelete)
 		{
 			if (story.HasCover && story.CoverUrl is not null)
 			{
-				await uploader.Delete(story.CoverUrl, ct);
+				(covers ??= []).Add(story.CoverUrl);
 			}
 			logger.LogInformation("Deleted story {StoryId} ({Title}) scheduled for {ScheduledFor}", story.Id, story.Title,
 				story.ScheduledForDeletion);
 
-			QueueEmail(story.AuthorEmail, story.AuthorUserName, story.Title, "story");
+			QueueEmail(emails, story.AuthorEmail, story.AuthorUserName, story.Title, "story");
 		}
 
 		await transaction.CommitAsync(ct);
+
+		return covers;
 	}
 
-	private async Task ProcessChapters(AppDbContext ctx, List<long> ids, CancellationToken ct)
+	private async Task ProcessChapters(AppDbContext ctx, List<long> ids, List<BulkEmail> emails, CancellationToken ct)
 	{
 		await using var transaction = await ctx.Database.BeginTransactionAsync(ct);
 
@@ -154,7 +182,10 @@ public sealed class ProcessSoftDeletesRecurringJob
 			return;
 		}
 
+		// Rows scheduled for deletion are hidden by the global query filter, so it has to be
+		// bypassed here – without it this deletes nothing and the transaction is rolled back.
 		var rows = await ctx.Chapters
+			.IgnoreQueryFilters()
 			.Where(s => chaptersToDelete.Select(sd => sd.Id).Contains(s.Id))
 			.ExecuteDeleteAsync(ct);
 
@@ -168,13 +199,13 @@ public sealed class ProcessSoftDeletesRecurringJob
 		{
 			logger.LogInformation("Deleted chapter {ChapterId} ({Title}) scheduled for {ScheduledFor}", chapter.Id, chapter.Title,
 				chapter.ScheduledForDeletion);
-			QueueEmail(chapter.AuthorEmail, chapter.AuthorUserName, chapter.Title, "chapter", chapter.StoryTitle);
+			QueueEmail(emails, chapter.AuthorEmail, chapter.AuthorUserName, chapter.Title, "chapter", chapter.StoryTitle);
 		}
 
 		await transaction.CommitAsync(ct);
 	}
 
-	private async Task ProcessBlogposts(AppDbContext ctx, List<long> ids, CancellationToken ct)
+	private async Task ProcessBlogposts(AppDbContext ctx, List<long> ids, List<BulkEmail> emails, CancellationToken ct)
 	{
 		await using var transaction = await ctx.Database.BeginTransactionAsync(ct);
 
@@ -196,7 +227,10 @@ public sealed class ProcessSoftDeletesRecurringJob
 			return;
 		}
 
+		// Rows scheduled for deletion are hidden by the global query filter, so it has to be
+		// bypassed here – without it this deletes nothing and the transaction is rolled back.
 		var rows = await ctx.Blogposts
+			.IgnoreQueryFilters()
 			.Where(s => blogpostsToDelete.Select(sd => sd.Id).Contains(s.Id))
 			.ExecuteDeleteAsync(ct);
 
@@ -210,13 +244,13 @@ public sealed class ProcessSoftDeletesRecurringJob
 		{
 			logger.LogInformation("Deleted blogpost {BlogpostId} ({Title}) scheduled for {ScheduledFor}", blogpost.Id, blogpost.Title,
 				blogpost.ScheduledForDeletion);
-			QueueEmail(blogpost.AuthorEmail, blogpost.AuthorUserName, blogpost.Title, "blogpost");
+			QueueEmail(emails, blogpost.AuthorEmail, blogpost.AuthorUserName, blogpost.Title, "blogpost");
 		}
 
 		await transaction.CommitAsync(ct);
 	}
 
-	private void QueueEmail(string email, string username, string title, string contentType, string? parentTitle = null)
+	private static void QueueEmail(List<BulkEmail> emails, string email, string username, string title, string contentType, string? parentTitle = null)
 	{
 		var model = new Dictionary<string, string>
 		{
@@ -224,7 +258,7 @@ public sealed class ProcessSoftDeletesRecurringJob
 			["content_title"] = parentTitle is null ? title : $"{parentTitle}: {title}",
 			["content_type"] = contentType,
 		};
-		_emails.Add(new BulkEmail(email, "content-deleted", model));
+		emails.Add(new BulkEmail(email, "content-deleted", model));
 	}
 
 	private sealed record ResultRow(long Id, ContentType Type);

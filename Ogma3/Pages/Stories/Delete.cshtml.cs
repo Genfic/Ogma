@@ -116,6 +116,10 @@ public sealed class DeleteModel(AppDbContext context, SafetyPinService pinServic
 
 		var undoToken = tokenService.GenerateToken(story.Id, scheduledFor, "story");
 
+		// Persist before emailing, so the undo link can never point at content that was not
+		// actually scheduled.
+		await context.SaveChangesAsync();
+
 		// Send email with undo link
 		var undoUrl = Stories_Restore.Get(undoToken).Url(Url, Request.Scheme);
 		await mailer.SendEmailTemplateAsync(email, "content-scheduled-for-deletion", new()
@@ -126,8 +130,6 @@ public sealed class DeleteModel(AppDbContext context, SafetyPinService pinServic
 			["scheduled_for"] = scheduledFor.ToString("yyyy-MM-dd HH:mm UTC"),
 			["undo_url"] = undoUrl ?? "",
 		});
-
-		await context.SaveChangesAsync();
 
 		return User_Stories.Get(uname).Redirect(this);
 	}
