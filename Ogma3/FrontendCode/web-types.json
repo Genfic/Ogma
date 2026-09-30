@@ -579,6 +579,15 @@
 					}
 				},
 				{
+					"name": "system-stats",
+					"description": "Custom element <system-stats> defined in typescript/src/admin/system-stats.tsx",
+					"attributes": [],
+					"source": {
+						"module": "./typescript/src/admin/system-stats.tsx",
+						"symbol": "system-stats"
+					}
+				},
+				{
 					"name": "table-info",
 					"description": "Custom element <table-info> defined in typescript/src/comp/table-info.tsx",
 					"attributes": [],

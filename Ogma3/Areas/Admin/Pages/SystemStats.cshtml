@@ -6,56 +6,7 @@
 	ViewData["ActivePage"] = NavPages.SystemStats;
 }
 
-<div id="system-stats" data-stream-url="@Url.Page(pageName: null, pageHandler: "Stream")">
-<p>Sampled at <time-display id="sampled-at" class="monospace" utc-date="@Model.SampledAt"></time-display></p>
-
-<br>
-
-<h2>Host</h2>
-<dl class="rows">
-	<dt>CPU usage</dt>
-	<dd data-stat="hostCpuUsage">@Model.HostCpuUsage</dd>
-
-	<dt>Memory used</dt>
-	<dd data-stat="hostMemoryUsed">
-		@Model.HostMemoryUsed
-	</dd>
-
-	<dt>Memory available</dt>
-	<dd data-stat="hostMemoryAvailable">@Model.HostMemoryAvailable</dd>
-
-	<dt>Root filesystem used</dt>
-	<dd data-stat="hostDiskUsed">@Model.HostDiskUsed</dd>
-
-	<dt>Root filesystem free</dt>
-	<dd data-stat="hostDiskAvailable">@Model.HostDiskAvailable</dd>
-</dl>
-
-<br>
-
-<h2>Service usage</h2>
-<dl class="rows">
-	<dt>Ogma process memory (working set)</dt>
-	<dd data-stat="ogmaWorkingSet">@Model.OgmaWorkingSet</dd>
-
-	<dt>Ogma process CPU</dt>
-	<dd data-stat="ogmaCpuUsage">@Model.OgmaCpuUsage</dd>
-
-	<dt>Garnet process private memory</dt>
-	<dd data-stat="garnetMemory">@Model.GarnetMemory</dd>
-
-	<dt>PostgreSQL database size</dt>
-	<dd data-stat="postgresDatabaseSize">@Model.PostgresDatabaseSize</dd>
-</dl>
-
-<br>
-<hr>
-
-<p>
-	Garnet and PostgreSQL container CPU and total RAM are not exposed to Ogma by the current deployment.
-	PostgreSQL size is the database’s disk footprint, not the whole PostgreSQL container or volume.
-</p>
-</div>
+<system-stats></system-stats>
 
 @section Scripts {
 	<script type="module" src="~/js/admin/system-stats.js" asp-append-version="true"></script>

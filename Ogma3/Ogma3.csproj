@@ -136,6 +136,9 @@
 		<PackageReference Include="ZiggyCreatures.FusionCache.Serialization.CysharpMemoryPack"/>
 	</ItemGroup>
 	<ItemGroup>
+		<InternalsVisibleTo Include="Ogma3.Tests"/>
+	</ItemGroup>
+	<ItemGroup>
 		<ProjectReference Include="../Ogma3.Data/Ogma3.Data.csproj"/>
 		<ProjectReference Include="../Ogma3.ServiceDefaults/Ogma3.ServiceDefaults.csproj"/>
 		<ProjectReference Include="../Utils/Utils.csproj"/>
