@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.CommentsThreads;
+using Ogma3.Data.Stories;
 using Ogma3.Infrastructure.OgmaConfig;
 using Ogma3.Infrastructure.ServiceRegistrations;
 using Ogma3.Services.TagCache;
@@ -78,6 +79,23 @@ public sealed class Scripts(AppDbContext ctx, TagCache tagCache, OgmaConfig conf
 			.SetProperty(s => s.IsVisible, s => s.PublicationDate != null));
 
 		Message = $"{sc} stories updated, {bc} blogposts updated, {cc} chapters updated";
+
+		return Page();
+	}
+
+	public async Task<IActionResult> OnGetRecalculateStoryCounts()
+	{
+		var storyIds = await ctx.Stories
+			.Select(s => s.Id)
+			.ToListAsync();
+
+		var updated = 0;
+		foreach (var storyId in storyIds)
+		{
+			updated += await ctx.RecalculateChapterCounts(storyId);
+		}
+
+		Message = $"Recalculated chapter and word counts for {updated} of {storyIds.Count} stories.";
 
 		return Page();
 	}

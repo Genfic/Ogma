@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
+using Ogma3.Data.Stories;
 using Ogma3.Data.Subscriptions;
 
 namespace Ogma3.Infrastructure.Jobs;
@@ -39,27 +40,18 @@ public sealed class DeleteDraftsRecurringJob
 
 		await using var transaction = await ctx.Database.BeginTransactionAsync(ct);
 
-		// The aggregate has to be read up front: `ExecuteDeleteAsync` bypasses change tracking, so
-		// the parent story's denormalized counters would otherwise drift upwards forever.
-		var perStory = await doomedChapters
-			.GroupBy(c => c.StoryId)
-			.Select(g => new
-			{
-				StoryId = g.Key,
-				Chapters = g.Count(),
-				Words = g.Sum(c => c.WordCount),
-			})
+		// The affected stories have to be collected before the delete. `ExecuteDeleteAsync` bypasses change
+		// tracking, so once it has run these ids are the only remaining record of which caches are stale.
+		var affectedStoryIds = await doomedChapters
+			.Select(c => c.StoryId)
+			.Distinct()
 			.ToListAsync(ct);
 
 		var chapterCount = await doomedChapters.ExecuteDeleteAsync(ct);
 
-		foreach (var story in perStory)
+		foreach (var storyId in affectedStoryIds)
 		{
-			await ctx.Stories
-				.Where(s => s.Id == story.StoryId)
-				.ExecuteUpdateAsync(setters => setters
-					.SetProperty(s => s.ChapterCount, s => s.ChapterCount - story.Chapters < 0 ? 0 : s.ChapterCount - story.Chapters)
-					.SetProperty(s => s.WordCount, s => s.WordCount - story.Words < 0 ? 0 : s.WordCount - story.Words), ct);
+			await ctx.RecalculateChapterCounts(storyId, ct: ct);
 		}
 
 		await transaction.CommitAsync(ct);

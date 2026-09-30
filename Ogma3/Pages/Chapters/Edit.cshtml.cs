@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using MinHash;
 using Ogma3.Data;
+using Ogma3.Data.Stories;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.ChapterService;
 using Routes.Pages;
@@ -110,6 +111,24 @@ public sealed class EditModel
 			? TimeZoneInfo.ConvertTime(sch, User.GetTimeZoneInfo()).ToUniversalTime()
 			: (DateTimeOffset?)null;
 
+		var data = await context.Chapters
+			.Where(c => c.Id == id)
+			.Where(c => c.Story.AuthorId == uid)
+			.Select(c => new
+			{
+				c.Id,
+				c.Slug,
+				c.StoryId,
+			})
+			.FirstOrDefaultAsync();
+
+		if (data is null) return NotFound("Chapter not found");
+
+		// The chapter edit and the story's cached counts have to land together: publishing, unpublishing or
+		// re-scheduling here changes what the public sees, and a failure between the two writes would leave
+		// the story advertising chapters it no longer serves.
+		await using var tx = await context.Database.BeginTransactionAsync(HttpContext.RequestAborted);
+
 		var chapterEditRows = await context.Chapters
 			.Where(c => c.Id == id)
 			.Where(c => c.Story.AuthorId == uid)
@@ -130,33 +149,9 @@ public sealed class EditModel
 
 		if (chapterEditRows <= 0) return NotFound("Chapter not found");
 
-		var storyEditRows = await context.Stories
-			.Where(s => s.AuthorId == uid)
-			.Where(s => s.Chapters.Any(c => c.Id == id))
-			.Select(s => new
-			{
-				Story = s,
-				ChapterCount = s.Chapters.Count(c => c.IsVisible),
-				WordCount = s.Chapters.Where(c => c.IsVisible).Sum(c => c.WordCount),
-			})
-			.ExecuteUpdateAsync(spc => spc
-				.SetProperty(s => s.Story.WordCount, s => s.WordCount)
-				.SetProperty(s => s.Story.ChapterCount, s => s.ChapterCount)
-			);
+		await context.RecalculateChapterCounts(data.StoryId, ct: HttpContext.RequestAborted);
 
-		if (storyEditRows <= 0) return NotFound("Story not found");
-
-		var data = await context.Chapters
-			.Where(c => c.Id == id)
-			.Select(c => new
-			{
-				c.Id,
-				c.Slug,
-				c.StoryId,
-			})
-			.FirstOrDefaultAsync();
-
-		if (data is null) return NotFound();
+		await tx.CommitAsync(HttpContext.RequestAborted);
 
 		return Chapter.Get(data.StoryId, data.Id, data.Slug).Redirect(this);
 	}

@@ -109,8 +109,6 @@ public sealed class CreateModel(
 					.OrderByDescending(c => c.Order)
 					.Select(c => c.Order)
 					.FirstOrDefault(),
-				ChapterCount = s.Chapters.Count(),
-				CurrentWordCount = s.Chapters.Sum(c => c.WordCount),
 				ShelfOwnerIds = s.Shelves
 					.Where(x => x.TrackUpdates)
 					.Select(x => x.OwnerId)
@@ -134,9 +132,6 @@ public sealed class CreateModel(
 			Signature = signature,
 		};
 
-		var newWordCount = storyDto.CurrentWordCount + chapter.WordCount;
-		var newChapterCount = storyDto.ChapterCount + 1;
-
 		context.Chapters.Add(chapter);
 
 		context.CommentThreadSubscribers.Add(new CommentThreadSubscriber
@@ -146,13 +141,6 @@ public sealed class CreateModel(
 		});
 
 		await context.SaveChangesAsync();
-
-		await context.Stories
-			.Where(s => s.Id == storyDto.Id)
-			.ExecuteUpdateAsync(s => s
-				.SetProperty(x => x.WordCount, newWordCount)
-				.SetProperty(x => x.ChapterCount, newChapterCount)
-				.SetProperty(x => x.LastUpdatedAt, DateTimeOffset.UtcNow));
 
 		await notificationsRepo.Create(
 			ENotificationEvent.WatchedStoryUpdated,

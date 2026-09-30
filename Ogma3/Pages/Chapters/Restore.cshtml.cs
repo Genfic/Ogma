@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
 using Ogma3.Data.Chapters;
+using Ogma3.Data.Stories;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Services.DeletionTokenService;
 using Utils.Extensions;
@@ -37,11 +38,11 @@ public sealed class RestoreModel(AppDbContext context, IDeletionTokenService tok
 
 		chapter.ScheduledForDeletion = null;
 
-		// Recalculate words and chapters in the story
-		chapter.Story.WordCount += chapter.WordCount;
-		chapter.Story.ChapterCount += 1;
-
 		await context.SaveChangesAsync();
+
+		// After the save, and deliberately not folded into it: clearing the schedule is what puts the chapter
+		// back into the public set, so a recompute issued beforehand would still exclude it.
+		await context.RecalculateChapterCounts(chapter.StoryId, ct: HttpContext.RequestAborted);
 
 		SuccessMessage = $"""Chapter "{chapter.Title}" has been restored successfully.""";
 		RestoredChapterId = chapter.Id;
@@ -77,7 +78,6 @@ public sealed class RestoreModel(AppDbContext context, IDeletionTokenService tok
 			.IgnoreQueryFilters()
 			.Where(c => c.Id == contentId)
 			.Where(c => c.Story.AuthorId == uid)
-			.Include(c => c.Story)
 			.FirstOrDefaultAsync();
 
 		if (chapter is null)
