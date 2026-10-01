@@ -1,0 +1,53 @@
+ul.items-list.namespaces {
+	li {
+		/* Fallback for namespaces saved without a colour. */
+		.deco {
+			background-color: var(--foreground-10);
+		}
+
+		.count {
+			display: flex;
+			align-items: center;
+			gap: 0.35rem;
+			min-width: 3ch;
+			font-size: 1rem;
+			font-variant-numeric: tabular-nums;
+			color: var(--foreground-75);
+
+			svg {
+				width: 1.1rem;
+				height: 1.1rem;
+				color: var(--foreground-50);
+			}
+		}
+
+		.name {
+			align-items: center;
+			gap: 0.5rem;
+
+			> .label {
+				font-size: 1.2rem;
+			}
+
+			> .slug,
+			> .alias {
+				padding: 0.1rem 0.45rem;
+				border: 1px solid var(--foreground-25);
+				border-radius: 0.75rem;
+				background-color: var(--foreground-10);
+				color: var(--foreground-75);
+				font-family: "Inconsolata Variable", Consolas, Courier, monospace;
+				font-size: 0.85rem;
+				line-height: 1.5;
+				white-space: nowrap;
+			}
+
+			/* Aliases are the user-facing shorthand, so they get the accent colour. */
+			> .alias {
+				border-color: var(--accent-25);
+				background-color: var(--accent-5);
+				color: var(--accent);
+			}
+		}
+	}
+}

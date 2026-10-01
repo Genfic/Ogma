@@ -16,6 +16,8 @@ import { createResource, createSignal, For, Match, Show, Switch } from "solid-js
 import { createStore } from "solid-js/store";
 import { render } from "solid-js/web";
 import * as v from "valibot";
+import { StyledElement } from "../comp/common/_styled";
+import styles from "./tag-namespaces.css";
 
 const parent = $id("tag-namespaces");
 const headers = { RequestVerificationToken: parent.dataset.csrf ?? "" };
@@ -33,14 +35,23 @@ const FormNamespaceSchema = v.object({
 
 type FormNamespace = v.InferOutput<typeof FormNamespaceSchema>;
 
-const EmptyNamespace = {
+type TagNamespaceView = Omit<TagNamespaceDto, "color"> & { color: string | null };
+
+const DefaultColor = "#8c37f4";
+
+/**
+ * Must return a new object each call. `createStore` mutates its seed object in place, so
+ * handing the same instance back to the setter would make every field compare equal and the
+ * reset would silently do nothing.
+ */
+const emptyNamespace = (): FormNamespace => ({
 	id: undefined,
 	name: "",
 	slug: null,
 	alias: null,
-	color: "#8c37f4",
+	color: DefaultColor,
 	description: null,
-} satisfies FormNamespace;
+});
 
 const TagNamespaces = () => {
 	const [namespaces, { refetch }] = createResource(async () => {
@@ -51,26 +62,26 @@ const TagNamespaces = () => {
 		return res.data.map((ns) => ({ ...ns, color: ns.color === null ? null : `#${ns.color}` }));
 	});
 
-	const [form, setForm] = createStore<FormNamespace>(EmptyNamespace);
+	const [form, setForm] = createStore<FormNamespace>(emptyNamespace());
 	const [errors, setErrors] = createSignal<string[]>([]);
 
 	const cancelEdit = () => {
-		setForm(EmptyNamespace);
+		setForm(emptyNamespace());
 	};
 
-	const editNamespace = (ns: TagNamespaceDto) => {
+	const editNamespace = (ns: TagNamespaceView) => {
 		window.scrollTo({ top: 0, behavior: "smooth" });
 		setForm({
 			id: ns.id,
 			name: ns.name,
 			slug: ns.slug,
 			alias: ns.alias,
-			color: ns.color === null ? "#8c37f4" : `#${ns.color}`,
+			color: ns.color ?? DefaultColor,
 			description: ns.description,
 		});
 	};
 
-	const deleteNamespace = async (ns: TagNamespaceDto) => {
+	const deleteNamespace = async (ns: TagNamespaceView) => {
 		const warning =
 			ns.tagCount > 0
 				? `Delete "${ns.name}"?\n\nIts ${ns.tagCount} tag(s) are NOT deleted - they become un-namespaced.`
@@ -170,7 +181,7 @@ const TagNamespaces = () => {
 					type="color"
 					name="color"
 					class="o-form-control"
-					prop:value={form.color ?? "#000000"}
+					prop:value={form.color ?? DefaultColor}
 				/>
 
 				<label for="tns-description">Description</label>
@@ -217,17 +228,21 @@ const TagNamespaces = () => {
 				</Match>
 				<Match when={namespaces.error}>{String(namespaces.error)}</Match>
 				<Match when={namespaces}>
-					<ul class="items-list">
+					<ul class="items-list namespaces">
 						<For each={namespaces()}>
 							{(ns) => (
 								<li>
-									<div class="deco" style={{ background: ns.color ?? "transparent" }} />
+									<div class="deco" style={ns.color ? { "background-color": ns.color } : undefined} />
 									<div class="main">
 										<h3 class="name">
-											<span>{ns.name}</span>
-											<small>{ns.slug}</small>
+											<span class="label">{ns.name}</span>
+											<code class="slug" title="URL slug">
+												{ns.slug}
+											</code>
 											<Show when={ns.alias}>
-												<small>{ns.alias}</small>
+												<code class="alias" title="Short alias">
+													{ns.alias}
+												</code>
 											</Show>
 										</h3>
 										<Show when={ns.description}>
@@ -256,4 +271,5 @@ const TagNamespaces = () => {
 	);
 };
 
-render(() => <TagNamespaces />, parent);
+const S = StyledElement(TagNamespaces, styles);
+render(() => <S />, parent);
