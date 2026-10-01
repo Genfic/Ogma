@@ -49,14 +49,14 @@ public sealed partial class CreateTag(AppDbContext context, TagCache cache, IMod
 		context.Tags.Add(tag);
 		await context.SaveChangesAsync(cancellationToken);
 
-		var nsName = await context.TagNamespaces
+		var tagNamespace = await context.TagNamespaces
 			.Where(n => n.Id == tag.NamespaceId)
-			.Select(n => n.Name)
+			.Select(n => new { n.Name, n.Slug })
 			.FirstOrDefaultAsync(cancellationToken);
 
-		moderatorActionService.LogTagCreated(tag.Id, tag.Name, nsName ?? "unknown");
+		moderatorActionService.LogTagCreated(tag.Id, tag.Name, tagNamespace?.Name ?? "unknown");
 
-		await cache.AddAsync(new(tag.Id, tag.Slug, nsName));
+		await cache.AddAsync(new(tag.Id, tag.Name, tagNamespace?.Slug));
 
 		return TypedResults.CreatedAtRoute(tag.ToDto(), nameof(GetSingleTag), new GetSingleTag.Query(tag.Id));
 	}

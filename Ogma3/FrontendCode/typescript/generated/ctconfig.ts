@@ -23,6 +23,16 @@ export const Tag = {
 	MaxDescLength: "250",
 } as const;
 
+export const TagNamespace = {
+	MinNameLength: "3",
+	MaxNameLength: "32",
+	MinSlugLength: "2",
+	MaxSlugLength: "32",
+	MaxAliasLength: "5",
+	MaxDescLength: "256",
+	ColorLength: "8",
+} as const;
+
 export const Rating = {
 	MinNameLength: "4",
 	MaxNameLength: "20",

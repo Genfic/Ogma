@@ -1,0 +1,18 @@
+@page
+@inject IAntiforgery Csrf
+@using Microsoft.AspNetCore.Antiforgery
+@model TagNamespaces
+
+@{
+	ViewData["Title"] = "Tag Namespaces";
+	ViewData["ActivePage"] = NavPages.TagNamespaces;
+}
+
+<div id="tag-namespaces" data-csrf="@Csrf.GetAndStoreTokens(HttpContext).RequestToken">
+
+</div>
+
+@section Scripts
+{
+	<script type="module" src="~/js/admin/tag-namespaces.js" asp-append-version="true"></script>
+}

@@ -16,7 +16,7 @@ export const DeleteAdminApiCache = async (headers?: HeadersInit, options?: Reque
     options,
 );
 
-export const DeleteAdminApiInfractions = async (infractionId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: undefined; 401: undefined; 404: undefined }, undefined>(`/admin/api/infractions/${infractionId}`,
+export const DeleteAdminApiInfractions = async (infractionId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: undefined; 401: undefined; 404: undefined; 500: string }, undefined>(`/admin/api/infractions/${infractionId}`,
     DELETE,
     undefined,
     headers,
@@ -72,7 +72,7 @@ export const GetInfractionDetails = async (infractionId: number, headers?: Heade
     options,
 );
 
-export const PostAdminApiInfractions = async (body: CreateInfractionCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: undefined; 401: undefined }, CreateInfractionCommand>("/admin/api/infractions",
+export const PostAdminApiInfractions = async (body: CreateInfractionCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: undefined; 401: undefined; 500: string }, CreateInfractionCommand>("/admin/api/infractions",
     POST,
     body,
     headers,

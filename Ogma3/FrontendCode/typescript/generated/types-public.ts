@@ -40,7 +40,7 @@ export type CommentDto = {
     isEdited: boolean;
 };
 
-export type CommentSource = "Blogpost" | "Chapter" | "ForumPost" | "Profile";
+export type CommentSource = "Blogpost" | "Chapter" | "ForumPost" | "NewsPost" | "Profile";
 
 export type CreateCommentCommand = {
     body: string;
@@ -93,6 +93,14 @@ export type CreateTagCommand = {
     name: string;
     description: string | null;
     namespaceId: number | null;
+};
+
+export type CreateTagNamespaceCommand = {
+    name: string;
+    slug: string | null;
+    alias: string | null;
+    color: string | null;
+    description: string | null;
 };
 
 export type CreateVoteCommand = {
@@ -187,7 +195,7 @@ export type GetUserNotificationsResult = {
     url: string;
     dateTime: Date;
     event: ENotificationEvent;
-    message: string | null;
+    message: string;
 };
 
 export type HttpValidationProblemDetails = {
@@ -339,6 +347,16 @@ export type TagDto = {
     namespaceColor: string | null;
 };
 
+export type TagNamespaceDto = {
+    id: number;
+    name: string;
+    slug: string;
+    alias: string | null;
+    color: string | null;
+    description: string | null;
+    tagCount: number;
+};
+
 export type UnblockUserCommand = {
     name: string;
 };
@@ -407,6 +425,15 @@ export type UpdateTagCommand = {
     name: string;
     description: string | null;
     namespaceId: number | null;
+};
+
+export type UpdateTagNamespaceCommand = {
+    id: number;
+    name: string;
+    slug: string | null;
+    alias: string | null;
+    color: string | null;
+    description: string | null;
 };
 
 export type UploadFileQuery = {

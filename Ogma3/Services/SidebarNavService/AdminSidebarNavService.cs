@@ -23,6 +23,7 @@ public sealed class AdminSidebarNavService(SidebarNavDataCache navData, IAuthori
 		["Categorization"] =
 		[
 			new(Tags.Get()),
+			new(TagNamespaces.Get()),
 			new(Ratings.Get()),
 		],
 		["Content"] =

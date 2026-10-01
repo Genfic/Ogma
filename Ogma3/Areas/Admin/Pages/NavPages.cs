@@ -8,6 +8,7 @@ public static class NavPages
 	public static string Settings => "Settings";
 	public static string Email => "Mailer";
 	public static string Tags => "Tags";
+	public static string TagNamespaces => "TagNamespaces";
 	public static string Quotes => "Quotes";
 	public static string InviteCodes => "InviteCodes";
 	public static string Documents => "Documents";

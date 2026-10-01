@@ -40,6 +40,21 @@ public static class CTConfig
 		public const int MaxDescLength = 250;
 	}
 
+	public static class TagNamespace
+	{
+		public const int MinNameLength = 3;
+		public const int MaxNameLength = 32;
+
+		public const int MinSlugLength = 2;
+		public const int MaxSlugLength = 32;
+
+		public const int MaxAliasLength = 5;
+
+		public const int MaxDescLength = 256;
+
+		public const int ColorLength = 8;
+	}
+
 	public static class Rating
 	{
 		public const int MinNameLength = 4;

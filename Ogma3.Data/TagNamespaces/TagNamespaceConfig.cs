@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Ogma3.Data.Bases;
 using Ogma3.Data.Constants;
+using Ogma3.Data.Helpers;
 
 namespace Ogma3.Data.TagNamespaces;
 
@@ -21,50 +22,63 @@ public class TagNamespaceConfig : BaseConfiguration<TagNamespace>
 			.IsUnique();
 
 		builder
+			.HasPartialIndex(t => t.Alias)
+			.UseCollation(PgConstants.CollationNames.CaseInsensitiveNoAccent)
+			.IsUnique();
+
+		builder
 			.Property(t => t.Name)
-			.HasMaxLength(32);
+			.IsRequired()
+			.HasMaxLength(CTConfig.TagNamespace.MaxNameLength);
 
 		builder
 			.Property(t => t.Slug)
-			.HasMaxLength(32);
+			.IsRequired()
+			.HasMaxLength(CTConfig.TagNamespace.MaxSlugLength);
 
 		builder
 			.Property(t => t.Description)
-			.HasMaxLength(256);
+			.IsRequired(false)
+			.HasDefaultValue(null)
+			.HasMaxLength(CTConfig.TagNamespace.MaxDescLength);
 
 		builder
 			.Property(t => t.Alias)
-			.HasMaxLength(5);
+			.IsRequired(false)
+			.HasDefaultValue(null)
+			.HasMaxLength(CTConfig.TagNamespace.MaxAliasLength);
 
 		builder
 			.Property(t => t.Color)
-			.HasMaxLength(8);
+			.IsRequired(false)
+			.HasDefaultValue(null)
+			.HasMaxLength(CTConfig.TagNamespace.ColorLength);
 
 		builder.HasData(
-				new()
-				{
-					Id = 1,
-					Name = "Content Warning",
-					Slug = "content-warning",
-					Alias = "cw",
-					Color = "d91919",
-				},
-				new()
-				{
-					Id = 2,
-					Name = "Genre",
-					Slug = "genre",
-					Alias = "ge",
-					Color = "8c37f4",
-				},
-				new()
-				{
-					Id = 3,
-					Name = "Franchise",
-					Slug = "franchise",
-					Alias = "fr",
-					Color = "18f900",
-				}
-			);
+			new()
+			{
+				Id = 1,
+				Name = "Content Warning",
+				Slug = "content-warning",
+				Alias = "cw",
+				Color = "d91919",
+			},
+			new()
+			{
+				Id = 2,
+				Name = "Genre",
+				Slug = "genre",
+				Alias = "ge",
+				Color = "8c37f4",
+			},
+			new()
+			{
+				Id = 3,
+				Name = "Franchise",
+				Slug = "franchise",
+				Alias = "fr",
+				Color = "18f900",
+			}
+		);
 	}
 }

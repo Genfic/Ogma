@@ -165,6 +165,15 @@ public sealed class ModeratorActionService
 		=> LogQueue.Add($"FAQ **{question}** (id: {faqId}) was deleted by **{UserName}**");
 
 	// Roles
+	public void LogTagNamespaceCreated(long namespaceId, string name, string slug, string? alias)
+		=> LogQueue.Add($"Tag namespace **{name}** (id: {namespaceId}, slug: **{slug}**, alias: {alias ?? "none"}) was created by **{UserName}**");
+
+	public void LogTagNamespaceUpdated(long namespaceId, string name, string slug, string? alias)
+		=> LogQueue.Add($"Tag namespace **{name}** (id: {namespaceId}, slug: **{slug}**, alias: {alias ?? "none"}) was updated by **{UserName}**");
+
+	public void LogTagNamespaceDeleted(long namespaceId, string name, string slug)
+		=> LogQueue.Add($"Tag namespace **{name}** (id: {namespaceId}, slug: **{slug}**) was deleted by **{UserName}**");
+
 	public void LogRoleCreated(long roleId, string name, bool isStaff)
 		=> LogQueue.Add($"Role **{name}** (id: {roleId}, staff: {isStaff}) was created by **{UserName}**");
 

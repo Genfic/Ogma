@@ -30,7 +30,7 @@ public sealed partial class DeleteTag(AppDbContext context, TagCache cache, IMod
 	{
 		var tag = await context.Tags
 			.Where(t => t.Id == request.TagId)
-			.Select(t => new TagEntry(t.Id, t.Slug, t.Namespace!.Name))
+			.Select(t => new TagEntry(t.Id, t.Name, t.Namespace!.Slug))
 			.FirstOrDefaultAsync(cancellationToken);
 
 		if (tag is null)

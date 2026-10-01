@@ -16,6 +16,7 @@ import type {
 	CreateRoleCommand,
 	CreateShelfCommand,
 	CreateTagCommand,
+	CreateTagNamespaceCommand,
 	CreateVoteCommand,
 	DeleteVoteCommand,
 	FaqDto,
@@ -53,6 +54,7 @@ import type {
 	SignInWithPasskeyQuery,
 	SubscribeCommentsThreadCommand,
 	TagDto,
+	TagNamespaceDto,
 	UnblockUserCommand,
 	UnfollowUserCommand,
 	UpdateCommentCommand,
@@ -64,6 +66,7 @@ import type {
 	UpdateRolesCommand,
 	UpdateShelfCommand,
 	UpdateTagCommand,
+	UpdateTagNamespaceCommand,
 	VoteResult,
 } from './types-public';
 const _enc = <T>(p: T): T extends string ? string : T => (typeof p === 'string' ? encodeURIComponent(p) : p) as any;
@@ -161,6 +164,13 @@ export const DeleteApiShelves = async (shelfId: number, headers?: HeadersInit, o
 );
 
 export const DeleteApiSubscriptionsThread = async (threadId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: boolean; 400: undefined; 401: undefined }, undefined>(`/api/subscriptions/thread?threadId=${_enc(threadId)}`,
+    DELETE,
+    undefined,
+    headers,
+    options,
+);
+
+export const DeleteApiTagnamespaces = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: number; 400: undefined; 401: undefined; 404: undefined }, undefined>(`/api/tagnamespaces?id=${_enc(id)}`,
     DELETE,
     undefined,
     headers,
@@ -402,6 +412,13 @@ export const GetApiSubscriptionsThread = async (threadId: number, headers?: Head
     options,
 );
 
+export const GetApiTagnamespaces = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: TagNamespaceDto[]; 401: undefined }, undefined>("/api/tagnamespaces",
+    GET,
+    undefined,
+    headers,
+    options,
+);
+
 export const GetApiTags = async (page: number, perPage: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: TagDto[]; 400: undefined }, undefined>(`/api/tags?page=${_enc(page)}&perPage=${_enc(perPage)}`,
     GET,
     undefined,
@@ -501,6 +518,13 @@ export const GetSingleQuote = async (id: number, headers?: HeadersInit, options?
 );
 
 export const GetSingleTag = async (tagId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: TagDto; 400: undefined; 404: undefined }, undefined>(`/api/tags/${tagId}`,
+    GET,
+    undefined,
+    headers,
+    options,
+);
+
+export const GetSingleTagNamespace = async (namespaceId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: TagNamespaceDto; 400: undefined; 401: undefined; 404: undefined }, undefined>(`/api/tagnamespaces/${namespaceId}`,
     GET,
     undefined,
     headers,
@@ -654,6 +678,13 @@ export const PostApiSubscriptionsThread = async (body: SubscribeCommentsThreadCo
     options,
 );
 
+export const PostApiTagnamespaces = async (body: CreateTagNamespaceCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 201: TagNamespaceDto; 400: undefined; 401: undefined; 409: string }, CreateTagNamespaceCommand>("/api/tagnamespaces",
+    POST,
+    body,
+    headers,
+    options,
+);
+
 export const PostApiTags = async (body: CreateTagCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 201: TagDto; 400: undefined; 401: undefined; 409: string }, CreateTagCommand>("/api/tags",
     POST,
     body,
@@ -732,6 +763,13 @@ export const PutApiRoles = async (body: UpdateRoleCommand, headers?: HeadersInit
 );
 
 export const PutApiShelves = async (body: UpdateShelfCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: undefined; 400: undefined; 401: undefined; 404: undefined }, UpdateShelfCommand>("/api/shelves",
+    PUT,
+    body,
+    headers,
+    options,
+);
+
+export const PutApiTagnamespaces = async (body: UpdateTagNamespaceCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: undefined; 400: undefined; 401: undefined; 404: undefined; 409: string }, UpdateTagNamespaceCommand>("/api/tagnamespaces",
     PUT,
     body,
     headers,

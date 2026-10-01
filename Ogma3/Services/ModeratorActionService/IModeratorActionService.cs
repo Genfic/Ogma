@@ -44,6 +44,11 @@ public interface IModeratorActionService
     void LogFaqUpdated(long faqId, string question);
     void LogFaqDeleted(long faqId, string question);
 
+    // Tag namespaces
+    void LogTagNamespaceCreated(long namespaceId, string name, string slug, string? alias);
+    void LogTagNamespaceUpdated(long namespaceId, string name, string slug, string? alias);
+    void LogTagNamespaceDeleted(long namespaceId, string name, string slug);
+
     // Roles
     void LogRoleCreated(long roleId, string name, bool isStaff);
     void LogRoleUpdated(long roleId, string name, bool isStaff);

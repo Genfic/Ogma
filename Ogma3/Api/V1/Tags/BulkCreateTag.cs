@@ -22,7 +22,13 @@ using ReturnType = Results<BadRequest<string>, Ok<string>>;
 [MapPost("tags/bulk")]
 [UsedImplicitly]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public sealed partial class BulkCreateTag(AppDbContext context, TagCache cache, ILogger<BulkCreateTag.Handler> logger, IModeratorActionService moderatorActionService)
+public sealed partial class BulkCreateTag
+(
+	AppDbContext context,
+	TagCache cache,
+	ILogger<BulkCreateTag.Handler> logger,
+	IModeratorActionService moderatorActionService
+)
 {
 	private async ValueTask<ReturnType> HandleAsync(
 		Command request,
@@ -60,15 +66,15 @@ public sealed partial class BulkCreateTag(AppDbContext context, TagCache cache, 
 			namespaces.Add(tag.Namespace);
 		}
 
-		var inserted = await context.Database.SqlQuery<TagEntry>(// lang=sql
-			$"""
-			INSERT INTO "Tags" ("Name", "Slug", "NamespaceId")
-			SELECT u.name, u.slug, n."Id"
-			FROM UNNEST({names}, {slugs}, {namespaces}) AS u(name, slug, ns_slug)
-			JOIN "TagNamespaces" n ON n."Slug" = u.ns_slug
-			ON CONFLICT DO NOTHING
-			RETURNING "Id", "Slug", n."Name";
-			""")
+		var inserted = await context.Database.SqlQuery<TagEntry>( // lang=sql
+				$"""
+				 INSERT INTO "Tags" ("Name", "Slug", "NamespaceId")
+				 SELECT u.name, u.slug, n."Id"
+				 FROM UNNEST({names}, {slugs}, {namespaces}) AS u(name, slug, ns_slug)
+				 JOIN "TagNamespaces" n ON n."Slug" = u.ns_slug
+				 ON CONFLICT DO NOTHING
+				 RETURNING "Id", "Name", n."Slug";
+				 """)
 			.ToListAsync(cancellationToken);
 
 		foreach (var tag in inserted)

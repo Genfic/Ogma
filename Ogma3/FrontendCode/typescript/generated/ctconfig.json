@@ -33,6 +33,15 @@
 		"MaxNameLength": 25,
 		"MaxDescLength": 250
 	},
+	"TagNamespace": {
+		"MinNameLength": 3,
+		"MaxNameLength": 32,
+		"MinSlugLength": 2,
+		"MaxSlugLength": 32,
+		"MaxAliasLength": 5,
+		"MaxDescLength": 256,
+		"ColorLength": 8
+	},
 	"Rating": {
 		"MinNameLength": 4,
 		"MaxNameLength": 20,

@@ -42,7 +42,7 @@ public sealed partial class UpdateTag(AppDbContext context, TagCache cache, IMod
 
 		var tag = await context.Tags
 			.Where(t => t.Id == request.Id)
-			.Select(t => new TagEntry(t.Id, t.Slug, t.Namespace!.Name))
+			.Select(t => new TagEntry(t.Id, t.Name, t.Namespace!.Slug))
 			.FirstOrDefaultAsync(cancellationToken);
 
 		if (tag is null)
@@ -60,22 +60,19 @@ public sealed partial class UpdateTag(AppDbContext context, TagCache cache, IMod
 					.SetProperty(t => t.LastChange, DateTimeOffset.UtcNow),
 				cancellationToken);
 
-		var names = await context.Tags
+		var namespaceSlug = await context.Tags
 			.Where(t => t.Id == request.Id)
-			.Select(t => new {
-				Ns = t.Namespace!.Name,
-				t.Slug,
-			})
+			.Select(t => t.Namespace!.Slug)
 			.FirstOrDefaultAsync(cancellationToken);
 
-		if (names is null)
+		if (namespaceSlug is null)
 		{
 			return TypedResults.NotFound();
 		}
 
 		moderatorActionService.LogTagUpdated(tag.Id, tag.TagName, tag.NamespaceSlug ?? "unknown");
 
-		await cache.UpdateAsync(tag, new(request.Id, names.Slug, names.Ns));
+		await cache.UpdateAsync(tag, new(request.Id, request.Name, namespaceSlug));
 
 		return res > 0 ? TypedResults.Ok() : TypedResults.NotFound();
 	}
