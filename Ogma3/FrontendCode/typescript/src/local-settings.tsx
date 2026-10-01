@@ -1,5 +1,5 @@
 import { $id } from "@h/dom";
-import { makePersisted } from "@solid-primitives/storage";
+import { makePersisted } from "@h/persisted";
 import { createEffect, createSignal } from "solid-js";
 import { render } from "solid-js/web";
 
