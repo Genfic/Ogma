@@ -1,7 +1,7 @@
 import { GetApiQuotesRandom as getQuote } from "@g/paths-public";
 import type { QuoteDto } from "@g/types-public";
+import { makePersisted } from "@h/persisted";
 import { component } from "@h/web-components";
-import { makePersisted } from "@solid-primitives/storage";
 import type { Empty } from "@t/utils";
 import LucideClock from "icon:lucide:clock";
 import LucideRefreshCw from "icon:lucide:refresh-cw";

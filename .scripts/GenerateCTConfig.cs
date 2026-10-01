@@ -2,6 +2,7 @@
 #:package Microsoft.CodeAnalysis.CSharp@5.*
 
 using System.Diagnostics;
+using System.Globalization;
 using System.Text;
 using System.Text.Json;
 using Microsoft.CodeAnalysis.CSharp;
@@ -212,6 +213,10 @@ static string ToTs(object? value)
 	{
 		string s => $"\"{s}\"",
 		bool b => b ? "true" : "false",
+
+		byte or sbyte or short or ushort or int or uint or long or ulong or float or double or decimal
+			=> ((IFormattable)value).ToString(null, CultureInfo.InvariantCulture),
+
 		object?[] arr => $"[{string.Join(", ", arr.Select(ToTs))}]",
 		object o => '"' + o.ToString() + '"',
 		_ => value?.ToString() ?? "null",

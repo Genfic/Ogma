@@ -1,3 +1,4 @@
+/// <reference lib="webworker" />
 // oxlint-disable unicorn/require-post-message-target-origin
 declare let self: ServiceWorkerGlobalScope;
 
