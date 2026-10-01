@@ -69,6 +69,7 @@ public sealed class EditModel(AppDbContext context, OgmaConfig config) : PageMod
 		if (input is null) return NotFound();
 
 		WasPublished = input.PublicationDate != null;
+		input.Schedule = input.Schedule is {} schedule ? User.ToUserTime(schedule) : null;
 		Input = input;
 
 		return Page();
@@ -84,7 +85,7 @@ public sealed class EditModel(AppDbContext context, OgmaConfig config) : PageMod
 		public required ChapterMinimal? AttachedChapter { get; init; }
 		public required StoryMinimal? AttachedStory { get; init; }
 		public required bool Publish { get; init; }
-		public required DateTimeOffset? Schedule { get; init; }
+		public required DateTimeOffset? Schedule { get; set; }
 		[DisplayName("Lock")]
 		public required bool IsLocked { get; init; }
 	}
@@ -93,8 +94,6 @@ public sealed class EditModel(AppDbContext context, OgmaConfig config) : PageMod
 	{
 		public PostDataValidation()
 		{
-			var now = DateTimeOffset.UtcNow;
-
 			RuleFor(b => b.Title)
 				.NotEmpty()
 				.Length(CTConfig.Blogpost.MinTitleLength, CTConfig.Blogpost.MaxTitleLength);
@@ -105,14 +104,18 @@ public sealed class EditModel(AppDbContext context, OgmaConfig config) : PageMod
 				.HashtagsFewerThan(CTConfig.Blogpost.MaxTagsAmount)
 				.HashtagsShorterThan(CTConfig.Blogpost.MaxTagLength)
 				.When(b => b.Tags is not null);
-			RuleFor(b => b.Schedule)
-				.InclusiveBetween(now + CTConfig.Publication.MinDelay, now + CTConfig.Publication.MaxDelay)
-				.When(b => b.Schedule is not null);
 		}
 	}
 
 	public async Task<IActionResult> OnPostAsync(long id)
 	{
+		// Publishing wins over anything left in the schedule box
+		var schedule = Input.Publish ? ScheduleResolution.None : User.ResolveSchedule(Input.Schedule);
+		if (schedule.Error is {} scheduleError)
+		{
+			ModelState.AddModelError(nameof(Input.Schedule), scheduleError);
+		}
+
 		if (!ModelState.IsValid) return await OnGetAsync(id);
 
 		// Get the logged-in user
@@ -132,10 +135,6 @@ public sealed class EditModel(AppDbContext context, OgmaConfig config) : PageMod
 			cutoff = Math.Min(body.IndexOfBefore(' ', config.BlogpostExcerptDefaultCutoff * 2), cutoff);
 		}
 
-		var schedule = Input.Schedule is {} sch
-			? TimeZoneInfo.ConvertTime(sch, User.GetTimeZoneInfo()).ToUniversalTime()
-			: (DateTimeOffset?)null;
-
 		var rows = await context.Blogposts
 			.Where(b => b.Id == id)
 			.Where(b => b.AuthorId == uid)
@@ -150,8 +149,7 @@ public sealed class EditModel(AppDbContext context, OgmaConfig config) : PageMod
 				.SetProperty(b => b.IsLocked, Input.IsLocked)
 				.If(Input.Publish, usb => usb
 					.SetProperty(b => b.PublicationDate, b => b.PublicationDate ?? DateTimeOffset.UtcNow))
-				.If(schedule is not null, usb => usb
-					.SetProperty(b => b.ScheduledFor, schedule))
+				.SetProperty(b => b.ScheduledFor, schedule.Utc)
 			);
 
 		if (rows <= 0) return NotFound();

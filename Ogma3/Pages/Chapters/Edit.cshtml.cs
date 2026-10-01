@@ -48,6 +48,7 @@ public sealed class EditModel
 
 		if (chapter is null) return NotFound();
 
+		chapter.Schedule = chapter.Schedule is {} schedule ? User.ToUserTime(schedule) : null;
 		Input = chapter;
 
 		return Page();
@@ -64,15 +65,13 @@ public sealed class EditModel
 		public required string? EndNotes { get; init; }
 		public required bool Publish { get; init; }
 		public required long? StoryId { get; init; }
-		public required DateTimeOffset? Schedule { get; init; }
+		public required DateTimeOffset? Schedule { get; set; }
 	}
 
 	public sealed class PostDataValidation : AbstractValidator<PostData>
 	{
 		public PostDataValidation()
 		{
-			var now = DateTimeOffset.UtcNow;
-
 			RuleFor(b => b.Title)
 				.NotEmpty()
 				.Length(CTConfig.Chapter.MinTitleLength, CTConfig.Chapter.MaxTitleLength);
@@ -85,9 +84,6 @@ public sealed class EditModel
 				.MaximumLength(CTConfig.Chapter.MaxNotesLength);
 			RuleFor(c => c.Publish)
 				.NotNull();
-			RuleFor(b => b.Schedule)
-				.InclusiveBetween(now + CTConfig.Publication.MinDelay, now + CTConfig.Publication.MaxDelay)
-				.When(b => b.Schedule is not null);
 		}
 	}
 
@@ -105,11 +101,14 @@ public sealed class EditModel
 			ModelState.AddModelError("Body", "This chapter seems plagiarized.");
 		}
 
-		if (!ModelState.IsValid) return Page();
+		// Publishing wins over anything left in the schedule box
+		var schedule = Input.Publish ? ScheduleResolution.None : User.ResolveSchedule(Input.Schedule);
+		if (schedule.Error is {} scheduleError)
+		{
+			ModelState.AddModelError(nameof(Input.Schedule), scheduleError);
+		}
 
-		var schedule = Input.Schedule is {} sch
-			? TimeZoneInfo.ConvertTime(sch, User.GetTimeZoneInfo()).ToUniversalTime()
-			: (DateTimeOffset?)null;
+		if (!ModelState.IsValid) return Page();
 
 		var data = await context.Chapters
 			.Where(c => c.Id == id)
@@ -143,8 +142,7 @@ public sealed class EditModel
 				.SetProperty(c => c.Signature, hasher.ComputeSignature(Input.Body.Trim()))
 				.If(Input.Publish, usb => usb
 					.SetProperty(b => b.PublicationDate, b => b.PublicationDate ?? DateTimeOffset.UtcNow))
-				.If(schedule is not null, usb => usb
-					.SetProperty(b => b.ScheduledFor, schedule))
+				.SetProperty(b => b.ScheduledFor, schedule.Utc)
 			);
 
 		if (chapterEditRows <= 0) return NotFound("Chapter not found");

@@ -82,5 +82,8 @@ public static class ClaimsPrincipalEx
 
 		public TimeZoneInfo GetTimeZoneInfo()
 			=> TimeZoneInfo.TryFindSystemTimeZoneById(principal.GetTimezone(), out var tzi) ? tzi : TimeZoneInfo.Utc;
+
+		public DateTimeOffset ToUserTime(DateTimeOffset utc)
+			=> TimeZoneInfo.ConvertTime(utc, principal.GetTimeZoneInfo());
 	}
 }

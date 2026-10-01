@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
+using Ogma3.Data.Stories;
 
 namespace Ogma3.Infrastructure.Jobs;
 
@@ -47,12 +48,27 @@ public sealed class PublishScheduledContentRecurringJob
 			logger.LogInformation("Published {StoryCount} scheduled stories", storyRows);
 		}
 
-		var chapterRows = await ctx.Chapters
+		var dueChapters = ctx.Chapters
 			.Where(c => c.PublicationDate == null)
-			.Where(c => c.ScheduledFor < cutoff)
-			.ExecuteUpdateAsync(setters => setters
-				.SetProperty(c => c.PublicationDate, now)
-				.SetProperty(c => c.IsVisible, true), ct);
+			.Where(c => c.ScheduledFor < cutoff);
+
+		await using var transaction = await ctx.Database.BeginTransactionAsync(ct);
+
+		var affectedStoryIds = await dueChapters
+			.Select(c => c.StoryId)
+			.Distinct()
+			.ToListAsync(ct);
+
+		var chapterRows = await dueChapters.ExecuteUpdateAsync(setters => setters
+			.SetProperty(c => c.PublicationDate, now)
+			.SetProperty(c => c.IsVisible, true), ct);
+
+		foreach (var storyId in affectedStoryIds)
+		{
+			await ctx.RecalculateChapterCounts(storyId, touchLastUpdatedAt: true, ct);
+		}
+
+		await transaction.CommitAsync(ct);
 
 		if (chapterRows > 0)
 		{

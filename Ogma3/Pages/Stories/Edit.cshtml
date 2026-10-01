@@ -1,5 +1,6 @@
-﻿@page
+@page
 @using Ogma3.Data.Stories
+@using Ogma3.Infrastructure.Extensions
 @using Ogma3.Infrastructure.OgmaConfig
 @using Ogma3.Pages.Shared
 @using Utils.Extensions
@@ -68,21 +69,19 @@
 
 		@if (!Model.WasPublished)
 		{
+			var bounds = Html.ScheduleBounds();
 			<div class="o-form-group">
 				<label asp-for="Input.Schedule">
-					Schedule (UTC)
+					Schedule (@User.GetTimezone())
 				</label>
-				@{
-					var now = DateTimeOffset.UtcNow;
-					now = now.AddSeconds(-now.Second);
-				}
 				<input
 					type="datetime-local"
 					asp-for="Input.Schedule"
-					min="@((now + CTConfig.Publication.MinDelay).ToString("s"))"
-					max="@((now + CTConfig.Publication.MaxDelay).ToString("s"))"
+					min="@bounds.Min"
+					max="@bounds.Max"
 					step="60"
 				>
+				<span asp-validation-for="Input.Schedule"></span>
 			</div>
 		}
 	</div>
@@ -260,6 +259,7 @@
 
 @section Scripts {
 	<script type="module" src="~/js/input-progressbars.js" asp-append-version="true"></script>
+	<script type="module" src="~/js/schedule-toggle.js" asp-append-version="true"></script>
 	<script type="module" src="~/js/comp/markdown-editor.js" asp-append-version="true"></script>
 	<script type="module" src="~/js/resizer.js" asp-append-version="true"></script>
 	<script type="module" src="~/js/credits.js" asp-append-version="true"></script>

@@ -59,6 +59,8 @@ public sealed class EditModel
 			.FirstOrDefaultAsync();
 
 		if (input is null) return NotFound();
+
+		input.Schedule = input.Schedule is {} schedule ? User.ToUserTime(schedule) : null;
 		Input = input;
 
 		// Fill Ratings dropdown
@@ -83,7 +85,7 @@ public sealed class EditModel
 		[Display(Name = "Extra tags")]
 		public string? ExtraTags { get; init; }
 		public required bool Publish { get; init; }
-		public required DateTimeOffset? Schedule { get; init; }
+		public required DateTimeOffset? Schedule { get; set; }
 		[Display(Name = "Lock")]
 		public required bool IsLocked { get; init; }
 		public List<NullableCredit> Credits { get; init; } = [];
@@ -119,6 +121,13 @@ public sealed class EditModel
 	public async Task<IActionResult> OnPostAsync(long id)
 	{
 		if (User.GetNumericId() is not {} uid) return Unauthorized();
+
+		// Publishing wins over anything left in the schedule box
+		var schedule = Input.Publish ? ScheduleResolution.None : User.ResolveSchedule(Input.Schedule);
+		if (schedule.Error is {} scheduleError)
+		{
+			ModelState.AddModelError(nameof(Input.Schedule), scheduleError);
+		}
 
 		if (!ModelState.IsValid)
 		{
@@ -193,6 +202,7 @@ public sealed class EditModel
 				.SetProperty(s => s.IsLocked, Input.IsLocked)
 				.SetProperty(s => s.PublicationDate, publishDate)
 				.SetProperty(s => s.IsVisible, Input.Publish)
+				.SetProperty(s => s.ScheduledFor, schedule.Utc)
 				.SetProperty(s => s.Credits, credits)
 				.SetProperty(s => s.ExtraTags, extraTags ?? [])
 			);

@@ -125,4 +125,44 @@ public sealed class ClaimsPrincipalExTest
 		var principal = new ClaimsPrincipal(new ClaimsIdentity([new Claim(ClaimTypes.Timezone, "Not/ARealZone")]));
 		await Assert.That(principal.GetTimeZoneInfo()).IsEqualTo(TimeZoneInfo.Utc);
 	}
+
+	[Test]
+	public async Task TestToUserTimeUsesTheWinterOffset()
+	{
+		// 12:00 UTC is 13:00 in Warsaw outside daylight saving
+		var utc = new DateTimeOffset(2026, 1, 15, 12, 0, 0, TimeSpan.Zero);
+		var local = UserWithClaims().ToUserTime(utc);
+
+		await Assert.That(local.Offset).IsEqualTo(TimeSpan.FromHours(1));
+		await Assert.That(local.DateTime).IsEqualTo(new DateTime(2026, 1, 15, 13, 0, 0));
+	}
+
+	[Test]
+	public async Task TestToUserTimeUsesTheSummerOffset()
+	{
+		// 12:00 UTC is 14:00 in Warsaw during daylight saving
+		var utc = new DateTimeOffset(2026, 7, 15, 12, 0, 0, TimeSpan.Zero);
+		var local = UserWithClaims().ToUserTime(utc);
+
+		await Assert.That(local.Offset).IsEqualTo(TimeSpan.FromHours(2));
+		await Assert.That(local.DateTime).IsEqualTo(new DateTime(2026, 7, 15, 14, 0, 0));
+	}
+
+	[Test]
+	public async Task TestToUserTimePreservesTheInstant()
+	{
+		var utc = new DateTimeOffset(2026, 7, 15, 12, 0, 0, TimeSpan.Zero);
+		await Assert.That(UserWithClaims().ToUserTime(utc).UtcDateTime).IsEqualTo(utc.UtcDateTime);
+	}
+
+	[Test]
+	public async Task TestToUserTimeFallsBackToUtcForAnUnknownTimezone()
+	{
+		var principal = new ClaimsPrincipal(new ClaimsIdentity([new Claim(ClaimTypes.Timezone, "Not/ARealZone")]));
+		var utc = new DateTimeOffset(2026, 7, 15, 12, 0, 0, TimeSpan.Zero);
+		var local = principal.ToUserTime(utc);
+
+		await Assert.That(local.Offset).IsEqualTo(TimeSpan.Zero);
+		await Assert.That(local.DateTime).IsEqualTo(utc.DateTime);
+	}
 }
