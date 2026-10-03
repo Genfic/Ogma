@@ -24,7 +24,7 @@
     <PackageVersion Include="Atulin.MinHash" Version="1.0.0" />
     <PackageVersion Include="Atulin.NpgsqlSourceGenerator" Version="1.1.1" />
     <PackageVersion Include="Atulin.SealAnalyzer" Version="1.0.0" />
-    <PackageVersion Include="AWSSDK.S3" Version="4.0.103.4" />
+    <PackageVersion Include="AWSSDK.S3" Version="4.0.104.1" />
     <PackageVersion Include="Bogus" Version="35.6.5" />
     <PackageVersion Include="Chorn.EmbeddedResourceAccessGenerator" Version="1.1.5" />
     <PackageVersion Include="FluentValidation" Version="12.1.1" />
@@ -73,7 +73,7 @@
     <PackageVersion Include="Postmark" Version="5.4.1" />
     <PackageVersion Include="Riok.Mapperly" Version="4.3.1" />
     <PackageVersion Include="SafeRouting" Version="1.5.0" />
-    <PackageVersion Include="Scalar.AspNetCore" Version="2.17.11" />
+    <PackageVersion Include="Scalar.AspNetCore" Version="2.17.13" />
     <PackageVersion Include="Serilog" Version="4.4.0" />
     <PackageVersion Include="Serilog.AspNetCore" Version="10.0.0" />
     <PackageVersion Include="Serilog.Sinks.Console" Version="6.1.1" />
@@ -83,7 +83,7 @@
     <PackageVersion Include="Sqids" Version="3.2.1" />
     <PackageVersion Include="stbychkov.AutoLoggerMessage" Version="1.0.17" />
     <PackageVersion Include="System.ServiceModel.Syndication" Version="11.0.0-rc.1.26425.128" />
-    <PackageVersion Include="TUnit" Version="1.72.0" />
+    <PackageVersion Include="TUnit" Version="1.72.16" />
     <PackageVersion Include="WaffleGenerator.Bogus" Version="4.3.1" />
     <PackageVersion Include="ZiggyCreatures.FusionCache" Version="2.9.0" />
     <PackageVersion Include="ZiggyCreatures.FusionCache.Backplane.StackExchangeRedis" Version="2.9.0" />
