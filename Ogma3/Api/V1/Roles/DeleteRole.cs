@@ -17,7 +17,7 @@ using ReturnType = Results<Ok<long>, NotFound>;
 [MapGroup<ApiGroup>]
 [MapDelete("roles")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public sealed partial class DeleteRole(AppDbContext context, RoleManager<OgmaRole> roleManager, IModeratorActionService moderatorActionService)
+public sealed partial class DeleteRole(RoleManager<OgmaRole> roleManager, IModeratorActionService moderatorActionService)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint

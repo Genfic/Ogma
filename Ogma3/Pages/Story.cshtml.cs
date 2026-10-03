@@ -16,7 +16,7 @@ public sealed class StoryModel(UserRepository userRepo, AppDbContext context) : 
 	public required ChapterBasic[] Chapters { get; set; }
 	public required ProfileBar ProfileBar { get; set; }
 
-	public async Task<IActionResult> OnGetAsync(long id, string? slug)
+	public async Task<IActionResult> OnGetAsync(long id, string? slug = null)
 	{
 		var uid = User.GetNumericId();
 

@@ -7,13 +7,11 @@ using Ogma3.Data.Reports;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Infrastructure.ServiceRegistrations;
 using Ogma3.Pages.Shared;
-using Ogma3.Services;
 
 namespace Ogma3.Areas.Admin.Pages;
 
 [Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
-public sealed class Reports(AppDbContext context, CommentRedirector redirector)
-	: PageModel
+public sealed class Reports(AppDbContext context) : PageModel
 {
 	private const int PerPage = 50;
 
@@ -35,20 +33,5 @@ public sealed class Reports(AppDbContext context, CommentRedirector redirector)
 			ItemCount = count,
 			PerPage = PerPage,
 		};
-	}
-
-	/// <summary>
-	/// The comment system here is so incredibly complex it needs its own named handler lol
-	/// Its purpose is to redirect to the content the given comment is attached to, and to scroll to said comment
-	/// </summary>
-	/// <param name="id">ID of the comment</param>
-	/// <returns></returns>
-	public async Task<ActionResult> OnGetComment(long id)
-	{
-		var redirect = await redirector.RedirectToComment(id);
-
-		if (redirect is null) return NotFound();
-
-		return Redirect(redirect);
 	}
 }

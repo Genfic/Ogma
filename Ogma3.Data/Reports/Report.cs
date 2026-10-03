@@ -1,12 +1,9 @@
 using AutoDbSetGenerators;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Ogma3.Data.Bases;
 using Ogma3.Data.Blogposts;
 using Ogma3.Data.Chapters;
 using Ogma3.Data.Clubs;
 using Ogma3.Data.Comments;
-using Ogma3.Data.Constants;
 using Ogma3.Data.Stories;
 using Ogma3.Data.Users;
 
@@ -16,13 +13,14 @@ namespace Ogma3.Data.Reports;
 public sealed class Report : BaseModel
 {
 	public OgmaUser Reporter { get; set; } = null!;
-	public long ReporterId { get; set; }
+	public required long ReporterId { get; set; }
 	public DateTimeOffset ReportDate { get; set; }
-	public string Reason { get; set; } = null!;
+	public required string Reason { get; set; }
 	public ReportStatus Status { get; set; } = ReportStatus.Open;
 
 	// Blockable content
-	public string ContentType { get; set; } = null!;
+	public ReportableContentType ContentType { get; } = 0;
+	public long ContentId { get; set; }
 
 	public Comment? Comment { get; set; }
 	public long? CommentId { get; set; }
@@ -41,26 +39,4 @@ public sealed class Report : BaseModel
 
 	public Club? Club { get; set; }
 	public long? ClubId { get; set; }
-
-	public sealed class ReportConfiguration : BaseConfiguration<Report>
-	{
-		protected override void Config(EntityTypeBuilder<Report> builder)
-		{
-
-			builder
-				.Property(b => b.ReportDate)
-				.IsRequired()
-				.HasDefaultValueSql(PgConstants.CurrentTimestamp);
-
-			builder
-				.Property(b => b.Reason)
-				.HasMaxLength(CTConfig.Report.MaxReasonLength)
-				.IsRequired();
-
-			builder
-				.Property(b => b.ContentType)
-				.HasMaxLength(32)
-				.IsRequired();
-		}
-	}
 }

@@ -98,9 +98,12 @@ const Comments = (props: Props) => {
 
 	const isStaff = $memo(threadData().isStaff);
 
+	const initialHash = window.location.hash;
+	const hasCommentHash = /^#comment-[a-zA-Z0-9]+$/.test(initialHash);
+
 	const visibilityTrigger = $signal<Element>();
-	const visible = createVisibilityObserver({ threshold: 0.5 })($get(visibilityTrigger));
-	let listVisible = $signal(false);
+	const visible = createVisibilityObserver({ threshold: 0.2 })($get(visibilityTrigger));
+	let listVisible = $signal(hasCommentHash);
 	createEffect(() => {
 		if (visible()) {
 			listVisible = true;

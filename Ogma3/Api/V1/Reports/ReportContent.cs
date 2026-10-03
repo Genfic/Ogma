@@ -30,7 +30,7 @@ public sealed partial class ReportContent(AppDbContext context, IUserService use
 	)
 	{
 		long itemId;
-		if (request.ItemType == EReportableContentTypes.Comment)
+		if (request.ItemType == ReportableContentType.Comment)
 		{
 			if (sqids.Decode(request.ItemId) is not [var id])
 			{
@@ -55,27 +55,26 @@ public sealed partial class ReportContent(AppDbContext context, IUserService use
 		{
 			Reason = request.Reason,
 			ReporterId = uid,
-			ContentType = request.ItemType.ToString(),
 		};
 
 		switch (request.ItemType)
 		{
-			case EReportableContentTypes.Comment:
+			case ReportableContentType.Comment:
 				report.CommentId = itemId;
 				break;
-			case EReportableContentTypes.User:
+			case ReportableContentType.User:
 				report.UserId = itemId;
 				break;
-			case EReportableContentTypes.Story:
+			case ReportableContentType.Story:
 				report.StoryId = itemId;
 				break;
-			case EReportableContentTypes.Chapter:
+			case ReportableContentType.Chapter:
 				report.ChapterId = itemId;
 				break;
-			case EReportableContentTypes.Blogpost:
+			case ReportableContentType.Blogpost:
 				report.BlogpostId = itemId;
 				break;
-			case EReportableContentTypes.Club:
+			case ReportableContentType.Club:
 				report.ClubId = itemId;
 				break;
 			default:
@@ -95,6 +94,6 @@ public sealed partial class ReportContent(AppDbContext context, IUserService use
 		[MinLength(CTConfig.Report.MinReasonLength)]
 		[MaxLength(CTConfig.Report.MaxReasonLength)]
 		public required string Reason { get; init; }
-		public required EReportableContentTypes ItemType { get; init; }
+		public required ReportableContentType ItemType { get; init; }
 	}
 }

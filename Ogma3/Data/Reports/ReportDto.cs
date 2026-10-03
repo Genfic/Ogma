@@ -4,25 +4,14 @@ namespace Ogma3.Data.Reports;
 
 public sealed class ReportDto
 {
-	public long Id { get; init; }
-	public string ReporterUserName { get; init; } = null!;
-	public long ReporterId { get; init; }
-	public DateTimeOffset ReportDate { get; init; }
-	public string Reason { get; init; } = null!;
-	public ReportStatus Status { get; init; }
+	public required long Id { get; init; }
+	public required string ReporterUserName { get; init; }
+	public required DateTimeOffset ReportDate { get; init; }
+	public required string Reason { get; init; }
+	public required ReportStatus Status { get; init; }
 
-	// Blockable content
-	public string ContentType { get; init; } = null!;
-	public long? CommentId { get; init; }
-	public long? CommentCommentsThreadId { get; init; }
-	public string? UserUserName { get; init; }
-
-	public long? UserId { get; init; }
-	public long? StoryId { get; init; }
-	public long? ChapterId { get; init; }
-	public long? BlogpostId { get; init; }
-	public string? ClubName { get; init; }
-	public long? ClubId { get; init; }
+	public required string ContentType { get; init; }
+	public required long ContentId { get; init; }
 }
 
 [Mapper]

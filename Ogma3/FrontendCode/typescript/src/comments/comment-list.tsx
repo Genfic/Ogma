@@ -1,6 +1,6 @@
 import { GetApiComments, GetApiCommentsLocate } from "@g/paths-public";
 import type { CommentDto } from "@g/types-public";
-import { type Component, createEffect, createMemo, createResource, createSignal, For, onMount } from "solid-js";
+import { type Component, createEffect, createMemo, createResource, createSignal, For, onMount, onCleanup } from "solid-js";
 import { Comment } from "./comment";
 import { CommentListPagination } from "./comment-list-pagination";
 
@@ -15,7 +15,7 @@ interface Props {
 
 export const CommentList: Component<Props> = (props) => {
 	const [currentPage, setCurrentPage] = createSignal(1);
-	const [highlight, setHighlight] = createSignal("");
+	const [highlight, setHighlight] = createSignal<string | null>(null);
 	const [reload, setReload] = createSignal(0);
 	const [username, setUsername] = createSignal<string | null>(null);
 	const [deleted, setDeleted] = createSignal<string[]>([]);
@@ -32,19 +32,32 @@ export const CommentList: Component<Props> = (props) => {
 		},
 	);
 
+
 	createEffect(() => {
 		const targetId = highlight();
-		if (commentsData.state === "ready" && targetId.length > 0) {
-			const element = document.getElementById(`comment-${targetId}`);
 
-			if (element) {
-				element.scrollIntoView({
-					behavior: "smooth",
-					block: "center",
-					inline: "nearest",
-				});
-			}
+		if (commentsData.state !== "ready" || !targetId || targetId.length <= 0) {
+			return;
 		}
+
+		const scrollToComment = () => {
+			document.getElementById(`comment-${targetId}`)?.scrollIntoView({
+				behavior: "smooth",
+				block: "center",
+				inline: "nearest",
+			});
+		};
+
+		if (document.visibilityState === "visible") {
+			requestAnimationFrame(scrollToComment);
+			return;
+		}
+
+		document.addEventListener("visibilitychange", scrollToComment, { once: true });
+
+		onCleanup(() => {
+			document.removeEventListener("visibilitychange", scrollToComment);
+		});
 	});
 
 	const changeHighlight = (e: MouseEvent, id: string) => {
@@ -53,21 +66,13 @@ export const CommentList: Component<Props> = (props) => {
 
 		if (id.length <= 0) return;
 
-		document.getElementById(`comment-${id}`)?.scrollIntoView({
-			behavior: "smooth",
-			block: "center",
-			inline: "nearest",
-		});
-
 		history.replaceState(undefined, "", `#comment-${id}`);
 	};
 
 	const comments = createMemo<CommentDto[]>((prev) => {
 		const data = commentsData();
 		if (commentsData.state === "ready" && data) {
-			return data.elements.map(
-				(c) => ({ ...c, deletedBy: deleted().includes(c.id) ? "User" : c.deletedBy }),
-			);
+			return data.elements.map((c) => ({ ...c, deletedBy: deleted().includes(c.id) ? "User" : c.deletedBy }));
 		}
 		return prev ?? [];
 	});

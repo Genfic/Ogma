@@ -6,6 +6,7 @@ using Routes.Pages;
 
 namespace Ogma3.Services;
 
+// TODO: Can probably be yeeted, in favour of how Ogma3/Areas/Admin/Api/ReportableContentRedirector.cs handles it
 [RegisterScoped]
 [UsedImplicitly]
 public sealed class CommentRedirector(AppDbContext context, LinkGenerator linkGenerator)

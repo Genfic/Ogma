@@ -4,7 +4,7 @@ using Ogma3.Data;
 
 namespace Ogma3.Migrator;
 
-public class MigrationWorker
+public partial class MigrationWorker
 (
 	ILogger<MigrationWorker> logger,
 	IServiceProvider services,
@@ -38,7 +38,10 @@ public class MigrationWorker
 		finally
 		{
 			appLifetime.StopApplication();
-			logger.LogInformation("Migration took {Elapsed} ms", watch.ElapsedMilliseconds);
+			LogMigrationTookElapsedMs(watch.ElapsedMilliseconds);
 		}
 	}
+
+	[LoggerMessage(LogLevel.Information, "Migration took {Elapsed} ms")]
+	partial void LogMigrationTookElapsedMs(long elapsed);
 }
