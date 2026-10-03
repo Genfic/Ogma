@@ -13,7 +13,7 @@ public sealed class IndexModel(AppDbContext context, ClubRepository clubRepo) : 
 	public ClubBar ClubBar { get; private set; } = null!;
 	public IList<ThreadCard> ThreadCards { get; private set; } = null!;
 
-	public async Task<IActionResult> OnGetAsync(long id, string? slug)
+	public async Task<IActionResult> OnGetAsync(long id, string? slug = null)
 	{
 		var cb = await clubRepo.GetClubBar(id);
 		if (cb is null) return NotFound();

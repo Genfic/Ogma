@@ -11,7 +11,6 @@ public sealed class CommentsThreadConfiguration : BaseConfiguration<CommentThrea
 {
 	protected override void Config(EntityTypeBuilder<CommentThread> builder)
 	{
-
 		// CONSTRAINTS
 		builder
 			.Property(ct => ct.CommentsCount)

@@ -2,7 +2,7 @@
 @using Ogma3.Api.Rss
 @using Ogma3.Data.Users
 @using Ogma3.Infrastructure.Config
-@using Ogma3.Infrastructure.Constants
+@using Ogma3.Infrastructure.Extensions
 @using Ogma3.Infrastructure.Middleware.RequestTimingMiddleware
 @using Ogma3.Infrastructure.OgmaConfig
 @inject SignInManager<OgmaUser> SignInManager
@@ -61,7 +61,7 @@
 
 			<a asp-route="@(nameof(GetBlogpostsRssFeed))" class="item"><icon name="lucide:rss" class="rss"></icon>Blogpost RSS</a>
 
-			@if (SignInManager.IsSignedIn(User) && User.IsInRole(RoleNames.Admin))
+			@if (SignInManager.IsSignedIn(User) && User.IsStaff())
 			{
 				<a class="item" asp-area="Admin" asp-page="/Index">Admin</a>
 			}

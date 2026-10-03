@@ -11,9 +11,9 @@ namespace Ogma3.Api.V1;
 [Handler]
 [MapGroup<ApiGroup>]
 [MapGet("test-three")]
-public sealed partial class TestThree(OgmaConfig config, AppDbContext ctx)
+public sealed partial class TestThree(AppDbContext ctx)
 {
-	JsonSerializerOptions opt = new() { WriteIndented = true };
+	private readonly JsonSerializerOptions _opt = new() { WriteIndented = true };
 
 	private async ValueTask<Ok<string>> Handle(Query q, CancellationToken ct)
 	{
@@ -27,7 +27,7 @@ public sealed partial class TestThree(OgmaConfig config, AppDbContext ctx)
 			})
 			.ToListAsync(ct);
 
-		var json =  JsonSerializer.Serialize(new { ns, t }, opt);
+		var json =  JsonSerializer.Serialize(new { ns, t }, _opt);
 		return TypedResults.Ok(json);
 	}
 
