@@ -16,7 +16,6 @@ const escapeHTML = (text: string) =>
 			})[m] || m,
 	);
 
-
 const sanitizer = new HtmlSanitizer();
 
 // `~~strike~~`, `++insert++` and `==mark==` are emitted by the extensions below but are absent

@@ -79,8 +79,8 @@ for (const [file, chars, _scale] of subsets) {
 		// obj.head.unitsPerE = Math.round(obj.head.unitsPerEm / scale);
 		// font.set(obj);
 
-		const woff2buffer = writeBinary(font,"woff2",{ hinting: true });
-		const woffbuffer =  writeBinary(font,"woff", {hinting: true });
+		const woff2buffer = writeBinary(font, "woff2", { hinting: true });
+		const woffbuffer = writeBinary(font, "woff", { hinting: true });
 
 		await Bun.write(`${output}.woff2`, woff2buffer);
 		await Bun.write(`${output}.woff`, woffbuffer);

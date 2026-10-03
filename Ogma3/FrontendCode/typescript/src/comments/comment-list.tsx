@@ -1,6 +1,15 @@
 import { GetApiComments, GetApiCommentsLocate } from "@g/paths-public";
 import type { CommentDto } from "@g/types-public";
-import { type Component, createEffect, createMemo, createResource, createSignal, For, onMount, onCleanup } from "solid-js";
+import {
+	type Component,
+	createEffect,
+	createMemo,
+	createResource,
+	createSignal,
+	For,
+	onMount,
+	onCleanup,
+} from "solid-js";
 import { Comment } from "./comment";
 import { CommentListPagination } from "./comment-list-pagination";
 
@@ -31,7 +40,6 @@ export const CommentList: Component<Props> = (props) => {
 			return res.data;
 		},
 	);
-
 
 	createEffect(() => {
 		const targetId = highlight();

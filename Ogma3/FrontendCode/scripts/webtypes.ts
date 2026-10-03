@@ -276,15 +276,13 @@ const packageInfo = getPackageInfo();
 const webTypesElements: HTMLElement[] = allComponents.map((comp) => ({
 	name: comp.tagName,
 	description: `Custom element <${comp.tagName}> defined in ${comp.sourceFile.replaceAll("\\", "/")}`,
-	attributes: comp.attributes.map(
-		(attr): HTMLAttribute => ({
-			name: attr.name,
-			value: {
-				kind: "expression",
-				type: attr.type,
-			},
-		}),
-	),
+	attributes: comp.attributes.map((attr): HTMLAttribute => ({
+		name: attr.name,
+		value: {
+			kind: "expression",
+			type: attr.type,
+		},
+	})),
 	source: {
 		module: `./${comp.sourceFile.replaceAll("\\", "/")}`,
 		symbol: comp.tagName,

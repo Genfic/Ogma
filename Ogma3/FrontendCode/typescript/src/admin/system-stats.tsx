@@ -39,7 +39,8 @@ const formatUsed = (usage: MemoryUsageDto) => {
 	return `${formatBytes(usage.usedBytes)} / ${formatBytes(usage.totalBytes)} (${formatPercentage(usedPercentage)})`;
 };
 
-const formatUsedOr = (usage: MemoryUsageDto | null, fallback: string) => (usage === null ? fallback : formatUsed(usage));
+const formatUsedOr = (usage: MemoryUsageDto | null, fallback: string) =>
+	usage === null ? fallback : formatUsed(usage);
 
 const formatAvailableOr = (usage: MemoryUsageDto | null, fallback: string) =>
 	usage === null ? fallback : formatBytes(usage.availableBytes);
@@ -110,8 +111,9 @@ const SystemStats = () => {
 						<hr />
 
 						<p>
-							Garnet and PostgreSQL container CPU and total RAM are not exposed to Ogma by the current deployment.
-							PostgreSQL size is the database&rsquo;s disk footprint, not the whole PostgreSQL container or volume.
+							Garnet and PostgreSQL container CPU and total RAM are not exposed to Ogma by the current
+							deployment. PostgreSQL size is the database&rsquo;s disk footprint, not the whole PostgreSQL
+							container or volume.
 						</p>
 					</>
 				);
