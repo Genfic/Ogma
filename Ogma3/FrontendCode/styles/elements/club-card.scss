@@ -8,7 +8,7 @@ $title-height: 2rem;
 	display: grid;
 	grid-template-rows: auto 1fr auto;
 	grid-auto-columns: 10rem 1fr;
-	grid-column-gap: 0.25rem;
+	column-gap: 0.25rem;
 	margin: 0;
 	background-color: var(--ele-1);
 	@include ab.active-border;
