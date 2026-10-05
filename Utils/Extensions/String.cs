@@ -28,6 +28,18 @@ public static partial class String
 		/// <returns></returns>
 		public string Friendlify() => input.Friendlify('-');
 
+
+		/// <summary>
+		/// Removes newlines from the string, replacing them with spaces
+		/// </summary>
+		/// <returns>String with newlines removed</returns>
+		public string RemoveNewLines()
+		{
+			Span<char> buffer = stackalloc char[input.Length];
+			input.AsSpan().RemoveNewLines(buffer);
+			return new string(buffer);
+		}
+
 		/// <summary>
 		/// Replaces elements of the `template` according to the supplied `pattern`
 		/// </summary>
@@ -229,6 +241,25 @@ public static partial class String
 			}
 
 			return buffer[..written];
+		}
+
+		public void RemoveNewLines(Span<char> buffer)
+		{
+			for(var i = 0; i < span.Length; i++)
+			{
+				var ch = span[i];
+				switch (ch)
+				{
+					case '\n':
+						buffer[i] = ' ';
+						continue;
+					case '\r':
+						continue;
+					default:
+						buffer[i] = ch;
+						continue;
+				}
+			}
 		}
 	}
 

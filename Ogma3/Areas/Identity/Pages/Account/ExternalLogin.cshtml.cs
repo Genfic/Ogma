@@ -37,7 +37,7 @@ public sealed class ExternalLoginModel
 
 	public required string LoginProvider { get; set; }
 
-	public required string ReturnUrl { get; set; }
+	public string? ReturnUrl { get => Url.EnsureLocal(field); set; }
 
 	[TempData] public required string ErrorMessage { get; set; }
 

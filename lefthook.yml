@@ -1,0 +1,18 @@
+assert_lefthook_installed: true
+pre-commit:
+  parallel: true
+  jobs:
+    - name: Frontend Checks
+      root: "Ogma3/FrontendCode"
+      group:
+        jobs:
+          - name: Lint TS
+            run: bun run lint:fix
+          - name: Format TS
+            run: bun run format:fix
+          - name: Typecheck
+            run: bun run js:typecheck
+          - name: Lint SCSS
+            run: bun run css:lint
+          - name: Webtypes
+            run: bun run webtypes

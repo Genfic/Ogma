@@ -10,6 +10,7 @@ using Ogma3.Data.CommentsThreads;
 using Ogma3.Data.Images;
 using Ogma3.Data.Shelves;
 using Ogma3.Services.GeneratedImagesService;
+using Utils.Extensions;
 
 namespace Ogma3.Areas.Identity.Pages.Account;
 
@@ -34,7 +35,7 @@ public sealed class ConfirmEmailModel(
 		var user = await userManager.FindByNameAsync(userName);
 		if (user is null)
 		{
-			logger.LogWarning("Attempt to confirm email for nonexistent user '{UserName}'.", userName);
+			logger.LogWarning("Attempt to confirm email for nonexistent user '{UserName}'.", userName.RemoveNewLines());
 			StatusMessage = "Error: Invalid confirmation link.";
 			return Page();
 		}

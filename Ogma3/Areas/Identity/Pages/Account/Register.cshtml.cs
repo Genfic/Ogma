@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Ogma3.Data;
 using Ogma3.Data.Users;
 using Ogma3.Infrastructure.CustomValidators;
+using Ogma3.Infrastructure.Extensions;
 using Ogma3.Infrastructure.ServiceRegistrations;
 using Ogma3.Services.EmailBlocklistProvider;
 using Ogma3.Services.InviteCodeService;
@@ -40,7 +41,7 @@ public sealed class RegisterModel(
 	[BindProperty(Name = "cf-turnstile-response")]
 	public string TurnstileResponse { get; set; } = null!;
 
-	public string? ReturnUrl { get; set; }
+	public string? ReturnUrl { get => Url.EnsureLocal(field); set; }
 
 	public required PowChallenge PowChallenge { get; set; } = null!;
 
