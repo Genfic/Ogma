@@ -19,6 +19,7 @@
 		<label asp-for="@Model.Input.Body"></label>
 		<markdown-editor>
 			<read-more-btn></read-more-btn>
+			<issues-btn></issues-btn>
 		</markdown-editor>
 		<textarea asp-for="@Model.Input.Body"
 		          cols="30" rows="10"
@@ -49,6 +50,7 @@
 
 @section Scripts {
 	<script type="module" src="~/js/comp/markdown-editor.js" asp-append-version="true"></script>
+	<script type="module" src="~/js/comp/extra-buttons/issues-button.js" asp-append-version="true"></script>
 	<script type="module" src="~/js/comp/extra-buttons/read-more-button.js" asp-append-version="true"></script>
 	<script type="module" src="~/js/image-uploader.js" asp-append-version="true"></script>
 }

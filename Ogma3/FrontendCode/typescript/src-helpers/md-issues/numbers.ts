@@ -1,0 +1,223 @@
+/**
+ * Number spellings for the range this app treats as "small numbers".
+ *
+ * Style guides that spell out numbers under a threshold rarely stop at ten, and
+ * twenty is the point where mixing digits and words starts to read badly, so the
+ * cut-off is 0-20 inclusive for both cardinals and ordinals.
+ */
+
+export const NUMBER_CARDINALS: Readonly<Record<number, string>> = {
+	0: "zero",
+	1: "one",
+	2: "two",
+	3: "three",
+	4: "four",
+	5: "five",
+	6: "six",
+	7: "seven",
+	8: "eight",
+	9: "nine",
+	10: "ten",
+	11: "eleven",
+	12: "twelve",
+	13: "thirteen",
+	14: "fourteen",
+	15: "fifteen",
+	16: "sixteen",
+	17: "seventeen",
+	18: "eighteen",
+	19: "nineteen",
+	20: "twenty",
+};
+
+export const NUMBER_ORDINALS: Readonly<Record<number, string>> = {
+	0: "zeroth",
+	1: "first",
+	2: "second",
+	3: "third",
+	4: "fourth",
+	5: "fifth",
+	6: "sixth",
+	7: "seventh",
+	8: "eighth",
+	9: "ninth",
+	10: "tenth",
+	11: "eleventh",
+	12: "twelfth",
+	13: "thirteenth",
+	14: "fourteenth",
+	15: "fifteenth",
+	16: "sixteenth",
+	17: "seventeenth",
+	18: "eighteenth",
+	19: "nineteenth",
+	20: "twentieth",
+};
+
+/**
+ * Words that make a following digit a reference rather than a quantity.
+ *
+ * These are excluded so that `chapter 3`, `page 12`, `level 5` and the like keep
+ * their digits, which is what a reader expects of a label.
+ */
+export const NON_QUANTITY_LABELS: ReadonlySet<string> = new Set([
+	"chapter",
+	"chapters",
+	"chap",
+	"page",
+	"pages",
+	"pg",
+	"figure",
+	"figures",
+	"fig",
+	"table",
+	"tables",
+	"sec",
+	"section",
+	"sections",
+	"line",
+	"lines",
+	"ln",
+	"volume",
+	"vol",
+	"volumes",
+	"part",
+	"parts",
+	"book",
+	"books",
+	"episode",
+	"episodes",
+	"ep",
+	"season",
+	"seasons",
+	"issue",
+	"issues",
+	"version",
+	"versions",
+	"step",
+	"steps",
+	"phase",
+	"phases",
+	"level",
+	"levels",
+	"lv",
+	"rank",
+	"ranks",
+	"grade",
+	"grades",
+	"room",
+	"rooms",
+	"no",
+	"number",
+	"numbers",
+	"item",
+	"items",
+	"rule",
+	"rules",
+	"day",
+	"days",
+	"hour",
+	"hours",
+	"minute",
+	"minutes",
+	"second",
+	"seconds",
+	"year",
+	"years",
+	"week",
+	"weeks",
+	"month",
+	"months",
+	"score",
+	"points",
+	"pt",
+]);
+
+/** Whether `word` is a label that keeps the digits that follow it. */
+export const isNonQuantityLabel = (word: string): boolean => NON_QUANTITY_LABELS.has(word.toLowerCase());
+
+/**
+ * Units a number is measured in, which keep their digits.
+ *
+ * Spelling out a measurement reads as clumsy, so `5 kg` and `10 metres` are left
+ * alone. Durations are deliberately absent: `three days` reads naturally, while
+ * `three kilograms` does not.
+ */
+export const MEASUREMENT_UNITS: ReadonlySet<string> = new Set([
+	// Mass
+	"mg",
+	"g",
+	"kg",
+	"t",
+	"oz",
+	"lb",
+	"lbs",
+	"gram",
+	"grams",
+	"gramme",
+	"grammes",
+	"kilogram",
+	"kilograms",
+	"ounce",
+	"ounces",
+	"pound",
+	"pounds",
+	// Length
+	"mm",
+	"cm",
+	"km",
+	"in",
+	"ft",
+	"yd",
+	"mi",
+	"px",
+	"millimetre",
+	"millimetres",
+	"millimeter",
+	"millimeters",
+	"centimetre",
+	"centimetres",
+	"centimeter",
+	"centimeters",
+	"metre",
+	"metres",
+	"meter",
+	"meters",
+	"kilometre",
+	"kilometres",
+	"kilometer",
+	"kilometers",
+	"inch",
+	"inches",
+	"foot",
+	"feet",
+	"yard",
+	"yards",
+	"mile",
+	"miles",
+	"pixel",
+	"pixels",
+	// Volume
+	"ml",
+	"litre",
+	"litres",
+	"liter",
+	"liters",
+	"gallon",
+	"gallons",
+	// Data
+	"kb",
+	"mb",
+	"gb",
+	"tb",
+	"kbps",
+	"mbps",
+	"gbps",
+	// Other
+	"percent",
+	"degrees",
+	"degree",
+]);
+
+/** Whether `word` is a unit that keeps the digits in front of it. */
+export const isMeasurementUnit = (word: string): boolean => MEASUREMENT_UNITS.has(word.toLowerCase());

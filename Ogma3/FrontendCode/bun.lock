@@ -53,7 +53,6 @@
         "sass-embedded": "^1.105.1",
         "solid-labels": "^0.17.0",
         "stylelint": "github:stylelint/stylelint#v18",
-        "stylelint": "^17.15.0",
         "stylelint-config-standard-scss": "^17.0.0",
         "typescript": "^7.0.2",
         "utility-types": "^3.11.0",

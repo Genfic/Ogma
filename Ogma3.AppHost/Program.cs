@@ -63,6 +63,7 @@ var database = builder
 	.AddPostgres("postgres", port: 5432, password: postgresPassword)
 	.WithImageTag("18")
 	.WithDataVolume()
+	.WithRepl()
 	.WithLifetime(ContainerLifetime.Persistent)
 	.WithEndpoint("tcp", e =>
 	{

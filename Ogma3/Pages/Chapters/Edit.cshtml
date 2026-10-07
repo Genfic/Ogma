@@ -36,6 +36,7 @@
 		<label asp-for="Input.Body"></label>
 		<markdown-editor>
 			<autosave-btn uid="@Model.Input.Id" key="chapter"></autosave-btn>
+			<issues-btn></issues-btn>
 			</markdown-editor>
 		<textarea asp-for="Input.Body" class="o-form-control active-border" rows="20" data-wordcount="true" data-md="true"></textarea>
 		<span asp-validation-for="Input.Body"></span>
@@ -43,14 +44,18 @@
 
 	<div class="o-form-group">
 		<label asp-for="Input.StartNotes"></label>
-		<markdown-editor></markdown-editor>
+		<markdown-editor>
+			<issues-btn></issues-btn>
+		</markdown-editor>
 		<textarea asp-for="Input.StartNotes" class="o-form-control active-border" rows="5" data-md="true"></textarea>
 		<span asp-validation-for="Input.StartNotes"></span>
 	</div>
 
 	<div class="o-form-group">
 		<label asp-for="Input.EndNotes"></label>
-		<markdown-editor></markdown-editor>
+		<markdown-editor>
+			<issues-btn></issues-btn>
+		</markdown-editor>
 		<textarea asp-for="Input.EndNotes" class="o-form-control active-border" rows="5" data-md="true"></textarea>
 		<span asp-validation-for="Input.EndNotes"></span>
 	</div>
@@ -103,5 +108,6 @@
 	<script type="module" src="~/js/input-progressbars.js" asp-append-version="true"></script>
 	<script type="module" src="~/js/schedule-toggle.js" asp-append-version="true"></script>
 	<script type="module" src="~/js/comp/markdown-editor.js" asp-append-version="true"></script>
+	<script type="module" src="~/js/comp/extra-buttons/issues-button.js" asp-append-version="true"></script>
 	<script type="module" src="~/js/comp/extra-buttons/autosave-button.js" asp-append-version="true"></script>
 }

@@ -1,3 +1,4 @@
+import { createRequire } from "node:module";
 import path, { basename, dirname, join } from "node:path";
 import { Glob } from "bun";
 import ct from "chalk-template";
@@ -302,9 +303,32 @@ const webTypesJson: Webtypes = {
 	},
 };
 
+/**
+ * Runs the formatter over the freshly written file, so generated output always
+ * satisfies `.editorconfig` and `bun run format`. `oxfmt`'s JS API ignores
+ * `.editorconfig`, so the CLI is spawned instead of calling `format()` directly.
+ */
+async function formatGeneratedFile(): Promise<void> {
+	const require = createRequire(import.meta.url);
+	const oxfmtBin = join(dirname(require.resolve("oxfmt/package.json")), "bin", "oxfmt");
+
+	const formatter = Bun.spawn([process.execPath, oxfmtBin, OUTPUT_FILE], {
+		cwd: dirname(OUTPUT_FILE),
+		stdout: "pipe",
+		stderr: "pipe",
+	});
+
+	const [exitCode, stderr] = await Promise.all([formatter.exited, new Response(formatter.stderr).text()]);
+
+	if (exitCode !== 0) {
+		throw new Error(stderr.trim() || `oxfmt exited with code ${exitCode}`);
+	}
+}
+
 try {
 	await Bun.write(OUTPUT_FILE, JSON.stringify(webTypesJson, null, "\t"));
+	await formatGeneratedFile();
 	console.log(`\nSuccessfully generated ${OUTPUT_FILE}`);
 } catch (error) {
-	console.error(`Error writing ${OUTPUT_FILE}:`, error);
+	console.error(`Error generating ${OUTPUT_FILE}:`, error);
 }

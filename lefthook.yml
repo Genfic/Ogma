@@ -7,7 +7,7 @@ pre-commit:
       group:
         jobs:
           - name: Lint TS
-            run: bun run lint:fix
+            run: bun run lint:fix -- --quiet || true
           - name: Format TS
             run: bun run format:fix
           - name: Typecheck

@@ -56,6 +56,23 @@
 					}
 				},
 				{
+					"name": "issues-btn",
+					"description": "Custom element <issues-btn> defined in typescript/src/comp/extra-buttons/issues-button.tsx",
+					"attributes": [
+						{
+							"name": "context",
+							"value": {
+								"kind": "expression",
+								"type": "undefined"
+							}
+						}
+					],
+					"source": {
+						"module": "./typescript/src/comp/extra-buttons/issues-button.tsx",
+						"symbol": "issues-btn"
+					}
+				},
+				{
 					"name": "manage-infractions",
 					"description": "Custom element <manage-infractions> defined in typescript/src/admin/manage-infractions.tsx",
 					"attributes": [

@@ -1,6 +1,6 @@
 import { defineConfig } from "oxlint";
 export default defineConfig({
-	plugins: ["typescript", "unicorn", "oxc", "promise", "import", "react", "jsx-a11y"],
+	plugins: ["typescript", "unicorn", "oxc", "promise", "import", "jsx-a11y"],
 	categories: {
 		correctness: "error",
 		suspicious: "warn",
@@ -15,9 +15,6 @@ export default defineConfig({
 		"typescript/prefer-as-const": "error",
 		"typescript/no-inferrable-types": "off",
 		"typescript/prefer-enum-initializers": "off",
-		"react/self-closing-comp": "error",
-		"react/react-in-jsx-scope": "off",
-		"react/jsx-key": "off",
 		"unicorn/prefer-number-properties": "error",
 		"unicorn/no-document-cookie": "off", // Let's wait until at least 95% support: https://caniuse.com/cookie-store-api
 		"no-cond-assign": "off",

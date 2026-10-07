@@ -1,0 +1,79 @@
+issues-btn {
+	display: contents;
+}
+
+dialog.my-dialog > .content.issues {
+	gap: 0.5rem;
+
+	> .issues-clean,
+	> .issues-count {
+		margin: 0;
+	}
+
+	> .issues-fix-all {
+		align-self: flex-start;
+	}
+
+	> .issues-rule {
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+		margin-top: 0.5rem;
+		padding-top: 0.5rem;
+		border-top: 1px solid var(--foreground-25);
+
+		> header {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 0.5rem;
+
+			> h3 {
+				margin: 0;
+				font-size: 1rem;
+			}
+
+			> .issues-fix-rule {
+				padding: 0.25rem 0.5rem;
+				font-size: 0.8rem;
+			}
+		}
+
+		> .issues-rule-description {
+			margin: 0;
+			color: var(--foreground-75);
+			font-size: 0.8rem;
+		}
+
+		> .issues-item {
+			display: grid;
+			grid-template-columns: 1fr auto;
+			grid-template-areas:
+				"message fix"
+				"snippet snippet";
+			align-items: center;
+			gap: 0.25rem 0.5rem;
+			padding: 0.5rem;
+			border-radius: 0.25rem;
+			background-color: var(--foreground-10);
+
+			> .issues-message {
+				grid-area: message;
+				margin: 0;
+				font-size: 0.9rem;
+			}
+
+			> .issues-fix-one {
+				grid-area: fix;
+				padding: 0.25rem;
+			}
+
+			> .issues-snippet {
+				grid-area: snippet;
+				overflow-wrap: anywhere;
+				font-size: 0.8rem;
+				white-space: pre-wrap;
+			}
+		}
+	}
+}
