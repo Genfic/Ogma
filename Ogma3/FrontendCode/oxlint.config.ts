@@ -18,7 +18,7 @@ export default defineConfig({
 		"unicorn/prefer-number-properties": "error",
 		"unicorn/no-document-cookie": "off", // Let's wait until at least 95% support: https://caniuse.com/cookie-store-api
 		"no-cond-assign": "off",
-		"curly": "warn",
+		curly: "warn",
 	},
 	settings: {
 		"jsx-a11y": {

@@ -29,7 +29,9 @@ export const applyIssues = (text: string, issues: readonly Issue[]): AppliedFix 
 	let ceiling = text.length;
 
 	for (const issue of ordered) {
-		if (issue.start < 0 || issue.end > text.length || issue.start > issue.end) {continue;}
+		if (issue.start < 0 || issue.end > text.length || issue.start > issue.end) {
+			continue;
+		}
 		if (issue.end > ceiling) {
 			continue;
 		}

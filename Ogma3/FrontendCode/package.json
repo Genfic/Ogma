@@ -22,6 +22,7 @@
 		"lh": "bunx unlighthouse"
 	},
 	"dependencies": {
+		"@angius/htmldiff": "^2.0.1",
 		"@angius/tinytime": "^1.2.0",
 		"@atulin/html-sanitizer": "npm:@jsr/atulin__html-sanitizer@3.0.0",
 		"@solid-primitives/destructure": "^0.2.4",
@@ -33,7 +34,6 @@
 		"comlink": "^4.4.2",
 		"es-toolkit": "^1.52.0",
 		"hash-wasm": "^4.12.0",
-		"@angius/htmldiff": "^2.0.1",
 		"marked": "^18.0.14",
 		"sa11y": "^5.0.9",
 		"solid-element": "^1.9.2",

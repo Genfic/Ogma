@@ -17,7 +17,9 @@ import { Glob } from "bun";
  */
 export const expandScss = (scss: string, basePath: string) =>
 	scss.split("\n").flatMap((l) => {
-		if (!l.startsWith("@use")) {return [l];}
+		if (!l.startsWith("@use")) {
+			return [l];
+		}
 
 		const p = l.split('"')[1];
 

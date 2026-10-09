@@ -54,7 +54,10 @@ export const Dialog: ParentComponent<Props> = (props: ParentProps<Props>) => {
 		const minY = rect.top + dialogRef.clientTop;
 
 		const isInBounds =
-			e.clientX < minX || e.clientX >= minX + dialogRef.clientWidth || e.clientY < minY || e.clientY >= minY + dialogRef.clientHeight;
+			e.clientX < minX ||
+			e.clientX >= minX + dialogRef.clientWidth ||
+			e.clientY < minY ||
+			e.clientY >= minY + dialogRef.clientHeight;
 
 		if (e.target === dialogRef && isInBounds) {
 			close();
