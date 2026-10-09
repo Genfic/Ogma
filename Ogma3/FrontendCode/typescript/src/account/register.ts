@@ -9,7 +9,9 @@ const powData = $query("[data-pow-token][data-pow-diff]");
 const token = powData.dataset.powToken;
 const diff = powData.dataset.powDiff;
 
-if (!token || !diff) throw new Error("Missing pow data");
+if (!token || !diff) {
+	throw new Error("Missing pow data");
+}
 
 let powStarted = false;
 const runPow = async () => {
@@ -30,7 +32,9 @@ $id<HTMLFormElement>("register-form").addEventListener("submit", () => {
 
 for (const input of formInputs) {
 	const info = $query(`[data-for="${input.id}"]`, true);
-	if (!info) continue;
+	if (!info) {
+		continue;
+	}
 
 	input.addEventListener("focusin", async () => {
 		info.classList.add(classname);

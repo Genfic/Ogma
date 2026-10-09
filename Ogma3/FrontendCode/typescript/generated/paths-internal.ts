@@ -5,8 +5,13 @@ import type {
 	GetUserInfractionsInfractionDetails,
 	GetUserInfractionsResult,
 	InfractionDto,
+	ReportableContentType,
 } from './types-internal';
-const _enc = <T>(p: T): T extends string ? string : T => (typeof p === 'string' ? encodeURIComponent(p) : p) as any;
+const _enc = (p: string | number | boolean | Date | null | undefined): string => {
+	if (p === null || p === undefined) return "";
+	if (p instanceof Date) return encodeURIComponent(p.toISOString());
+	return encodeURIComponent(typeof p === "string" ? p : String(p));
+};
 
 
 export const DeleteAdminApiCache = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: undefined; 401: undefined; 500: string }, undefined>("/admin/api/cache",
@@ -59,6 +64,13 @@ export const GetAdminApiUserInfractions = async (id: number, headers?: HeadersIn
 );
 
 export const GetAdminApiUsersSearch = async (name: string, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: FindUsersByNameUserSearchResult[]; 401: undefined }, undefined>(`/admin/api/users/search/${name}`,
+    GET,
+    undefined,
+    headers,
+    options,
+);
+
+export const GetAdminContent = async (kind: ReportableContentType, id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 401: undefined; 404: undefined }, undefined>(`/admin/content/${kind}/${id}`,
     GET,
     undefined,
     headers,

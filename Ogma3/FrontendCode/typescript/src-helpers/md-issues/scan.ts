@@ -22,7 +22,9 @@ const isWord = (ch: string | undefined): boolean => ch !== undefined && /[A-Za-z
 /** Offset of the first non-whitespace character at or after `from`. */
 const skipSpace = (text: string, from: number, to: number): number => {
 	let i = from;
-	while (i < to && isSpace(text[i])) i++;
+	while (i < to && isSpace(text[i])) {
+		i++;
+	}
 	return i;
 };
 
@@ -38,7 +40,9 @@ const lineRanges = (text: string): { start: number; end: number }[] => {
 		const newline = text.indexOf("\n", i);
 		const end = newline === -1 ? text.length : newline;
 		ranges.push({ start: i, end });
-		if (newline === -1) break;
+		if (newline === -1) {
+			break;
+		}
 		i = newline + 1;
 	}
 
@@ -81,8 +85,12 @@ export const scanMarkdown = (text: string): MarkdownScan => {
 
 	const prose = new Uint8Array(text.length);
 	for (const line of lines) {
-		if (!isProseContainer(line.container)) continue;
-		for (let p = line.contentStart; p < line.end; p++) prose[p] = 1;
+		if (!isProseContainer(line.container)) {
+			continue;
+		}
+		for (let p = line.contentStart; p < line.end; p++) {
+			prose[p] = 1;
+		}
 		maskInline(text, line.contentStart, line.end, prose);
 	}
 
@@ -92,7 +100,9 @@ export const scanMarkdown = (text: string): MarkdownScan => {
 	for (const [index, line] of lines.entries()) {
 		// Blank lines inside a fence belong to its block, anywhere else they separate blocks.
 		if (line.blank) {
-			if (line.container !== "code") broken = true;
+			if (line.container !== "code") {
+				broken = true;
+			}
 			continue;
 		}
 
@@ -135,13 +145,27 @@ export const scanMarkdown = (text: string): MarkdownScan => {
 
 /** Assign a container to a line that is not inside a fence or an HTML block. */
 const classify = (line: string): BlockKind => {
-	if (ATX.test(line)) return "heading";
-	if (HR.test(line)) return "html";
-	if (FENCE.test(line)) return "code";
-	if (QUOTE.test(line)) return "quote";
-	if (BULLET.test(line) || ORDERED.test(line)) return "list";
-	if (HTML_OPEN.test(line)) return "html";
-	if (TABLE_DIVIDER.test(line)) return "table";
+	if (ATX.test(line)) {
+		return "heading";
+	}
+	if (HR.test(line)) {
+		return "html";
+	}
+	if (FENCE.test(line)) {
+		return "code";
+	}
+	if (QUOTE.test(line)) {
+		return "quote";
+	}
+	if (BULLET.test(line) || ORDERED.test(line)) {
+		return "list";
+	}
+	if (HTML_OPEN.test(line)) {
+		return "html";
+	}
+	if (TABLE_DIVIDER.test(line)) {
+		return "table";
+	}
 
 	return "prose";
 };
@@ -149,16 +173,26 @@ const classify = (line: string): BlockKind => {
 /** Promote a pipe-delimited run of lines to `table`, anchored on the divider row. */
 const markTables = (ranges: { start: number; end: number }[], containers: BlockKind[], text: string): void => {
 	for (let index = 0; index < ranges.length; index++) {
-		if (containers[index] !== "prose") continue;
+		if (containers[index] !== "prose") {
+			continue;
+		}
 
 		const line = text.slice(ranges[index].start, ranges[index].end);
 		const next = ranges[index + 1];
-		if (next === undefined || !line.includes("|")) continue;
-		if (!TABLE_DIVIDER.test(text.slice(next.start, next.end))) continue;
+		if (next === undefined || !line.includes("|")) {
+			continue;
+		}
+		if (!TABLE_DIVIDER.test(text.slice(next.start, next.end))) {
+			continue;
+		}
 
 		for (let scan = index; scan < ranges.length; scan++) {
-			if (containers[scan] !== "prose" && containers[scan] !== "table") break;
-			if (!text.slice(ranges[scan].start, ranges[scan].end).includes("|")) break;
+			if (containers[scan] !== "prose" && containers[scan] !== "table") {
+				break;
+			}
+			if (!text.slice(ranges[scan].start, ranges[scan].end).includes("|")) {
+				break;
+			}
 			containers[scan] = "table";
 		}
 	}
@@ -173,11 +207,15 @@ const markFences = (ranges: { start: number; end: number }[], containers: BlockK
 
 		if (fence !== null) {
 			containers[index] = "code";
-			if (closesFence(line, fence)) fence = null;
+			if (closesFence(line, fence)) {
+				fence = null;
+			}
 			continue;
 		}
 
-		if (containers[index] !== "code") continue;
+		if (containers[index] !== "code") {
+			continue;
+		}
 		fence = FENCE.exec(line)?.[1] ?? null;
 	}
 };
@@ -186,7 +224,9 @@ const markFences = (ranges: { start: number; end: number }[], containers: BlockK
 const maskInline = (text: string, from: number, to: number, prose: Uint8Array): void => {
 	const block = (start: number, end: number) => {
 		const hi = Math.min(end, to);
-		for (let p = start; p < hi; p++) prose[p] = 0;
+		for (let p = start; p < hi; p++) {
+			prose[p] = 0;
+		}
 	};
 
 	/** Index of the `close` matching the `open` at `at`, honouring nesting and escapes. */
@@ -197,8 +237,11 @@ const maskInline = (text: string, from: number, to: number, prose: Uint8Array): 
 				p++;
 				continue;
 			}
-			if (text[p] === open) depth++;
-			else if (text[p] === close && --depth === 0) return p;
+			if (text[p] === open) {
+				depth++;
+			} else if (text[p] === close && --depth === 0) {
+				return p;
+			}
 		}
 		return -1;
 	};
@@ -206,15 +249,21 @@ const maskInline = (text: string, from: number, to: number, prose: Uint8Array): 
 	/** Mask a code span opened by a backtick run at `at`. Returns the offset to resume from. */
 	const maskCodeSpan = (at: number): number => {
 		let run = 1;
-		while (at + run < to && text[at + run] === "`") run++;
+		while (at + run < to && text[at + run] === "`") {
+			run++;
+		}
 
 		let cursor = at + run;
 		while (cursor < to) {
 			const open = text.indexOf("`", cursor);
-			if (open === -1 || open >= to) break;
+			if (open === -1 || open >= to) {
+				break;
+			}
 
 			let closeRun = 1;
-			while (open + closeRun < to && text[open + closeRun] === "`") closeRun++;
+			while (open + closeRun < to && text[open + closeRun] === "`") {
+				closeRun++;
+			}
 
 			if (closeRun === run) {
 				block(at, open + closeRun);
@@ -308,7 +357,9 @@ const maskInline = (text: string, from: number, to: number, prose: Uint8Array): 
 
 		if (ch === "@" || ch === "#") {
 			let handle = i + 1;
-			while (handle < to && /[A-Za-z0-9_./-]/.test(text[handle])) handle++;
+			while (handle < to && /[A-Za-z0-9_./-]/.test(text[handle])) {
+				handle++;
+			}
 			if (handle > i + 1) {
 				block(i, handle);
 				i = handle;
@@ -323,8 +374,12 @@ const maskInline = (text: string, from: number, to: number, prose: Uint8Array): 
 
 			if (url) {
 				let end = i;
-				while (end < to && !isSpace(text[end]) && text[end] !== "<") end++;
-				while (end > i && URL_TRAILERS.has(text[end - 1])) end--;
+				while (end < to && !isSpace(text[end]) && text[end] !== "<") {
+					end++;
+				}
+				while (end > i && URL_TRAILERS.has(text[end - 1])) {
+					end--;
+				}
 				block(i, end);
 				i = end;
 				continue;
@@ -333,7 +388,9 @@ const maskInline = (text: string, from: number, to: number, prose: Uint8Array): 
 
 		if (INLINE_DELIMITERS.has(ch)) {
 			let run = 1;
-			while (i + run < to && text[i + run] === ch) run++;
+			while (i + run < to && text[i + run] === ch) {
+				run++;
+			}
 			const width = ch === "~" || ch === "=" ? 1 : run;
 
 			const close = text.indexOf(ch.repeat(width), i + width);

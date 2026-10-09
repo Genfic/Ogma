@@ -45,7 +45,7 @@
 		<ul class="my-list">
 			@foreach (var ver in Model.Versions)
 			{
-				<li class="item">
+				<li class="item tabular">
 					<a asp-page="/Docs" asp-route-v="@ver.Version" asp-route-slug="@ver.Slug">
 						version @ver.Version.ToString($"D{digits}") — <time-display utc-date="ver.CreationTime" formatter="@(d => d.ToString("yyyy-MM-dd HH:mm:ss"))"></time-display>
 					</a>
@@ -53,8 +53,21 @@
 					{
 						<span class="current">current</span>
 					}
+					else
+					{
+						<doc-diff
+							slug="@Model.Document.Slug"
+							current-version="@Model.Document.Version"
+							target-version="@ver.Version"
+							body-selector="article .md">
+						</doc-diff>
+					}
 				</li>
 			}
 		</ul>
 	</details>
 </article>
+
+@section Scripts {
+	<script src="~/js/comp/doc-diff.js" asp-append-version="true" type="module"></script>
+}

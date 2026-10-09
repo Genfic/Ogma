@@ -24,6 +24,7 @@ import type {
 	FullQuoteDto,
 	GetClubsWithStoryResult,
 	GetCurrentUserQuickShelvesResult,
+	GetDocumentVersionResult,
 	GetFolderResult,
 	GetJoinedClubsResponse,
 	GetPaginatedCurrentUserShelvesResult,
@@ -69,7 +70,11 @@ import type {
 	UpdateTagNamespaceCommand,
 	VoteResult,
 } from './types-public';
-const _enc = <T>(p: T): T extends string ? string : T => (typeof p === 'string' ? encodeURIComponent(p) : p) as any;
+const _enc = (p: string | number | boolean | Date | null | undefined): string => {
+	if (p === null || p === undefined) return "";
+	if (p instanceof Date) return encodeURIComponent(p.toISOString());
+	return encodeURIComponent(typeof p === "string" ? p : String(p));
+};
 
 
 export const DeleteApiChaptersread = async (body: MarkChapterAsUnreadCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: number[]; 204: undefined; 400: undefined; 401: undefined }, MarkChapterAsUnreadCommand>("/api/chaptersread",
@@ -251,7 +256,7 @@ export const GetApiComments = async (thread: number, page: number | null, header
     pages: number;
     /** The requested page */
     page: number;
-}; 304: undefined; 400: undefined; 404: undefined }, undefined>(`/api/comments?thread=${_enc(thread)}&page=${_enc(page)}`,
+}; 304: undefined; 400: undefined; 404: undefined }, undefined>(`/api/comments?thread=${_enc(thread)}&page=${_enc(page ?? "")}`,
     GET,
     undefined,
     headers,
@@ -273,6 +278,13 @@ export const GetApiCommentsRevisions = async (commentId: string, headers?: Heade
 );
 
 export const GetApiCommentsThread = async (threadId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: GetThreadDetailsResult; 400: undefined; 401: undefined; 404: undefined }, undefined>(`/api/CommentsThread/${threadId}`,
+    GET,
+    undefined,
+    headers,
+    options,
+);
+
+export const GetApiDocumentsVersion = async (slug: string, version: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: GetDocumentVersionResult; 404: undefined }, undefined>(`/api/documents/${slug}/version/${version}`,
     GET,
     undefined,
     headers,
@@ -342,7 +354,7 @@ export const GetApiPasskeysOptions = async (headers?: HeadersInit, options?: Req
     options,
 );
 
-export const GetApiPasskeysRequestOptions = async (username: string | null, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: string; 404: undefined; 500: undefined }, undefined>(`/api/passkeys/request-options?username=${_enc(username)}`,
+export const GetApiPasskeysRequestOptions = async (username: string | null, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: string; 404: undefined; 500: undefined }, undefined>(`/api/passkeys/request-options?username=${_enc(username ?? "")}`,
     GET,
     undefined,
     headers,

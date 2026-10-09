@@ -6,7 +6,9 @@
  * @returns {number} The given number normalized into [0, 1] range
  */
 export function normalize(num: number, min: number, max: number): number {
-	if (min === max) return min;
+	if (min === max) {
+		return min;
+	}
 	return (num - min) / (max - min);
 }
 
@@ -17,8 +19,14 @@ export function normalize(num: number, min: number, max: number): number {
  * @param max The upper edge to clamp to, by default 1
  */
 export function clamp(num: number, min = 0, max = 1): number {
-	if (max < min) throw `Max (${max}) cannot be less than min (${min})`;
-	if (num < min) return min;
-	if (num > max) return max;
+	if (max < min) {
+		throw `Max (${max}) cannot be less than min (${min})`;
+	}
+	if (num < min) {
+		return min;
+	}
+	if (num > max) {
+		return max;
+	}
 	return num;
 }

@@ -25,7 +25,9 @@ export const convertTimeZone = (date: Date, timezone: string) => {
 
 	const map: Record<string, number> = {};
 	for (const part of formatter.formatToParts(date)) {
-		if (part.type === "literal") continue;
+		if (part.type === "literal") {
+			continue;
+		}
 		map[part.type] = Number.parseInt(part.value, 10);
 	}
 

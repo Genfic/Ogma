@@ -7,6 +7,7 @@ preload = ['./typescript/tests/_happy-dom.ts']
 minimumReleaseAge = 25_9200 # 3 days in seconds
 minimumReleaseAgeExcludes = [
 	"@angius/tinytime",
+	"@angius/htmldiff",
 	"@angius/bun-plugin-solid",
 	"@jsr/atulin__html-sanitizer",
 	"@types/bun",

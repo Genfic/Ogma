@@ -156,8 +156,12 @@ const Tags = () => {
 	const filtered = () =>
 		tags()?.filter((t) => {
 			const f = filter();
-			if (f == null) return true;
-			if (f === "None") return t.namespaceName == null;
+			if (f == null) {
+				return true;
+			}
+			if (f === "None") {
+				return t.namespaceName == null;
+			}
 			return t.namespaceName === f;
 		}) ?? [];
 

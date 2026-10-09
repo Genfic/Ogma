@@ -1,0 +1,47 @@
+dialog.doc-diff {
+	width: var(--body-width);
+	max-height: 90vh;
+}
+
+.diff-btn {
+	padding: 0.1rem 0.5rem;
+	margin-left: 0.5rem;
+	color: var(--foreground-75);
+	background-color: var(--background-75);
+}
+
+.diff-view {
+	del,
+	ins {
+		border: 1px solid transparent;
+		padding-inline: 0.25em;
+		text-decoration-color: rgb(from var(--foreground) r g b / 0.75);
+		transition: text-decoration-color 0.2s ease-in-out;
+		-webkit-box-decoration-break: clone;
+		box-decoration-break: clone;
+
+		&:hover {
+			text-decoration-color: transparent;
+		}
+	}
+
+	.diffins {
+		background-color: rgb(from var(--green) r g b / 0.25);
+		border-color: rgb(from var(--green) r g b / 0.5);
+	}
+
+	.diffdel {
+		background-color: rgb(from var(--red) r g b / 0.25);
+		border-color: rgb(from var(--red) r g b / 0.5);
+	}
+
+	ins.diffmod {
+		background-color: rgb(from var(--blue) r g b / 0.25);
+		border-color: rgb(from var(--blue) r g b / 0.5);
+	}
+
+	del.diffmod {
+		background-color: rgb(from var(--yellow) r g b / 0.25);
+		border-color: rgb(from var(--yellow) r g b / 0.5);
+	}
+}

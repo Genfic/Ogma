@@ -75,7 +75,9 @@ export { $id, $query, $queryAll, $target };
  * @returns The first matching following sibling, or null if none is found.
  */
 export const findNextSibling = (el: Element, selector: string): Element | null => {
-	if (!el) return null; // Handle cases where the starting element doesn't exist
+	if (!el) {
+		return null;
+	} // Handle cases where the starting element doesn't exist
 
 	let currentSibling = el.nextElementSibling; // Start with the immediate next sibling
 

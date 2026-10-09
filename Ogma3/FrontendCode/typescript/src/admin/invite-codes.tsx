@@ -16,7 +16,9 @@ const DeleteButton = ({ code, onDelete }: { code: InviteCodeDto; onDelete: (id: 
 	const deleteCode = async (t: InviteCodeDto) => {
 		if (confirm("Delete permanently?")) {
 			const res = await DeleteApiInviteCodes(t.id, headers);
-			if (!res.ok) return;
+			if (!res.ok) {
+				return;
+			}
 			onDelete(t.id);
 		}
 	};

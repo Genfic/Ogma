@@ -9,7 +9,9 @@ import css from "./extra-button.css";
 const ReadMoreButton: ComponentType<{ context?: ExtraButtonContext }> = (props) => {
 	const insert = () => {
 		const area = props.context?.input;
-		if (!area) return;
+		if (!area) {
+			return;
+		}
 
 		const val = area.value;
 		let start = area.selectionStart ?? 0;

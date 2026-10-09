@@ -32,3 +32,7 @@ dialog {
 		}
 	}
 }
+
+html:has(dialog[open]:modal) {
+	overflow: hidden;
+}

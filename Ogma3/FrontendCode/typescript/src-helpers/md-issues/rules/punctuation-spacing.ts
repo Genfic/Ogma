@@ -13,7 +13,9 @@ const SEPARATORS = new Set([".", ",", ":"]);
 const digitRun = (text: string, at: number, step: number): number => {
 	let count = 0;
 	for (let i = at; i >= 0 && i < text.length; i += step) {
-		if (!/\d/.test(text[i])) break;
+		if (!/\d/.test(text[i])) {
+			break;
+		}
 		count++;
 	}
 	return count;
@@ -32,16 +34,24 @@ const detect = (scan: MarkdownScan): Issue[] => {
 
 		if ((ch === " " || ch === "\t") && NEEDS_SPACE_AFTER.has(text[i + 1] ?? "")) {
 			const stop = i + 1;
-			if (!prose[stop]) continue;
+			if (!prose[stop]) {
+				continue;
+			}
 
 			let start = stop;
-			while (start > 0 && (text[start - 1] === " " || text[start - 1] === "\t")) start--;
+			while (start > 0 && (text[start - 1] === " " || text[start - 1] === "\t")) {
+				start--;
+			}
 
 			const before = text[start - 1];
 			// Nothing to close up against, so the stop simply opens a line.
-			if (before === undefined || /\s/.test(before)) continue;
+			if (before === undefined || /\s/.test(before)) {
+				continue;
+			}
 			// `3 . 14` is deliberate spacing around a number.
-			if (/\d/.test(before) && /\d/.test(text[stop + 1] ?? "")) continue;
+			if (/\d/.test(before) && /\d/.test(text[stop + 1] ?? "")) {
+				continue;
+			}
 
 			issues.push({
 				rule: "punctuation-spacing",
@@ -55,17 +65,29 @@ const detect = (scan: MarkdownScan): Issue[] => {
 			continue;
 		}
 
-		if (!NEEDS_SPACE_AFTER.has(ch)) continue;
+		if (!NEEDS_SPACE_AFTER.has(ch)) {
+			continue;
+		}
 
 		const prev = text[i - 1];
 		const next = text[i + 1];
 
-		if (prev === undefined || !/\S/.test(prev)) continue;
+		if (prev === undefined || !/\S/.test(prev)) {
+			continue;
+		}
 		// Already followed by a space or a line break.
-		if (next === undefined || /\s/.test(next)) continue;
-		if (HUGGED.has(prev)) continue;
-		if (!prose[i] || !prose[i - 1]) continue;
-		if (isNumericSeparator(scan, i)) continue;
+		if (next === undefined || /\s/.test(next)) {
+			continue;
+		}
+		if (HUGGED.has(prev)) {
+			continue;
+		}
+		if (!prose[i] || !prose[i - 1]) {
+			continue;
+		}
+		if (isNumericSeparator(scan, i)) {
+			continue;
+		}
 
 		issues.push({
 			rule: "punctuation-spacing",

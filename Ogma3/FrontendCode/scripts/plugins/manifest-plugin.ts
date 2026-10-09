@@ -14,7 +14,9 @@ export function manifestPlugin(options?: ManifestOptions): BunPlugin {
 		setup(build) {
 			build.onEnd(async (result) => {
 				const outdir = build.config.outdir;
-				if (!outdir || !result.outputs) return;
+				if (!outdir || !result.outputs) {
+					return;
+				}
 
 				const lines = await Parallel.forEach(
 					result.outputs.filter((o) => !!o.path && o.kind !== "sourcemap"),

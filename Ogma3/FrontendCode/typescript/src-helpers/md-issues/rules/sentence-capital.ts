@@ -9,19 +9,29 @@ const detect = (scan: MarkdownScan): Issue[] => {
 		for (const start of findSentenceStarts(scan, paragraph.start, paragraph.end)) {
 			// Openers such as quotes and emphasis marks sit between the start and the word.
 			let word = start;
-			while (word < paragraph.end && !/[A-Za-z\d]/.test(text[word])) word++;
+			while (word < paragraph.end && !/[A-Za-z\d]/.test(text[word])) {
+				word++;
+			}
 
 			// A sentence that opens on a digit has no letter to capitalise.
-			if (word >= paragraph.end || !/[A-Za-z]/.test(text[word]) || !prose[word]) continue;
+			if (word >= paragraph.end || !/[A-Za-z]/.test(text[word]) || !prose[word]) {
+				continue;
+			}
 
 			const letter = text[word];
 			const lower = letter.toLowerCase();
-			if (letter !== lower) continue;
+			if (letter !== lower) {
+				continue;
+			}
 
 			let end = word;
-			while (end < paragraph.end && /[A-Za-z']/.test(text[end])) end++;
+			while (end < paragraph.end && /[A-Za-z']/.test(text[end])) {
+				end++;
+			}
 
-			if (!needsCapital(text.slice(word, end))) continue;
+			if (!needsCapital(text.slice(word, end))) {
+				continue;
+			}
 
 			issues.push({
 				rule: "sentence-capital",

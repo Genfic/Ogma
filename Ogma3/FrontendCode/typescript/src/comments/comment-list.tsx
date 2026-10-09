@@ -72,7 +72,9 @@ export const CommentList: Component<Props> = (props) => {
 		e.preventDefault();
 		setHighlight(id);
 
-		if (id.length <= 0) return;
+		if (id.length <= 0) {
+			return;
+		}
 
 		history.replaceState(undefined, "", `#comment-${id}`);
 	};
@@ -104,7 +106,9 @@ export const CommentList: Component<Props> = (props) => {
 		const hash = window.location.hash;
 		const match = hash.match(/^#comment-([a-zA-Z0-9]+)$/);
 
-		if (!match?.[1]) return;
+		if (!match?.[1]) {
+			return;
+		}
 
 		setHighlight(match[1]);
 
@@ -117,7 +121,9 @@ export const CommentList: Component<Props> = (props) => {
 	});
 
 	const changePage = (page: number) => {
-		if (page === currentPage()) return;
+		if (page === currentPage()) {
+			return;
+		}
 		setHighlight("");
 		setCurrentPage(page);
 	};

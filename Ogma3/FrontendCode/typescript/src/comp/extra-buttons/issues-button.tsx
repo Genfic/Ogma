@@ -37,7 +37,9 @@ const IssuesButton: ComponentType<{ context?: ExtraButtonContext }> = (props) =>
 	/** Scan the editor, reporting whether it was reachable at all. */
 	const scan = () => {
 		const source = props.context?.input.value;
-		if (source === undefined) return false;
+		if (source === undefined) {
+			return false;
+		}
 
 		text = source;
 		issues = analyze(source);
@@ -48,7 +50,9 @@ const IssuesButton: ComponentType<{ context?: ExtraButtonContext }> = (props) =>
 	/** Write `value` back, telling the editor and anything listening for input. */
 	const write = (value: string) => {
 		const context = props.context;
-		if (!context) return;
+		if (!context) {
+			return;
+		}
 
 		context.input.value = value;
 		context.finishEdit(value.length);
@@ -56,14 +60,18 @@ const IssuesButton: ComponentType<{ context?: ExtraButtonContext }> = (props) =>
 	};
 
 	const show = () => {
-		if (scan()) dialog?.open();
+		if (scan()) {
+			dialog?.open();
+		}
 	};
 
 	const fix = (predicate: (issue: Issue) => boolean) => {
 		const source = $get(text)();
 		const next = applyIssues(source, $get(issues)().filter(predicate)).text;
 
-		if (next === source) return;
+		if (next === source) {
+			return;
+		}
 
 		write(next);
 		scan();

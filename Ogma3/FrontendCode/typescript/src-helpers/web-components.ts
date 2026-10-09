@@ -40,7 +40,9 @@ export const component = <T extends NoHTMLAttributeKeys<T>>(
 
 			const missing: string[] = [];
 			for (const key in defaultProps) {
-				if (optionalProps?.includes(key)) continue;
+				if (optionalProps?.includes(key)) {
+					continue;
+				}
 
 				const value = props[key];
 				if (

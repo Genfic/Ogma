@@ -5,6 +5,7 @@
     "": {
       "name": "ogma-3",
       "dependencies": {
+        "@angius/htmldiff": "^2.0.1",
         "@angius/tinytime": "^1.2.0",
         "@atulin/html-sanitizer": "npm:@jsr/atulin__html-sanitizer@3.0.0",
         "@solid-primitives/destructure": "^0.2.4",
@@ -61,6 +62,8 @@
   },
   "packages": {
     "@angius/bun-plugin-solid": ["@angius/bun-plugin-solid@1.4.2", "", { "dependencies": { "@babel/preset-typescript": "^7.28.5", "babel-preset-solid": "^1.9.10", "bun-only": "^0.0.1" }, "peerDependencies": { "@babel/core": "^7.29.0", "@types/babel__core": "^7.20.5", "typescript": "^5.9.3" } }, "sha512-WUGjMZj+3ZuWvBjKe2eMVmF1i5ce2JALO2s3z8H90OPfNwyS/r3bH/N/hgZYd79NwyR1ZkU6RqV9vy0cbo/CFw=="],
+
+    "@angius/htmldiff": ["@angius/htmldiff@2.0.1", "", {}, "sha512-FlDwDJHglEeSDVF52s0vzjZBL8Y3zU1cvWa7RgHtsnoOWKkaKakqXr9pana7FoZQjSnKCH8QN5431kXp+VxrfA=="],
 
     "@angius/tinytime": ["@angius/tinytime@1.2.0", "", { "peerDependencies": { "typescript": "^5.8.2" } }, "sha512-cgfUE0jkEfsDstH7PA8/lPxZvx2PuSNx5VTWoVjlwAYb3LCDr1xEqqBoORKbOFTvpFj4D0dTtSnr3JCtTq8CmQ=="],
 

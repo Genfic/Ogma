@@ -21,7 +21,9 @@ const detect = (scan: MarkdownScan): Issue[] => {
 	for (const match of scan.text.matchAll(BLANK_GAP)) {
 		const start = match.index;
 		const end = start + match[0].length;
-		if (!isBlockBoundary(scan, start, end)) continue;
+		if (!isBlockBoundary(scan, start, end)) {
+			continue;
+		}
 
 		issues.push({
 			rule: "paragraph-over-spaced",

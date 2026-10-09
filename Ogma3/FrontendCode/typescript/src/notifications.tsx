@@ -26,7 +26,9 @@ const Notifications = () => {
 		const res = await deleteNotification(id, {
 			RequestVerificationToken: csrf,
 		});
-		if (!res.ok) return;
+		if (!res.ok) {
+			return;
+		}
 		await refetch();
 	};
 
@@ -34,7 +36,9 @@ const Notifications = () => {
 		const res = await deleteAllNotifications({
 			RequestVerificationToken: csrf,
 		});
-		if (!res.ok) return;
+		if (!res.ok) {
+			return;
+		}
 		mutate([]);
 	};
 

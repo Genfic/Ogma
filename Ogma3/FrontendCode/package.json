@@ -33,6 +33,7 @@
 		"comlink": "^4.4.2",
 		"es-toolkit": "^1.52.0",
 		"hash-wasm": "^4.12.0",
+		"@angius/htmldiff": "^2.0.1",
 		"marked": "^18.0.14",
 		"sa11y": "^5.0.9",
 		"solid-element": "^1.9.2",

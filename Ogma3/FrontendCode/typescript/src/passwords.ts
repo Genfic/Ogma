@@ -10,7 +10,9 @@ for (const pi of passwordInputs) {
 		e.preventDefault();
 
 		const icon = $target(e, true)?.querySelector("use");
-		if (!icon) return;
+		if (!icon) {
+			return;
+		}
 
 		if (pi.type === "password") {
 			pi.type = "text";

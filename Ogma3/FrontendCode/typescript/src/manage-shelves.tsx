@@ -44,7 +44,9 @@ const ManageShelves = (props: Props) => {
 
 	const [shelves, { refetch }] = createResource(async () => {
 		const res = await GetApiShelves(props.userName, 1);
-		if (res.ok) return res.data;
+		if (res.ok) {
+			return res.data;
+		}
 		throw res.data;
 	});
 
@@ -66,7 +68,9 @@ const ManageShelves = (props: Props) => {
 		e.preventDefault();
 
 		const data = formData;
-		if (!data) return;
+		if (!data) {
+			return;
+		}
 
 		data.color = data.color.startsWith("#") ? data.color : `#${data.color}`;
 
@@ -99,7 +103,9 @@ const ManageShelves = (props: Props) => {
 	const deleteShelf = async (id: number) => {
 		if (confirm("Deleting a bookshelf is irreversible. Are you sure?")) {
 			const res = await DeleteApiShelves(id);
-			if (!res.ok) throw new Error(res.data);
+			if (!res.ok) {
+				throw new Error(res.data);
+			}
 			await refetch();
 		}
 	};

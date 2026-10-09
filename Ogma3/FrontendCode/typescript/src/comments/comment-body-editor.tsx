@@ -25,7 +25,9 @@ export const CommentBodyEditor = (props: Props) => {
 	};
 
 	const update = async (_e: Event) => {
-		if (text().trim().length < 1) return;
+		if (text().trim().length < 1) {
+			return;
+		}
 
 		const res = await PatchApiComments({
 			body: text(),

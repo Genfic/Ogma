@@ -13,6 +13,10 @@
 	@include ab.active-border;
 	@include f.focus;
 
+	&.inline {
+		display: inline-block;
+	}
+
 	&.red {
 		background-color: var(--red-10);
 		color: var(--foreground);

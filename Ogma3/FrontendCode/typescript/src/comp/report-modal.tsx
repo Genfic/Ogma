@@ -1,20 +1,20 @@
 import { Report } from "@g/ctconfig";
 import { PostApiReports as postReport } from "@g/paths-public";
-import type { EReportableContentTypes } from "@g/types-public";
+import type { ReportableContentType } from "@g/types-public";
 import { component } from "@h/web-components";
 import { type ComponentType, noShadowDOM } from "solid-element";
 import { onMount } from "solid-js";
 import { Dialog, type DialogApi } from "./common/_dialog";
 
 export type ReportModalElement = HTMLElement & {
-	createNew: (id: number | string, type: EReportableContentTypes) => void;
+	createNew: (id: number | string, type: ReportableContentType) => void;
 };
 
 const ReportModal: ComponentType<{
 	openSelector?: string | undefined;
 	csrf: string;
 	itemId: number | string;
-	itemType: EReportableContentTypes;
+	itemType: ReportableContentType;
 }> = (props, { element }) => {
 	noShadowDOM();
 
@@ -46,7 +46,7 @@ const ReportModal: ComponentType<{
 		dialogRef?.open();
 	};
 
-	const createNew = (id: number, type: EReportableContentTypes) => {
+	const createNew = (id: number, type: ReportableContentType) => {
 		itemId = id;
 		itemType = type;
 		dialogRef?.open();
@@ -68,7 +68,9 @@ const ReportModal: ComponentType<{
 
 	const submit = async (e: SubmitEvent) => {
 		e.preventDefault();
-		if (!validate()) return;
+		if (!validate()) {
+			return;
+		}
 
 		const res = await postReport(
 			{
@@ -130,7 +132,7 @@ component(
 		openSelector: undefined,
 		csrf: "",
 		itemId: 0,
-		itemType: "" as EReportableContentTypes,
+		itemType: "" as ReportableContentType,
 	},
 	ReportModal,
 	[],

@@ -56,6 +56,44 @@
 					}
 				},
 				{
+					"name": "doc-diff",
+					"description": "Custom element <doc-diff> defined in typescript/src/comp/doc-diff.tsx",
+					"attributes": [
+						{
+							"name": "slug",
+							"value": {
+								"kind": "expression",
+								"type": "string"
+							}
+						},
+						{
+							"name": "current-version",
+							"value": {
+								"kind": "expression",
+								"type": "number"
+							}
+						},
+						{
+							"name": "target-version",
+							"value": {
+								"kind": "expression",
+								"type": "number"
+							}
+						},
+						{
+							"name": "body-selector",
+							"value": {
+								"kind": "expression",
+								"type": "string"
+							}
+						}
+					],
+					"source": {
+						"module": "./typescript/src/comp/doc-diff.tsx",
+						"symbol": "doc-diff"
+					}
+				},
+				{
 					"name": "issues-btn",
 					"description": "Custom element <issues-btn> defined in typescript/src/comp/extra-buttons/issues-button.tsx",
 					"attributes": [

@@ -113,8 +113,6 @@ export type DeleteVoteCommand = {
 
 export type ENotificationEvent = "CommentReply" | "FollowedAuthorNewBlogpost" | "FollowedAuthorNewStory" | "NewFollower" | "System" | "WatchedStoryUpdated" | "WatchedThreadNewComment";
 
-export type EReportableContentTypes = "Blogpost" | "Chapter" | "Club" | "Comment" | "Story" | "User";
-
 export type FaqDto = {
     id: number;
     question: string;
@@ -145,6 +143,11 @@ export type GetCurrentUserQuickShelvesResult = {
     color: string | null;
     iconName: string | null;
     doesContainBook: boolean;
+};
+
+export type GetDocumentVersionResult = {
+    version: number;
+    compiledBody: string;
 };
 
 export type GetFolderResult = {
@@ -299,8 +302,10 @@ export type RemoveBookFromShelfResult = {
 export type ReportContentCommand = {
     itemId: string;
     reason: string;
-    itemType: EReportableContentTypes;
+    itemType: ReportableContentType;
 };
+
+export type ReportableContentType = "Blogpost" | "Chapter" | "Club" | "Comment" | "Story" | "User";
 
 export type RoleDto = {
     id: number;

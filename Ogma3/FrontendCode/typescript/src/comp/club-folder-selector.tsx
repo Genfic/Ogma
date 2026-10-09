@@ -19,7 +19,9 @@ const ClubFolderSelector: ComponentType<{ storyId: number; csrf: string }> = (pr
 	let dialogRef = $signal<DialogApi>();
 
 	const [clubs] = createResource($get(isOpen), async (condition) => {
-		if (!condition) return null;
+		if (!condition) {
+			return null;
+		}
 		const res = await getUserClubs();
 		return res.ok ? res.data : null;
 	});

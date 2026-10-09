@@ -29,7 +29,9 @@ const FeaturedInClubs: ComponentType<{ storyId: number }> = (props) => {
 
 	let isOpen = $signal(false);
 	const [clubs] = createResource($get(isOpen), async (condition: boolean) => {
-		if (!condition) return null;
+		if (!condition) {
+			return null;
+		}
 		const res = await getFeaturingClubs(props.storyId);
 		return res.ok ? res.data : null;
 	});

@@ -10,7 +10,9 @@ name.addEventListener("focusout", async (e) => {
 	const target = e.target as HTMLInputElement;
 
 	const res = await getSignInData(target.value);
-	if (!res.ok) return;
+	if (!res.ok) {
+		return;
+	}
 
 	avatar.src = res.data.avatar;
 	title.innerText = res.data.title ?? "";

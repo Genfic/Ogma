@@ -29,9 +29,15 @@ export const ManageInfraction: Component<ManageInfractionProps> = (props) => {
 		const d = date();
 		const t = type();
 
-		if (!r) throw new Error("Reason is required");
-		if (!d) throw new Error("Expiration date is required");
-		if (!t) throw new Error("Infraction type is required");
+		if (!r) {
+			throw new Error("Reason is required");
+		}
+		if (!d) {
+			throw new Error("Expiration date is required");
+		}
+		if (!t) {
+			throw new Error("Infraction type is required");
+		}
 
 		const res = await PostAdminApiInfractions(
 			{

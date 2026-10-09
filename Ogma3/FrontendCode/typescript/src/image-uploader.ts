@@ -11,10 +11,14 @@ for (const area of areas) {
 function watchForPaste(area: HTMLTextAreaElement) {
 	area.addEventListener("paste", async (e) => {
 		const items = e.clipboardData?.items;
-		if (!items) return;
+		if (!items) {
+			return;
+		}
 
 		const file = [...items].find((item) => item.kind === "file" && item.type.startsWith("image/"))?.getAsFile();
-		if (!file) return;
+		if (!file) {
+			return;
+		}
 
 		e.preventDefault();
 

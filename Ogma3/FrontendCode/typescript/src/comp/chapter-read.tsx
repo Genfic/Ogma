@@ -14,7 +14,9 @@ const ChapterRead: ComponentType<{ chapterId: number; storyId: number }> = (prop
 	const markRead = async () => {
 		const client = isRead() ? DeleteApiChaptersread : PostApiChaptersread;
 		const res = await client({ story: props.storyId, chapter: props.chapterId });
-		if (!res.ok) return;
+		if (!res.ok) {
+			return;
+		}
 
 		mutate(new Set(res.data));
 	};

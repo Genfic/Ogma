@@ -33,11 +33,15 @@ export const Comment = (props: Props) => {
 
 	const report = () => {
 		const modal = document.getElementById("report-comment") as ReportModalElement;
-		if (!modal) return;
+		if (!modal) {
+			return;
+		}
 		modal.createNew(props.id, "Comment");
 	};
 	const del = async () => {
-		if (!confirm("Are you sure you want to delete this comment?")) return;
+		if (!confirm("Are you sure you want to delete this comment?")) {
+			return;
+		}
 
 		const res = await DeleteApiComments(props.id);
 		if (res.ok) {

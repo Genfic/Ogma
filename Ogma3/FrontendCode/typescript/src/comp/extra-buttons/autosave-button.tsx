@@ -17,7 +17,9 @@ const AutosaveButton: ComponentType<{ context?: ExtraButtonContext; key: string;
 	createEffect(() => {
 		const input = props.context?.input;
 
-		if (!(input instanceof EventTarget)) return;
+		if (!(input instanceof EventTarget)) {
+			return;
+		}
 
 		saveExists = (localStorage.getItem(key)?.length ?? -1) > 0;
 
@@ -28,10 +30,14 @@ const AutosaveButton: ComponentType<{ context?: ExtraButtonContext; key: string;
 	});
 
 	const save = debounce(() => {
-		if (!enabled) return;
+		if (!enabled) {
+			return;
+		}
 
 		const input = props.context?.input;
-		if (!input) return;
+		if (!input) {
+			return;
+		}
 
 		if (input.value.length > 0) {
 			console.log("Autosave");
@@ -45,7 +51,9 @@ const AutosaveButton: ComponentType<{ context?: ExtraButtonContext; key: string;
 
 	const load = () => {
 		const input = props.context?.input;
-		if (!input) return;
+		if (!input) {
+			return;
+		}
 		input.value = localStorage.getItem(key) ?? "";
 	};
 

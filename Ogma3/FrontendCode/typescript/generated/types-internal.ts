@@ -50,3 +50,5 @@ export type InfractionDto = {
 export type InfractionType = "Ban" | "Mute" | "Note" | "Warning";
 
 export type None = undefined;
+
+export type ReportableContentType = "Blogpost" | "Chapter" | "Club" | "Comment" | "Story" | "User";

@@ -123,7 +123,9 @@ const OPENERS = "([{\"'“‘*_~";
 /** The letters and inner full stops that immediately precede the stop at `index`. */
 const precedingToken = (text: string, index: number): string => {
 	let start = index;
-	while (start > 0 && /[A-Za-z.]/.test(text[start - 1])) start--;
+	while (start > 0 && /[A-Za-z.]/.test(text[start - 1])) {
+		start--;
+	}
 	return text.slice(start, index);
 };
 
@@ -135,32 +137,50 @@ const precedingToken = (text: string, index: number): string => {
  */
 export const isSentenceEnd = (text: string, index: number): boolean => {
 	const next = text[index + 1];
-	if (next !== undefined && /\d/.test(next)) return false;
-	if (next === ".") return false;
+	if (next !== undefined && /\d/.test(next)) {
+		return false;
+	}
+	if (next === ".") {
+		return false;
+	}
 
 	const token = precedingToken(text, index);
 
 	// "U.S." and "a.m." carry an inner full stop before the final one.
-	if (token.includes(".")) return false;
+	if (token.includes(".")) {
+		return false;
+	}
 
 	// A single letter is an initial, and no letters at all is a number or marker.
-	if (token.length <= 1) return false;
+	if (token.length <= 1) {
+		return false;
+	}
 
 	return !ABBREVIATIONS.includes(token.toLowerCase());
 };
 
 /** Whether the word starting at `at` cannot open a sentence. */
 const continuesSentence = (text: string, at: number, to: number): boolean => {
-	if (at >= to) return true;
+	if (at >= to) {
+		return true;
+	}
 
 	let from = at;
-	if (OPENERS.includes(text[from])) from++;
-	while (from < to && !/[A-Za-z]/.test(text[from])) from++;
+	if (OPENERS.includes(text[from])) {
+		from++;
+	}
+	while (from < to && !/[A-Za-z]/.test(text[from])) {
+		from++;
+	}
 
 	let end = from;
-	while (end < to && /[A-Za-z]/.test(text[end])) end++;
+	while (end < to && /[A-Za-z]/.test(text[end])) {
+		end++;
+	}
 
-	if (end === from) return false;
+	if (end === from) {
+		return false;
+	}
 
 	return CONTINUATION_WORDS.includes(text.slice(from, end).toLowerCase());
 };
@@ -178,31 +198,47 @@ export const findSentenceStarts = (scan: MarkdownScan, from: number, to: number)
 	const opening = new Uint8Array(text.length);
 	for (const paragraph of scan.paragraphs) {
 		const line = scan.lines[paragraph.lineIndexes[0]];
-		if (line !== undefined) opening[line.contentStart] = 1;
+		if (line !== undefined) {
+			opening[line.contentStart] = 1;
+		}
 	}
 
 	for (let i = from; i < to; i++) {
-		if (!prose[i]) continue;
+		if (!prose[i]) {
+			continue;
+		}
 
 		if (opening[i] === 1) {
-			if (!continuesSentence(text, i, to)) starts.push(i);
+			if (!continuesSentence(text, i, to)) {
+				starts.push(i);
+			}
 			continue;
 		}
 
 		const stop = text[i];
-		if (stop !== "." && stop !== "!" && stop !== "?") continue;
+		if (stop !== "." && stop !== "!" && stop !== "?") {
+			continue;
+		}
 
-		if (stop === "." && !isSentenceEnd(text, i)) continue;
+		if (stop === "." && !isSentenceEnd(text, i)) {
+			continue;
+		}
 
 		// The next sentence begins at the first character after the stop and any spacing.
 		let next = i + 1;
-		while (next < to && (text[next] === " " || text[next] === "\t")) next++;
-		if (next >= to || !prose[next]) continue;
+		while (next < to && (text[next] === " " || text[next] === "\t")) {
+			next++;
+		}
+		if (next >= to || !prose[next]) {
+			continue;
+		}
 
 		// Continue scanning from the word itself, so its letters are not re-examined as stops.
 		i = next - 1;
 
-		if (continuesSentence(text, next, to)) continue;
+		if (continuesSentence(text, next, to)) {
+			continue;
+		}
 
 		starts.push(next);
 	}

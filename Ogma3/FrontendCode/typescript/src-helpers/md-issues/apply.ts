@@ -18,7 +18,9 @@ export type AppliedFix = {
  * leave the document untouched.
  */
 export const applyIssues = (text: string, issues: readonly Issue[]): AppliedFix => {
-	if (issues.length === 0) return { text, applied: [] };
+	if (issues.length === 0) {
+		return { text, applied: [] };
+	}
 
 	const ordered = issues.toSorted((a, b) => b.start - a.start || b.end - a.end);
 
@@ -27,8 +29,10 @@ export const applyIssues = (text: string, issues: readonly Issue[]): AppliedFix 
 	let ceiling = text.length;
 
 	for (const issue of ordered) {
-		if (issue.start < 0 || issue.end > text.length || issue.start > issue.end) continue;
-		if (issue.end > ceiling) continue;
+		if (issue.start < 0 || issue.end > text.length || issue.start > issue.end) {continue;}
+		if (issue.end > ceiling) {
+			continue;
+		}
 
 		seen.add(issue);
 		result = result.slice(0, issue.start) + issue.replacement + result.slice(issue.end);

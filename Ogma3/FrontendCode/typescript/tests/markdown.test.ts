@@ -19,7 +19,9 @@ const findLivePayloads = (host: HTMLElement): string[] => {
 	const found: string[] = [];
 
 	for (const tag of FORBIDDEN_TAGS) {
-		if (host.querySelector(tag)) found.push(`<${tag}> element survived`);
+		if (host.querySelector(tag)) {
+			found.push(`<${tag}> element survived`);
+		}
 	}
 
 	for (const el of host.querySelectorAll("*")) {
