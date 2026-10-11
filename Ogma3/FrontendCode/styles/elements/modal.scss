@@ -33,6 +33,6 @@ dialog {
 	}
 }
 
-html:has(dialog[open]:modal) {
+body:has(dialog[open]:modal) {
 	overflow: hidden;
 }

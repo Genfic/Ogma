@@ -94,31 +94,30 @@ const DocDiff: ComponentType<Props> = (props) => {
 				diff
 			</button>
 
-			<Dialog
-				id={id()}
-				ref={(api) => (dialogRef = api)}
-				classes={["doc-diff"]}
-				contentClass="md doc-diff-content"
-				header={
-					<strong>
-						Diff
-						<Show when={targetVersion() !== null}>
-							: v{targetVersion()} vs current (v{props.currentVersion})
-						</Show>
-					</strong>
-				}
-				onClose={close}
-			>
-				<Show when={loading()}>
-					<div>Loading diff...</div>
-				</Show>
-				<Show when={!loading() && error()}>
-					<div>{error()}</div>
-				</Show>
-				<Show when={!loading() && result()}>
-					<div class="diff-view" innerHTML={result()} />
-				</Show>
-			</Dialog>
+			<Show when={targetVersion()}>
+				<Dialog
+					id={id()}
+					ref={(api) => (dialogRef = api)}
+					classes={["doc-diff"]}
+					contentClass="md doc-diff-content"
+					header={
+						<strong>
+							Diff : v{targetVersion()} vs current (v{props.currentVersion})
+						</strong>
+					}
+					onClose={close}
+				>
+					<Show when={loading()}>
+						<div>Loading diff...</div>
+					</Show>
+					<Show when={!loading() && error()}>
+						<div>{error()}</div>
+					</Show>
+					<Show when={!loading() && result()}>
+						<div class="diff-view" innerHTML={result()} />
+					</Show>
+				</Dialog>
+			</Show>
 		</>
 	);
 };

@@ -7,7 +7,6 @@
 		"webtypes": "bun ./scripts/webtypes.ts",
 		"lint": "bunx oxlint .",
 		"lint:fix": "bunx oxlint . --fix",
-		"lint:report": "bun run ./scripts/lint-report.ts",
 		"format": "bunx oxfmt . --check",
 		"format:fix": "bunx oxfmt .",
 		"css": "bun ./scripts/build-sass.ts",
@@ -18,7 +17,6 @@
 		"js:watch": "bun run js -- -wc",
 		"js:prod": "bun run js -- -cr --no-size",
 		"js:typecheck": "tsc --project ./typescript --noEmit",
-		"fonts": "bun ./scripts/build-fonts.ts",
 		"lh": "bunx unlighthouse"
 	},
 	"dependencies": {
@@ -59,9 +57,7 @@
 		"cheerio": "^1.2.0",
 		"commander": "^15.0.0",
 		"convert": "^8.0.2",
-		"ejs": "^6.0.1",
 		"esbuild": "^0.28.2",
-		"fonteditor-core": "^2.6.3",
 		"lighthouse": "^13.5.0",
 		"lightningcss": "^1.33.0",
 		"oxc-parser": "^0.152.0",

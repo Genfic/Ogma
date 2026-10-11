@@ -10,7 +10,7 @@ contain something when the code itself is ready for prime time.
 
 ## Stack
 
-- .NET 11 preview 5
+- .NET 11
 - PostgreSQL 18
 - Garnet
 - Aspire
@@ -21,10 +21,14 @@ contain something when the code itself is ready for prime time.
 
 ## Requirements
 
-Docker and Aspire
+* Docker and Aspire
 
-To run some helper scripts contained in the [taskfile](./taskfile.yml), the companion tool,
+* Bun, since TS and SCSS build scripts require it
+
+* To run some helper scripts contained in the [taskfile](./taskfile.yml), the companion tool,
 [Genfic/Tool](https://github.com/Genfic/Tool) needs to be installed. Tasks can be run with [Taskfile](https://taskfile.dev/)
+
+* [FontTools](https://github.com/fonttools/fonttools) to subset fonts with `task subset-fonts`
 
 ## License
 

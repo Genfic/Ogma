@@ -69,15 +69,34 @@ tasks:
   # Frontend
   build-front:
     dir: ./Ogma3/FrontendCode
-    cmd: bun run --parallel "*:prod" fonts
+    cmd: bun run --parallel "*:prod"
   watch-front:
     dir: ./Ogma3/FrontendCode
     cmd: bun run --parallel "*:watch"
+
+  lint-report: dotnet run ./.scripts/LintReport.cs
+
+  # Requires https://github.com/fonttools/fonttools
+  subset-fonts:
+    cmds:
+      - for:
+          matrix:
+            FONT:
+              - 'IMFellEnglish-Italic.ttf'
+              - 'IMFellEnglish-Regular.ttf'
+            FMT: ['woff', 'woff2']
+        cmd: >-
+          pyftsubset "./Ogma3/FrontendCode/fonts/{{.ITEM.FONT}}"
+          --unicodes="U+0020-007E"
+          --hinting
+          --flavor={{.ITEM.FMT}}
+          --output-file="./Ogma3/wwwroot/fonts/{{ regexReplaceAll `\.\w+$` .ITEM.FONT (printf ".%s" .ITEM.FMT) }}"
 
   # Deploy
   deploy:
     cmds:
       - task: build-front
+      - task: subset-fonts
       - aspire deploy -e Production
 
   bump:patch: dotnet run --file ./.scripts/Bump.cs -- patch
