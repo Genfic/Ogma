@@ -29,15 +29,7 @@
 	@* Preconnects, preloads and prefetches *@
 	<link rel="preconnect" href="https://cdn.genfic.net">
 
-	<fonts
-		fonts="@(
-		       [
-			       new("InterVariable", "inter", "Inter Variable", (100, 900)),
-			       new("InterVariable-Italic", "inter", "Inter Variable", (100, 900), true),
-			       new("IMFellEnglish-Regular", "imfell", "IMFellEnglish", (200, 900), Variable: false),
-			       new("InconsolataVariable", "inconsolata", "Inconsolata Variable", (200, 900)),
-		       ])"
-		allowed-extensions="@(["woff2"])"></fonts>
+	<fonts></fonts>
 
 	@* Module preloads *@
 	<link rel="modulepreload" href="~/js/workers/cache-service.worker.js" as="serviceworker" asp-append-version="true" />

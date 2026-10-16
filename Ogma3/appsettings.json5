@@ -21,4 +21,35 @@
 	"Infisical": {
 		"Url": "https://eu.infisical.com",
 	},
+	"Fonts": {
+		"AllowedExtensions": ["woff2"],
+		"Fonts": [
+			{
+				"Filename": "InterVariable",
+				"CssVariableName": "inter",
+				"Name": "Inter Variable",
+				"Weight": "100 900",
+			},
+			{
+				"Filename": "InterVariable-Italic",
+				"CssVariableName": "inter",
+				"Name": "Inter Variable",
+				"Weight": "100 900",
+				"Italic": true,
+			},
+			{
+				"Filename": "IMFellEnglish-Regular",
+				"CssVariableName": "imfell",
+				"Name": "IMFellEnglish",
+				"Weight": "200 900",
+				"Variable": false,
+			},
+			{
+				"Filename": "InconsolataVariable",
+				"CssVariableName": "inconsolata",
+				"Name": "Inconsolata Variable",
+				"Weight": "200 900",
+			}
+		]
+	}
 }

@@ -17,7 +17,7 @@ using ReturnType = Results<Conflict<string>, CreatedAtRoute<RoleDto>>;
 [MapGroup<ApiGroup>]
 [MapPost("roles")]
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public sealed partial class CreateRole(AppDbContext context, RoleManager<OgmaRole> roleManager, IModeratorActionService moderatorActionService)
+public sealed partial class CreateRole(RoleManager<OgmaRole> roleManager, IModeratorActionService moderatorActionService)
 {
 	internal static void CustomizeEndpoint(RouteHandlerBuilder endpoint)
 		=> endpoint

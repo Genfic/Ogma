@@ -1,18 +1,21 @@
 ﻿using System.Text;
+using ConfigBinder.Attributes;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Microsoft.Extensions.Options;
 using Ogma3.Infrastructure.Logging.OperationTiming;
 
 namespace Ogma3.Infrastructure.TagHelpers;
 
-using WeightTuple = (int Min, int Max);
-
-public sealed class FontsTagHelper(IWebHostEnvironment env, ILogger<FontsTagHelper> logger) : TagHelper
+public sealed class FontsTagHelper(
+	IWebHostEnvironment env,
+	ILogger<FontsTagHelper> logger,
+	IOptions<FontsTagHelper.FontConfig> options
+) : TagHelper
 {
-	public required FontEntry[] Fonts { get; set; }
+	private readonly FontEntry[] _fonts  = options.Value.Fonts;
 
-	[UsedImplicitly]
-	public required HashSet<string> AllowedExtensions { get; set; } = [];
+	private readonly HashSet<string> _allowedExtensions  = options.Value.AllowedExtensions;
 
 	private readonly string _fontsPath = Path.Combine(env.WebRootPath, "fonts");
 
@@ -43,7 +46,7 @@ public sealed class FontsTagHelper(IWebHostEnvironment env, ILogger<FontsTagHelp
 			);
 
 		var sb = new StringBuilder();
-		foreach (var fontEntry in Fonts)
+		foreach (var fontEntry in _fonts)
 		{
 			var fontName = Path.GetFileNameWithoutExtension(fontEntry.Filename).ToLowerInvariant();
 			var family = fontEntry.Name ?? fontName;
@@ -52,13 +55,13 @@ public sealed class FontsTagHelper(IWebHostEnvironment env, ILogger<FontsTagHelp
 			{
 				foreach (var ext in font.Extensions)
 				{
-					if (AllowedExtensions.Count > 0 && !AllowedExtensions.Contains(ext.Trim('.')))
+					if (_allowedExtensions.Count > 0 && !_allowedExtensions.Contains(ext.Trim('.')))
 					{
 						continue;
 					}
 					sb.Append(MakePreloadLink(fontEntry.Filename, ext));
 					sb.Append('\n');
-					sb.Append(MakeStyle(family, fontEntry.Filename, fontEntry.CssVariableName, ext, fontEntry.Weight ?? 400, fontEntry.Italic, fontEntry.Variable));
+					sb.Append(MakeStyle(family, fontEntry.Filename, fontEntry.CssVariableName, ext, fontEntry.Weight, fontEntry.Italic ?? false, fontEntry.Variable ?? true));
 				}
 				continue;
 			}
@@ -79,21 +82,16 @@ public sealed class FontsTagHelper(IWebHostEnvironment env, ILogger<FontsTagHelp
 	        """;
 	}
 
-	private static string MakeStyle(string name, string filename, string cssVariableName, string extension, FontWeight weight, bool italic, bool variable)
+	private static string MakeStyle(string name, string filename, string cssVariableName, string extension, string? weight, bool italic, bool variable)
 	{
 		var ext = extension.Trim('.');
-		var weightString = weight switch
-		{
-			int i => i.ToString(),
-			WeightTuple t => $"{t.Min} {t.Max}",
-		};
 		var format = variable ? $"{ext}-variations" : ext;
 
 		var css = //lang=css
 			$$"""
 			@font-face {
 				font-family: "{{name}}";
-				font-weight: {{weightString}};
+				font-weight: {{weight ?? "400"}};
 				font-style: {{(italic ? "italic" : "normal")}};
 				font-display: swap;
 				src:
@@ -115,14 +113,21 @@ public sealed class FontsTagHelper(IWebHostEnvironment env, ILogger<FontsTagHelp
 			 """;
 	}
 
-	public sealed record FontEntry(
-		string Filename,
-		string CssVariableName,
-		string? Name = null,
-		FontWeight? Weight = null,
-		bool Italic = false,
-		bool Variable = true
-	);
+	[UsedImplicitly]
+	public sealed class FontEntry
+	{
+		public required string Filename { get; init; }
+		public required string CssVariableName { get; init; }
+		public string? Name { get; init; }
+		public string? Weight { get; init; }
+		public bool? Italic { get; init; }
+		public bool? Variable { get; init; }
+	}
 
-	public union FontWeight(int, WeightTuple);
+	[ConfigSection("Fonts")]
+	public sealed class FontConfig
+	{
+		public required HashSet<string> AllowedExtensions { get; init; }
+		public required FontEntry[] Fonts { get; init; }
+	}
 }

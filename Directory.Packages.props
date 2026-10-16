@@ -18,13 +18,13 @@
     <PackageVersion Include="Aspire.StackExchange.Redis" Version="13.6.1" />
     <PackageVersion Include="Aspire.StackExchange.Redis.DistributedCaching" Version="13.6.1" />
     <PackageVersion Include="Atulin.AutoDbSet" Version="2.0.0" />
-    <PackageVersion Include="Atulin.ConfigBinder" Version="0.4.0" />
+    <PackageVersion Include="Atulin.ConfigBinder" Version="0.5.0" />
     <PackageVersion Include="Atulin.InfisicalConfig" Version="1.0.0" />
     <PackageVersion Include="Atulin.MarkdigExtensions" Version="1.5.0" />
     <PackageVersion Include="Atulin.MinHash" Version="1.0.0" />
     <PackageVersion Include="Atulin.NpgsqlSourceGenerator" Version="1.1.1" />
     <PackageVersion Include="Atulin.SealAnalyzer" Version="1.0.0" />
-    <PackageVersion Include="AWSSDK.S3" Version="4.0.104.3" />
+    <PackageVersion Include="AWSSDK.S3" Version="4.0.104.4" />
     <PackageVersion Include="Bogus" Version="35.6.5" />
     <PackageVersion Include="Chorn.EmbeddedResourceAccessGenerator" Version="1.1.5" />
     <PackageVersion Include="FluentValidation" Version="12.2.0" />
@@ -53,8 +53,8 @@
     <PackageVersion Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="11.0.0-rc.1.26425.128" />
     <PackageVersion Include="Microsoft.Extensions.Hosting" Version="11.0.0-rc.1.26425.128" />
     <PackageVersion Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="10.0.13" />
-    <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="10.10.0" />
-    <PackageVersion Include="Microsoft.Extensions.ServiceDiscovery" Version="10.10.0" />
+    <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="10.11.0" />
+    <PackageVersion Include="Microsoft.Extensions.ServiceDiscovery" Version="10.11.0" />
     <PackageVersion Include="Microsoft.IO.RecyclableMemoryStream" Version="3.0.1" />
     <PackageVersion Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.23.0" />
     <PackageVersion Include="NetDevPack.Security.PasswordHasher.Argon2" Version="7.1.2" />
@@ -64,12 +64,12 @@
     <PackageVersion Include="NetVips" Version="3.2.0" />
     <PackageVersion Include="NetVips.Native" Version="8.18.7" />
     <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="11.0.0-rc.1.1" />
-    <PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.19.1" />
-    <PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.19.1" />
-    <PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.19.0" />
+    <PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.20.0" />
+    <PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.20.0" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.20.0" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.EntityFrameworkCore" Version="1.18.0-beta.1" />
-    <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.19.0" />
-    <PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="1.19.0" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.20.0" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="1.20.0" />
     <PackageVersion Include="Postmark" Version="5.4.1" />
     <PackageVersion Include="Riok.Mapperly" Version="4.3.1" />
     <PackageVersion Include="SafeRouting" Version="1.5.0" />
