@@ -120,7 +120,7 @@ footer.footer {
 		> .build-text {
 			color: var(--foreground-25);
 			font-size: 0.8rem;
-			font-family: "Inconsolata Variable", Consolas, Courier, monospace;
+			font-family: var(--font-inconsolata), Consolas, Courier, monospace;
 		}
 	}
 }

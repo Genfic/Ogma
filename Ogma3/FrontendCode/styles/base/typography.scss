@@ -1,7 +1,7 @@
 @use "sass:math";
 
 .monospace {
-	font-family: "Inconsolata Variable", Consolas, Courier, monospace;
+	font-family: var(--font-inconsolata), Consolas, Courier, monospace;
 }
 
 .tabular {
@@ -13,7 +13,7 @@
 }
 
 .olde {
-	font-family: IMFellEnglish, serif;
+	font-family: var(--font-imfell), serif;
 }
 
 // Headers
@@ -89,5 +89,5 @@ code,
 pre,
 kbd,
 samp {
-	font-family: "Inconsolata Variable", Consolas, Courier, monospace;
+	font-family: var(--font-inconsolata), Consolas, Courier, monospace;
 }

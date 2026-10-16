@@ -33,7 +33,7 @@ $btn-height: 2.5rem;
 			min-height: 5rem;
 			background-color: var(--foreground-10);
 			color: var(--foreground);
-			font-family: "Inconsolata Variable", Consolas, Courier, monospace;
+			font-family: var(--font-inconsolata), Consolas, Courier, monospace;
 		}
 
 		> .counter {

@@ -11,7 +11,7 @@
 			text-align: center;
 			background-color: var(--foreground-10);
 			line-height: 3rem;
-			font-family: "Inconsolata Variable", Consolas, Courier, monospace;
+			font-family: var(--font-inconsolata), Consolas, Courier, monospace;
 
 			&.masked {
 				color: var(--foreground-75);
