@@ -29,11 +29,15 @@
 	@* Preconnects, preloads and prefetches *@
 	<link rel="preconnect" href="https://cdn.genfic.net">
 
-	<link rel="preload" as="font" crossorigin="anonymous" type="font/woff2" href="~/fonts/InterVariable.woff2">
-	<link rel="preload" as="font" crossorigin="anonymous" type="font/woff2" href="~/fonts/InterVariable-Italic.woff2">
-	<link rel="preload" as="font" crossorigin="anonymous" type="font/woff2" href="~/fonts/IMFellEnglish-Regular.woff2">
-	@* <link rel="preload" as="font" crossorigin="anonymous" type="font/woff2" href="~/fonts/IMFellEnglish-Italic.woff2"> *@
-	<link rel="preload" as="font" crossorigin="anonymous" type="font/woff2" href="~/fonts/InconsolataVariable.woff2">
+	<fonts
+		fonts="@(
+		       [
+			       new("InterVariable", "inter", "Inter Variable", (100, 900)),
+			       new("InterVariable-Italic", "inter", "Inter Variable", (100, 900), true),
+			       new("IMFellEnglish-Regular", "imfell", "IMFellEnglish", (200, 900), Variable: false),
+			       new("InconsolataVariable", "inconsolata", "Inconsolata Variable", (200, 900)),
+		       ])"
+		allowed-extensions="@(["woff2"])"></fonts>
 
 	@* Module preloads *@
 	<link rel="modulepreload" href="~/js/workers/cache-service.worker.js" as="serviceworker" asp-append-version="true" />
@@ -127,7 +131,7 @@
 
 	<global-notifications></global-notifications>
 
-	<partial name="_StatusMessage" for="@message"/>
+	<partial name="_StatusMessage" for="@message" />
 
 	<noscript>
 		<div class="noscript">
@@ -204,7 +208,7 @@
 		Sa11y.Lang.addI18n(Sa11yLangEn.strings);
 		const sa11y = new Sa11y.Sa11y({
 			checkRoot: "body",
-			containerIgnore: ".mp-results"
+			containerIgnore: ".mp-results",
 		});
 	</script>
 }

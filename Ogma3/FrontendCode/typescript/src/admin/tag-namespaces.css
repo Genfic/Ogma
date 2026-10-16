@@ -36,7 +36,7 @@ ul.items-list.namespaces {
 				border-radius: 0.75rem;
 				background-color: var(--foreground-10);
 				color: var(--foreground-75);
-				font-family: "Inconsolata Variable", Consolas, Courier, monospace;
+				font-family: var(--font-inconsolata), Consolas, Courier, monospace;
 				font-size: 0.85rem;
 				line-height: 1.5;
 				white-space: nowrap;

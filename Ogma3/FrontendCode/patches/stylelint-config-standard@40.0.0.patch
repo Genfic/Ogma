@@ -1,0 +1,13 @@
+diff --git a/index.js b/index.js
+index 99f2d4f319c821e0242c163297af90602d698f12..84e2e41b2c1cc7b04483a5cea05ddcaaf79c81d4 100644
+--- a/index.js	
++++ b/index.js
+@@ -59,7 +59,7 @@ export default {
+ 			},
+ 		],
+ 		'declaration-block-no-redundant-longhand-properties': true,
+-		'declaration-block-single-line-max-declarations': 1,
++		// 'declaration-block-single-line-max-declarations': 1,
+ 		'declaration-empty-line-before': [
+ 			'always',
+ 			{

@@ -139,7 +139,7 @@ form.form {
 		textarea {
 			min-height: 3rem;
 			resize: vertical;
-			font-family: "Inconsolata Variable", Consolas, Courier, monospace;
+			font-family: var(--font-inconsolata), Consolas, Courier, monospace;
 		}
 
 		input[type="color"] {

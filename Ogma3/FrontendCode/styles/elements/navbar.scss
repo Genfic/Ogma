@@ -89,7 +89,7 @@ nav#top-nav {
 		margin-block: calc(-1 * var(--pad));
 		margin-right: 1rem;
 
-		font-family: IMFellEnglish, serif;
+		font-family: var(--font-imfell), serif;
 		font-size: var(--font, 2rem);
 
 		display: flex;

@@ -23,7 +23,7 @@ html {
 body {
 	--dynamic-nav-height: calc(var(--nav-height) + var(--nav-v-pad) * 2);
 
-	font-family: "Inter Variable", Inter, Arial, sans-serif;
+	font-family: var(--font-inter), Inter, Arial, sans-serif;
 	font-weight: 350;
 	font-feature-settings:
 		"dlig" 1,
