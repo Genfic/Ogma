@@ -3,7 +3,7 @@ pre-commit:
   parallel: true
   jobs:
     - name: Frontend Checks
-      root: "Ogma3/FrontendCode"
+      root: "FrontendCode"
       group:
         jobs:
           - name: Lint TS

@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.VisualStudio.JavaScript.Sdk/1.0.6887863">
+	<PropertyGroup>
+		<!-- Bun is the package manager, so MSBuild must never shell out to npm. -->
+		<ShouldRunNpmInstall>false</ShouldRunNpmInstall>
+		<!-- Assets are built explicitly (task build-front / watch-front), not as part of a .NET build. -->
+		<ShouldRunBuildScript>false</ShouldRunBuildScript>
+
+		<StartupCommand>bun run --parallel "*:watch"</StartupCommand>
+		<BuildCommand>bun run --parallel "*:prod"</BuildCommand>
+	</PropertyGroup>
+</Project>

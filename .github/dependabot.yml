@@ -8,7 +8,7 @@ registries:
 
 updates:
   - package-ecosystem: "bun"
-    directory: "/Ogma3/FrontendCode"
+    directory: "/FrontendCode"
     schedule:
       interval: "daily"
     allow:

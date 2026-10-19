@@ -77,7 +77,7 @@ for file in files:
 ## Replace direct icon imports with `icon:` on-demand imports
 
 ```ts
-// ./Ogma3/Ogma3/FrontendCode/fix.ts
+// ./FrontendCode/fix.ts
 
 import { Glob } from "bun";
 import { kebabCase } from "es-toolkit";

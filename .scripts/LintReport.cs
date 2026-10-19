@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 const int contextLines = 3;
 
 var solutionDir = Path.GetFullPath("..");
-var frontendDir = Path.Join(solutionDir, "Ogma3", "FrontendCode");
+var frontendDir = Path.Join(solutionDir, "FrontendCode");
 var binPath = Path.Join(frontendDir, "node_modules", ".bin", "oxlint.exe");
 
 var startInfo = new ProcessStartInfo

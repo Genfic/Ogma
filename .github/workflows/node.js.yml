@@ -14,7 +14,7 @@ permissions:
 
 defaults:
   run:
-    working-directory: ./Ogma3/FrontendCode
+    working-directory: ./FrontendCode
 
 jobs:
   build:

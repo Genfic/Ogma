@@ -6,8 +6,8 @@ CSR parts of Ogma.
 
 ## Client-side rendering
 
-[Icon plugin](../../Ogma3/FrontendCode/scripts/plugins/icon-plugin.ts) works by collecting icons
-during the build process requesting the ones not found in the [cache directory](../../Ogma3/FrontendCode/typescript/generated/icons)
+[Icon plugin](../../FrontendCode/scripts/plugins/icon-plugin.ts) works by collecting icons
+during the build process requesting the ones not found in the [cache directory](../../FrontendCode/typescript/generated/icons)
 from the Iconify API, and placing them in the cache directory. Bun's bundler picks them up and
 bundles them all nice like.
 

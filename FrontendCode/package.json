@@ -83,8 +83,5 @@
 		"version": "1.0.0",
 		"framework": "solid",
 		"description-markup": "markdown"
-	},
-	"patchedDependencies": {
-		"stylelint-config-standard@40.0.0": "patches/stylelint-config-standard@40.0.0.patch"
 	}
 }

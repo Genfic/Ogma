@@ -47,7 +47,7 @@
 	</Target>
 
 	<Target Name="ExportCTConfig" BeforeTargets="Build">
-		<Exec Command='dotnet "$(ToolsOut)/GenerateCTConfig.dll" "$(ProjectDir)/../Ogma3.Data/CTConfig.cs" "$(ProjectDir)/FrontendCode/typescript/generated"'
+		<Exec Command='dotnet "$(ToolsOut)/GenerateCTConfig.dll" "$(ProjectDir)/../Ogma3.Data/CTConfig.cs" "$(ProjectDir)/../FrontendCode/typescript/generated"'
 		      WorkingDirectory="$(ToolsDir)"/>
 	</Target>
 
@@ -148,19 +148,7 @@
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		</Content>
-		<Content Update="FrontendCode/svg/discord.svg">
-			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-		</Content>
-		<Content Update="FrontendCode/svg/google.svg">
-			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-		</Content>
-		<Content Update="FrontendCode/svg/patreon.svg">
-			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-		</Content>
-		<Content Update="FrontendCode/svg/tumblr.svg">
+		<Content Include="../FrontendCode/svg/*.svg" LinkBase="FrontendCode/svg">
 			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		</Content>
