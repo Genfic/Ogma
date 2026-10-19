@@ -70,11 +70,11 @@ jobs:
         run: ssh-keyscan -H ${{ secrets.TARGET_HOST }} >> ~/.ssh/known_hosts
 
       - name: Install frontend dependencies
-        working-directory: Ogma3/FrontendCode
+        working-directory: FrontendCode
         run: bun install --frozen-lockfile
 
       - name: Build frontend
-        working-directory: Ogma3/FrontendCode
+        working-directory: FrontendCode
         run: bun run --parallel "*:prod" fonts
 
       - name: Deploy with Aspire

@@ -12,6 +12,7 @@ import { cssTargets } from "./helpers/css-targets";
 import { dirsize } from "./helpers/dirsize";
 import { Logger } from "./helpers/logger";
 import { hasExtension } from "./helpers/path";
+import { solutionRoot, wwwroot } from "./helpers/project-paths";
 import { Parallel } from "./helpers/promises";
 import { Stopwatch } from "./helpers/stopwatch";
 import { watch } from "./helpers/watcher";
@@ -30,9 +31,9 @@ const encoder = new TextEncoder();
 
 const root = dirname(Bun.main);
 const _base = join(root, "..", "styles");
-const _dest = join(root, "..", "..", "wwwroot", "css");
+const _dest = join(wwwroot, "css");
 
-const projectRoot = join(root, "..", "..");
+const projectRoot = solutionRoot;
 
 const clean = async () => {
 	console.log(ct`{bold.red 🗑️ {dim Cleaning} ${_dest}}`);

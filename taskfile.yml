@@ -21,7 +21,7 @@ tasks:
     env:
       DENO_TLS_CA_STORE: system
     vars:
-      DEST: ./Ogma3/FrontendCode/typescript/generated/
+      DEST: ./FrontendCode/typescript/generated/
       URL: https://localhost:5001/openapi/
     cmds:
       - ogma-tool generate-paths {{.DEST}} --path.public="{{.URL}}public.json" --path.internal="{{.URL}}internal.json"
@@ -68,10 +68,10 @@ tasks:
 
   # Frontend
   build-front:
-    dir: ./Ogma3/FrontendCode
+    dir: ./FrontendCode
     cmd: bun run --parallel "*:prod"
   watch-front:
-    dir: ./Ogma3/FrontendCode
+    dir: ./FrontendCode
     cmd: bun run --parallel "*:watch"
 
   lint-report: dotnet run ./.scripts/LintReport.cs
@@ -86,7 +86,7 @@ tasks:
               - 'IMFellEnglish-Regular.ttf'
             FMT: ['woff', 'woff2']
         cmd: >-
-          pyftsubset "./Ogma3/FrontendCode/fonts/{{.ITEM.FONT}}"
+          pyftsubset "./FrontendCode/fonts/{{.ITEM.FONT}}"
           --unicodes="U+0020-007E"
           --hinting
           --flavor={{.ITEM.FMT}}

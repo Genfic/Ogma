@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="FrontendCode\FrontendCode.esproj" />
   <Project Path="Ogma3.AppHost\Ogma3.AppHost.csproj" />
   <Project Path="Ogma3.Data\Ogma3.Data.csproj" />
   <Project Path="Ogma3.Migrator/Ogma3.Migrator.csproj" />

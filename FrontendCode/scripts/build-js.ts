@@ -9,6 +9,7 @@ import convert from "convert";
 import solidLabels from "solid-labels/babel";
 import { Logger } from "./helpers/logger";
 import { hasExtension } from "./helpers/path";
+import { wwwroot } from "./helpers/project-paths";
 import { SizeHistory } from "./helpers/size-history";
 import { Stopwatch } from "./helpers/stopwatch";
 import { watch } from "./helpers/watcher";
@@ -30,7 +31,7 @@ const values = program
 
 const _root = dirname(Bun.main);
 const _source = join(_root, "..", "typescript");
-const _dest = join(_root, "..", "..", "wwwroot", "js");
+const _dest = join(wwwroot, "js");
 const _iconCache = join(_source, "generated", "icons");
 
 const clean = async () => {
