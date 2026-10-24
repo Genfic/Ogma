@@ -1,47 +1,35 @@
 @page
+@using SafeRouting
+@using static Routes.Areas.Admin.Pages.Scripts
 @model Ogma3.Areas.Admin.Pages.Scripts
 
 @{
 	ViewData["Title"] = "Scripts";
+
+	var scripts = new List<(string Text, IRouteValues Route)>()
+	{
+		("Update Stories (set `IsVisible` based on publish date nullability)", PostUpdateStories()),
+		("Reload tag cache based on tags in the database", PostReloadTagCache()),
+		("Recalculate blogpost excerpt cutoff points", PostRecalculateBlogpostCutoff()),
+		("Migrate news blogposts to news proper", PostMigrateNewsPosts()),
+		("Recalculate story chapter and word counts", PostRecalculateStoryCounts()),
+	};
 }
 
 <pre>
 @(Model.Message ?? "No message")
 </pre>
 
-<ul class="scripts">
+<div class="scripts">
 
-	<li>
-		<a for-route="@Routes.Areas.Admin.Pages.Scripts.GetUpdateStories()">
-			Update Stories (set `IsVisible` based on publish date nullability)
-		</a>
-	</li>
+	@foreach (var (text, route) in scripts)
+	{
+		<form for-route="@route" method="post">
+			<input type="submit" value="@text">
+		</form>
+	}
 
-	<li>
-		<a for-route="@Routes.Areas.Admin.Pages.Scripts.GetReloadTagCache()">
-			Reload tag cache based on tags in the database
-		</a>
-	</li>
-
-	<li>
-		<a for-route="@Routes.Areas.Admin.Pages.Scripts.GetRecalculateBlogpostCutoff()">
-			Recalculate blogpost excerpt cutoff points
-		</a>
-	</li>
-
-	<li>
-		<a for-route="@Routes.Areas.Admin.Pages.Scripts.GetMigrateNewsPosts()">
-			Migrate news blogposts to news proper
-		</a>
-	</li>
-
-	<li>
-		<a for-route="@Routes.Areas.Admin.Pages.Scripts.GetRecalculateStoryCounts()">
-			Recalculate story chapter and word counts
-		</a>
-	</li>
-
-</ul>
+</div>
 
 <style asp-add-nonce="true">
 	.scripts {
@@ -51,7 +39,7 @@
 		flex-direction: column;
 		gap: .25rem;
 
-		a {
+		input[type="submit"] {
 			text-decoration: none;
 			display: flex;
 			padding: .5rem 1rem;

@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Ogma3.Data.Chapters;
 
 namespace Ogma3.Data.Stories;
 
@@ -26,15 +25,12 @@ public static class StoryCountExtensions
 			.Where(s => s.Id == storyId)
 			.ExecuteUpdateAsync(s => s
 				.SetProperty(x => x.ChapterCount, x => x.Chapters
-					.Count(IsVisible))
+					.Count(c => c.IsVisible && c.ContentBlockId == null && c.ScheduledForDeletion == null))
 				.SetProperty(x => x.WordCount, x => x.Chapters
-					.Where(IsVisible)
+					.Where(c => c.IsVisible && c.ContentBlockId == null && c.ScheduledForDeletion == null)
 					.Select(c => (int?)c.WordCount)
 					.Sum() ?? 0)
 				.SetProperty(x => x.LastUpdatedAt, x => touchLastUpdatedAt ? DateTimeOffset.UtcNow : x.LastUpdatedAt),
 				ct);
 	}
-
-	// ReSharper disable once MergeIntoPattern (EF Core does not understand pattern matching)
-	private static readonly Func<Chapter, bool> IsVisible = c => c.IsVisible && c.ContentBlockId == null && c.ScheduledForDeletion == null;
 }

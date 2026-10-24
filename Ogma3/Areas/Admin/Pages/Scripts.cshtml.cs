@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -12,6 +13,7 @@ using Ogma3.Services.TagCache;
 namespace Ogma3.Areas.Admin.Pages;
 
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
+[RequireAntiforgeryToken]
 public sealed class Scripts(AppDbContext ctx, TagCache tagCache, OgmaConfig config) : PageModel
 {
 
@@ -19,7 +21,7 @@ public sealed class Scripts(AppDbContext ctx, TagCache tagCache, OgmaConfig conf
 	// Handler needed for SafeRouting generator to work
 	public IActionResult OnGet() => Page();
 
-	public async Task<IActionResult> OnGetRecalculateBlogpostCutoff()
+	public async Task<IActionResult> OnPostRecalculateBlogpostCutoff()
 	{
 		var posts = await ctx.Blogposts
 			.Select(b => new
@@ -54,7 +56,7 @@ public sealed class Scripts(AppDbContext ctx, TagCache tagCache, OgmaConfig conf
 		return Page();
 	}
 
-	public async Task<IActionResult> OnGetReloadTagCache()
+	public async Task<IActionResult> OnPostReloadTagCache()
 	{
 		var tags = await ctx.Tags
 			.Select(t => new TagEntry(t.Id, t.Name, t.Namespace!.Slug))
@@ -67,7 +69,7 @@ public sealed class Scripts(AppDbContext ctx, TagCache tagCache, OgmaConfig conf
 		return Page();
 	}
 
-	public async Task<IActionResult> OnGetUpdateStories()
+	public async Task<IActionResult> OnPostUpdateStories()
 	{
 		var sc = await ctx.Stories.ExecuteUpdateAsync(setters => setters
 			.SetProperty(s => s.IsVisible, s => s.PublicationDate != null));
@@ -83,7 +85,7 @@ public sealed class Scripts(AppDbContext ctx, TagCache tagCache, OgmaConfig conf
 		return Page();
 	}
 
-	public async Task<IActionResult> OnGetRecalculateStoryCounts()
+	public async Task<IActionResult> OnPostRecalculateStoryCounts()
 	{
 		var storyIds = await ctx.Stories
 			.Select(s => s.Id)
@@ -100,7 +102,7 @@ public sealed class Scripts(AppDbContext ctx, TagCache tagCache, OgmaConfig conf
 		return Page();
 	}
 
-	public async Task<IActionResult> OnGetMigrateNewsPosts()
+	public async Task<IActionResult> OnPostMigrateNewsPosts()
 	{
 		var rows = await ctx.Database.SqlQueryRaw<long>(// lang=sql
 			"""
