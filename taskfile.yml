@@ -26,21 +26,18 @@ tasks:
     cmds:
       - ogma-tool generate-paths {{.DEST}} --path.public="{{.URL}}public.json" --path.internal="{{.URL}}internal.json"
 
-  # Generate preload code for fonts
-  preloads:
-    vars:
-      SRC: ./Ogma3/wwwroot/fonts
-      DEST: fonts
+  packageguard:
     cmds:
-      - ogma-tool generate-preloads {{.SRC}} {{.DEST}}
+      - cd ./FrontendCode && npm i --package-lock-only --legacy-peer-deps && cd ..
+      - defer: rm -f ./FrontendCode/package-lock.json
+      - packageguard --config-path .packageguard/config.json --npm-path ./FrontendCode .
 
-  # Generate CSS import conde for fonts
-  imports:
+  sbom:
     vars:
-      SRC: ./Ogma3/wwwroot/fonts
-      DEST: fonts
+      DEST: ./Documentation/sbom
     cmds:
-      - ogma-tool generate-imports {{.SRC}} {{.DEST}}
+      - syft . -o spdx-json={{.DEST}}/spdx.json -o cyclonedx-json={{.DEST}}/cdx.json
+      - cd {{.DEST}} && bun fmt
 
   # Check the size of the bundle
   bundlesize:
