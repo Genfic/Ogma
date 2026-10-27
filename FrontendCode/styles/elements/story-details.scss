@@ -253,7 +253,7 @@ $title-height: 2rem;
 			width: 100%;
 			object-fit: cover;
 			height: 100%;
-			filter: blur($size);
+			filter: blur(#{$size});
 			opacity: 0.6;
 		}
 	}

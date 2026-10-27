@@ -65,7 +65,7 @@ $btn-height: 2.5rem;
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			flex: 0 0 $btn-height;
+			flex: 0 0 #{$btn-height};
 			margin: 1px 0 0;
 			height: $btn-height;
 			color: var(--foreground);

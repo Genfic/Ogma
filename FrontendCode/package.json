@@ -60,20 +60,20 @@
 		"esbuild": "^0.28.2",
 		"lighthouse": "^13.5.0",
 		"lightningcss": "^1.33.0",
-		"oxc-parser": "^0.152.0",
-		"oxfmt": "^0.71.0",
+		"oxc-parser": "^0.155.0",
+		"oxfmt": "^0.74.0",
 		"oxlint": "^1.89.0",
-		"oxlint-tsgolint": "^7.0.2004",
-		"sass-embedded": "^1.105.2",
+		"oxlint-tsgolint": "^7.0.2005",
+		"sass-embedded": "^1.106.1",
 		"solid-labels": "^0.17.1",
-		"stylelint": "18.0.0-next.0",
-		"stylelint-config-standard": "40.0.0",
+		"stylelint": "^18.0.0-next.0",
+		"stylelint-config-standard": "^41.0.0-next.0",
 		"stylelint-config-standard-scss": "^17.0.0",
 		"typescript": "^7.0.2",
 		"utility-types": "^3.11.0"
 	},
-	"patchedDependencies": {
-		"stylelint-config-standard@40.0.0": "patches/stylelint-config-standard@40.0.0.patch"
+	"overrides": {
+		"stylelint-config-standard": "^41.0.0-next.0"
 	},
 	"web-types": [
 		"./web-types.json"
