@@ -29,19 +29,33 @@ var tasks = Glob.Files(source, glob)
 		var name = Path.GetFileNameWithoutExtension(path);
 		var webpOut = Path.Combine(target, $"{name}.webp");
 		var avifOut = Path.Combine(target, $"{name}.avif");
+		var jxlOut = Path.Combine(target, $"{name}.jxl");
 
 		var file = await File.ReadAllBytesAsync(Path.Combine(source, path));
-		var (webp, avif) = await Task.Run(() => {
+		var result = await Task.Run(() => {
 			using var img = Image.NewFromBuffer(file);
 
 			var webp = img.WriteToBuffer(".webp[Q=85,strip=true]");
 			var avif = img.WriteToBuffer(".avif[Q=85,strip=true]");
+			byte[]? jxl = null;
+			try
+			{
+				jxl = img.WriteToBuffer(".jxl[Q=90,effort=7,strip=true]");
+			}
+			catch
+			{
+				Console.WriteLine("Jpeg-XL support is not available in this build of libvips");
+			}
 
-			return (webp, avif);
+			return (webp, avif, jxl);
 		});
 
-		await File.WriteAllBytesAsync(webpOut, webp);
-		await File.WriteAllBytesAsync(avifOut, avif);
+		await File.WriteAllBytesAsync(webpOut, result.webp);
+		await File.WriteAllBytesAsync(avifOut, result.avif);
+		if (result.jxl != null)
+		{
+			await File.WriteAllBytesAsync(jxlOut, result.jxl);
+		}
 
 		if (verbose)
 		{

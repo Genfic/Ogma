@@ -46,11 +46,11 @@ var sprites = (await Task.WhenAll(grouped.Select(async group => {
 	.OrderBy(s => s.Name)
 	.ToImmutableArray();
 
-var sheet = /*lang=svg*/
+var sheet = //lang=svg
 	$"""
 	<svg xmlns="http://www.w3.org/2000/svg">
 		<defs>
-			{string.Join("\n\t\t", sprites.Select(s => /*lang=svg*/
+			{string.Join("\n\t\t", sprites.Select(s => //lang=svg
 			$"""
 			<symbol id="{s.Name}" viewBox="0 0 {s.Width} {s.Height}">{s.Body}</symbol>
 			"""

@@ -44,16 +44,17 @@ public sealed partial class DeactivateInfraction(AppDbContext context, IUserServ
 			infraction.RemovedAt,
 			infraction.Type);
 
-		await context.SaveChangesAsync(cancellationToken);
-
-		if (infraction.Type != InfractionType.Ban)
+		if (infraction.Type == InfractionType.Ban)
 		{
-			return TypedResults.Ok();
+			var res = await cache.Unban(infraction.UserId);
+			if (!res)
+			{
+				return TypedResults.InternalServerError("Could not unban user!");
+			}
 		}
 
-		var res = await cache.Unban(infraction.UserId);
-		return res
-			? TypedResults.Ok()
-			: TypedResults.InternalServerError("Cound not unban user!");
+		await context.SaveChangesAsync(cancellationToken);
+
+		return TypedResults.Ok();
 	}
 }

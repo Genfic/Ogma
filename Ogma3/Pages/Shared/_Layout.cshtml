@@ -8,8 +8,9 @@
 @inject OgmaConfig Config
 
 @{
-	Context.Request.Cookies.TryGetValue("theme", out var theme);
-	theme ??= "system";
+	var theme = Context.Request.Cookies.TryGetValue("theme", out var t)
+		? t
+		: "system";
 
 	Context.Request.Cookies.TryGetValue("cookie-consent", out var consent);
 	var cookieConsent = consent is "true";
@@ -128,7 +129,7 @@
 	<noscript>
 		<div class="noscript">
 			While browsing the site should work just fine, a lot of functionality breaks with Javascript disabled.<br>
-			Consider enabling it — you can check the site's <a href="https://github.com/Atulin/Ogma">source code</a> if you're unsure.
+			Consider enabling it — you can check the site's <a href="https://github.com/Genfic/Ogma">source code</a> if you're unsure.
 		</div>
 	</noscript>
 
