@@ -1,0 +1,22 @@
+name: Bun Dependabot
+description: |
+  Dependabot cannot parse `bun.lock` for transitive dependencies. This action should fix that.
+  Taken from https://charpeni.com/blog/the-bun-dependabot-gap-dependabot-alerts-dont-see-bun-lock
+
+on:
+  push:
+    paths:
+      - '**/bun.lock'
+      - .github/workflows/dependency-submission.yml
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+      - uses: charpeni/bun-lock-submission@v1
