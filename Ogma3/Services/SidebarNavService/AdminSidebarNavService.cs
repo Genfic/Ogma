@@ -57,46 +57,62 @@ public sealed class AdminSidebarNavService(SidebarNavDataCache navData, IAuthori
 		foreach (var (category, items) in AllNavbarItems)
 		{
 			accessible.TryAdd(category, []);
-
-			foreach (var item in items)
-			{
-				if (!navData.PolicyMap.TryGetValue(item.Path.PageName, out var authData) || authData.Count <= 0)
-				{
-					accessible[category].Add(item);
-					continue;
-				}
-
-				foreach (var attr in authData)
-				{
-					if (attr.Policy is { Length: > 0 })
-					{
-						var result = await authorizationService.AuthorizeAsync(user, null, attr.Policy);
-						if (result.Succeeded)
-						{
-							accessible[category].Add(item);
-							break;
-						}
-					}
-
-					if (attr.Roles is not { Length: > 0 })
-					{
-						continue;
-					}
-
-					var roles = attr.Roles.Split(',', StringSplitOptions.TrimEntries);
-
-					if (roles.None(user.IsInRole))
-					{
-						continue;
-					}
-
-					accessible[category].Add(item);
-					break;
-				}
-			}
-
+			await AddAccessibleItemsAsync(user, category, items, accessible);
 		}
 
 		return accessible.AsReadOnly();
+	}
+
+	private async Task AddAccessibleItemsAsync(
+		ClaimsPrincipal user,
+		string category,
+		IEnumerable<NavbarItem> items,
+		Dictionary<string, List<NavbarItem>> accessible)
+	{
+		foreach (var item in items)
+		{
+			if (await IsItemAccessibleAsync(user, item))
+			{
+				accessible[category].Add(item);
+			}
+		}
+	}
+
+	private async Task<bool> IsItemAccessibleAsync(ClaimsPrincipal user, NavbarItem item)
+	{
+		if (!navData.PolicyMap.TryGetValue(item.Path.PageName, out var authData) || authData.Count <= 0)
+		{
+			return true;
+		}
+
+		foreach (var attr in authData)
+		{
+			if (await HasAccessAsync(user, attr))
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private async Task<bool> HasAccessAsync(ClaimsPrincipal user, IAuthorizeData attr)
+	{
+		if (attr.Policy is { Length: > 0 })
+		{
+			var result = await authorizationService.AuthorizeAsync(user, null, attr.Policy);
+			if (result.Succeeded)
+			{
+				return true;
+			}
+		}
+
+		if (attr.Roles is not { Length: > 0 })
+		{
+			return false;
+		}
+
+		var roles = attr.Roles.Split(',', StringSplitOptions.TrimEntries);
+		return !roles.None(user.IsInRole);
 	}
 }

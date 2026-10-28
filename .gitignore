@@ -72,3 +72,4 @@ Ogma3/wwwroot/lib/admin/
 .logs/
 
 .backups/
+.secrets/

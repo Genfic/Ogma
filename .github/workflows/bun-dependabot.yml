@@ -18,5 +18,5 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v7
-      - uses: charpeni/bun-lock-submission@v1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: charpeni/bun-lock-submission@7d54432cdbf56ed02aaf95b31f810d867ec45e5b # v1
