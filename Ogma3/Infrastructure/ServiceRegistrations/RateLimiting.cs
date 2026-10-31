@@ -12,6 +12,7 @@ public static class RateLimiting
 	public const string Login = nameof(Login);
 	public const string PowIssue = nameof(PowIssue);
 	public const string IssueInviteCodeExternal = nameof(IssueInviteCodeExternal);
+	public const string PatreonWebhook = nameof(PatreonWebhook);
 
 	public static IServiceCollection AddRateLimiting(this IServiceCollection services)
 	{
@@ -49,6 +50,10 @@ public static class RateLimiting
 				.AddPartitionedFixedWindowLimiter(policyName: IssueInviteCodeExternal, options => {
 					options.Window = TimeSpan.FromSeconds(10);
 					options.PermitLimit = 5;
+				})
+				.AddPartitionedFixedWindowLimiter(policyName: PatreonWebhook, options => {
+					options.Window = TimeSpan.FromMinutes(1);
+					options.PermitLimit = 60;
 				});
 
 			limiterOptions.OnRejected = (context, _) => {

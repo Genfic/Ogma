@@ -15,8 +15,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DOTNET_TEST_USE_MODERN_OUTPUT: true
-      NUGET_AUTH_TOKEN: ${{ secrets.NUGET_PAT }}
-      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
     steps:
       - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v6
         with:
@@ -34,8 +32,13 @@ jobs:
           dotnet-version: '11.0.x'
           dotnet-quality: 'preview'
           source-url: https://nuget.pkg.github.com/atulin/index.json
+        env:
+          NUGET_AUTH_TOKEN: ${{ github.token }}
 
       - name: Validate SonarQube token
+        if: github.event_name == 'push'
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           if [[ -z "$SONAR_TOKEN" ]]; then
             echo "::error::SONAR_TOKEN secret is not configured."
@@ -43,16 +46,20 @@ jobs:
           fi
 
       - name: Install SonarScanner for .NET
+        if: github.event_name == 'push'
         run: |
           dotnet tool install --global dotnet-sonarscanner
           echo "$HOME/.dotnet/tools" >> "$GITHUB_PATH"
 
       - name: Begin SonarQube analysis
+        if: github.event_name == 'push'
         run: >-
           dotnet sonarscanner begin
           /k:"Genfic_Ogma"
           /o:"genfic"
           "/d:sonar.token=$SONAR_TOKEN"
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - name: Restore dependencies
         run: dotnet restore -p:Configuration=Release -r linux-x64
@@ -64,7 +71,10 @@ jobs:
         run: dotnet test -c Release -- --coverage --coverage-output-format cobertura
 
       - name: End SonarQube analysis
+        if: github.event_name == 'push'
         run: dotnet sonarscanner end /d:sonar.token="$SONAR_TOKEN"
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - name: Coveralls
         uses: coverallsapp/github-action@648a8eb78e6d50909eff900e4ec85cab4524a45b

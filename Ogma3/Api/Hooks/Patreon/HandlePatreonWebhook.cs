@@ -1,3 +1,4 @@
+using System.Buffers;
 using System.Collections.Frozen;
 using System.Security.Cryptography;
 using System.Text;
@@ -8,10 +9,12 @@ using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Ogma3.Data;
 using Ogma3.Data.Subscriptions;
+using Ogma3.Infrastructure.ServiceRegistrations;
 using Ogma3.Services.EntitlementService;
 
 namespace Ogma3.Api.Hooks.Patreon;
@@ -21,6 +24,7 @@ using ReturnType = Results<Ok, NotFound, BadRequest, InternalServerError>;
 [Handler]
 [MapGroup<HooksGroup>]
 [MapPost("patreon")]
+[EnableRateLimiting(policyName: RateLimiting.PatreonWebhook)]
 [AllowAnonymous]
 [UsedImplicitly]
 public sealed partial class HandlePatreonWebhook
@@ -42,6 +46,8 @@ public sealed partial class HandlePatreonWebhook
 		"members:pledge:delete",
 	];
 
+	private const int MaxPayloadBytes = 1 * 1024 * 1024;
+
 	private async ValueTask<ReturnType> HandleAsync(
 		Query request,
 		CancellationToken cancellationToken
@@ -59,14 +65,36 @@ public sealed partial class HandlePatreonWebhook
 
 		logger.LogInformation("Patreon webhook for {Event} received.", request.Event);
 
-		if (httpContext.Request.ContentLength > int.MaxValue)
+		var contentLength = httpContext.Request.ContentLength;
+		if (contentLength is null or <= 0 or > MaxPayloadBytes)
 		{
-			logger.LogWarning("Patreon webhook payload is too large.");
+			logger.LogWarning("Patreon webhook payload has an invalid size.");
 			return TypedResults.BadRequest();
 		}
 
-		using var ms = new MemoryStream((int)(httpContext.Request.ContentLength ?? 4096));
-		await httpContext.Request.Body.CopyToAsync(ms, cancellationToken);
+		using var ms = new MemoryStream((int)contentLength.Value);
+		var buffer = ArrayPool<byte>.Shared.Rent(16 * 1024);
+		try
+		{
+			while (true)
+			{
+				var bytesRead = await httpContext.Request.Body.ReadAsync(buffer.AsMemory(0, 16 * 1024), cancellationToken);
+				if (bytesRead == 0) break;
+
+				if (ms.Length + bytesRead > MaxPayloadBytes)
+				{
+					logger.LogWarning("Patreon webhook payload exceeded the maximum size.");
+					return TypedResults.BadRequest();
+				}
+
+				await ms.WriteAsync(buffer.AsMemory(0, bytesRead), cancellationToken);
+			}
+		}
+		finally
+		{
+			ArrayPool<byte>.Shared.Return(buffer);
+		}
+
 		var body = ms.GetBuffer().AsSpan(0, (int)ms.Length);
 
 		if (!ValidateSignature(request.Signature, config.Value.WebhookSecret, body))

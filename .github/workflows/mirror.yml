@@ -9,8 +9,8 @@ jobs:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
-      - uses: yesolutions/mirror-action@master
+      - uses: yesolutions/mirror-action@662fce0eced8996f64d7fa264d76cddd84827f33 # reviewed master commit
         with:
           REMOTE: 'https://codeberg.org/Genfic/Ogma.git'
           GIT_USERNAME: ${{ secrets.CODEBERG_USERNAME }}
-          GIT_PASSWORD: ${{ secrets.CODEBERG_PASSWORD }}
+          GIT_PASSWORD: ${{ secrets.CODEBERG_TOKEN }}

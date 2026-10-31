@@ -68,9 +68,22 @@ jobs:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Add known hosts
-        run: ssh-keyscan -H "${TARGET_HOST}" >> ~/.ssh/known_hosts
+        run: |
+          if [[ -z "$TARGET_HOST" || -z "$SSH_KNOWN_HOSTS" ]]; then
+            echo "::error::TARGET_HOST and SSH_KNOWN_HOSTS secrets must be configured."
+            exit 1
+          fi
+
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+          ssh-keygen -F "$TARGET_HOST" -f ~/.ssh/known_hosts >/dev/null || {
+            echo "::error::SSH_KNOWN_HOSTS does not contain an entry for TARGET_HOST."
+            exit 1
+          }
         env:
           TARGET_HOST: ${{ secrets.TARGET_HOST }}
+          SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
 
       - name: Install frontend dependencies
         working-directory: FrontendCode

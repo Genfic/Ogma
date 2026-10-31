@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using System.Text.Json;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Ogma3.Infrastructure.Extensions;
@@ -28,42 +29,36 @@ public sealed class TumblrAuthenticationOptions : OAuthOptions
 	private static Task OnCreatingTicket(OAuthCreatingTicketContext context)
 	{
 		var userElement = context.User.GetProperty("response").GetProperty("user");
+		var primaryBlog = userElement.TryGetProperty("blogs", out var blogs) && blogs.ValueKind == JsonValueKind.Array
+			? blogs.EnumerateArray().FirstOrDefault(blog =>
+				blog.ValueKind == JsonValueKind.Object
+				&& blog.TryGetProperty("primary", out var primary)
+				&& primary.ValueKind == JsonValueKind.True)
+			: default;
 
-		var userName = userElement.GetProperty("name").GetString();
-		string? stableIdentifier = null;
+		var stableIdentifier = primaryBlog.ValueKind == JsonValueKind.Object
+			&& primaryBlog.TryGetProperty("uuid", out var uuidElement)
+			&& uuidElement.ValueKind == JsonValueKind.String
+			? uuidElement.GetString()
+			: null;
 
-		// Extract the stable identifier (Primary Blog UUID)
-		if (userElement.TryGetProperty("blogs", out var blogs) && blogs.GetArrayLength() > 0)
+		if (string.IsNullOrWhiteSpace(stableIdentifier))
 		{
-			var primaryBlog = blogs
-				.EnumerateArray()
-				.FirstOrDefault(b => b.TryGetProperty("primary", out var primary) && primary.GetBoolean());
-
-			if (primaryBlog.TryGetProperty("uuid", out var uuidElement))
-			{
-				stableIdentifier = uuidElement.GetString();
-			}
+			throw new AuthenticationFailureException("Tumblr did not provide the stable identifier for the primary blog.");
 		}
 
-		if (string.IsNullOrEmpty(stableIdentifier))
+		if (context.Principal?.Identity is not ClaimsIdentity identity)
 		{
-			stableIdentifier = userName;
+			throw new AuthenticationFailureException("Tumblr authentication did not produce a claims identity.");
 		}
 
-		if (string.IsNullOrEmpty(stableIdentifier))
-		{
-			return Task.CompletedTask;
-		}
-
-		var identity = (ClaimsIdentity?)context.Principal?.Identity;
-
-		var existingClaim = identity?.FindFirst(ClaimTypes.NameIdentifier);
+		var existingClaim = identity.FindFirst(ClaimTypes.NameIdentifier);
 		if (existingClaim is not null)
 		{
-			identity?.RemoveClaim(existingClaim);
+			identity.RemoveClaim(existingClaim);
 		}
 
-		identity?.AddClaim(new Claim(ClaimTypes.NameIdentifier, stableIdentifier, ClaimValueTypes.String, context.Options.ClaimsIssuer));
+		identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, stableIdentifier, ClaimValueTypes.String, context.Options.ClaimsIssuer));
 
 		return Task.CompletedTask;
 	}
