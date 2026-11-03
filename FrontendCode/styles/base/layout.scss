@@ -102,3 +102,7 @@ body {
 :focus-visible {
 	outline: 3px groove color-mix(in oklab, var(--accent), var(--background) 50%);
 }
+
+@view-transition {
+	navigation: auto;
+}

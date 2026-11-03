@@ -18,7 +18,8 @@ public sealed class AsideTagHelper : TagHelper
 		var childContent = await output.GetChildContentAsync(NullHtmlEncoder.Default);
 
 		output.TagName = "aside";
-		if (For is {} f) {
+		if (For is {} f)
+		{
 			output.Attributes.Add("data-for", f.Name.Replace('.', '_'));
 		}
 		output.Content.SetHtmlContent(childContent);

@@ -12,10 +12,11 @@
 	<img class="image"
 	     src="@(Model.Cover ?? "/img/placeholders/ph-250.png")"
 	     alt="@Model.Title"
+	     style="view-transition-name: story-cover-@Model.Id"
 	     width="160" height="160" cf/>
 
 	<div class="title">
-		<h3>
+		<h3 style="view-transition-name: story-title-@Model.Id">
 			<partial name="_RatingIcon" model="Model.Rating"/>
 
 			<a for-route="storyRoute">@Model.Title</a>

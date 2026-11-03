@@ -4,6 +4,7 @@
 @using Ogma3.Data.Reports
 @using Ogma3.Infrastructure.Constants
 @using Ogma3.Infrastructure.Extensions
+@using Ogma3.Infrastructure.TagHelpers
 @using Routes.Pages
 @model ChapterModel
 @inject IAntiforgery Antiforgery
@@ -17,6 +18,15 @@
 	var csrf = Antiforgery.GetAndStoreTokens(HttpContext).RequestToken;
 
 	var readerSettings = Request.Cookies.TryGetValue("reader-settings", out var settings) ? settings : null;
+
+	var previous = Model.Previous is null ? null : Chapter.Get(Model.Chapter.StoryId, Model.Previous.Id, Model.Previous.Slug);
+	var next = Model.Next is null ? null : Chapter.Get(Model.Chapter.StoryId, Model.Next.Id, Model.Next.Slug);
+
+	var prefetch = new SpeculationRule
+	{
+		ReferrerPolicy = "no-referrer",
+		Urls = [previous?.Url(Url), next?.Url(Url)],
+	};
 }
 
 @section OgMeta {
@@ -121,14 +131,14 @@
 	<div class="navigation">
 		@if (Model.Previous is not null)
 		{
-			<a for-route="@Chapter.Get(Model.Chapter.StoryId, Model.Previous.Id, Model.Previous.Slug)" class="previous active-border">
+			<a for-route="@previous" class="previous active-border">
 				<span class="action">Previous</span>
 				<span class="title">@Model.Previous.Title</span>
 			</a>
 		}
 		@if (Model.Next is not null)
 		{
-			<a for-route="@Chapter.Get(Model.Chapter.StoryId, Model.Next.Id, Model.Next.Slug)" class="next active-border">
+			<a for-route="@next" class="next active-border">
 				<span class="action">Next</span>
 				<span class="title">@Model.Next.Title</span>
 			</a>
@@ -147,6 +157,7 @@
 
 @section Scripts
 {
+	<speculation-rules prefetch="@([prefetch])"></speculation-rules>
 	<script type="module" src="~/js/watch-chapter-read.js" asp-append-version="true"></script>
 	<script type="module" src="~/js/comp/read-progress.js" asp-append-version="true"></script>
 	<script type="module" src="~/js/comp/reader-settings.js" asp-append-version="true"></script>

@@ -105,7 +105,7 @@
 
 		<div class="titlebar">
 			<span style="display:none" itemprop="contentRating">@Model.Story.Rating</span>
-			<h1 class="title" itemprop="name">
+			<h1 class="title" itemprop="name" style="view-transition-name: story-title-@Model.Story.Id">
 				<partial name="_RatingIcon" model="Model.Story.Rating" /> @Model.Story.Title
 			</h1>
 		</div>
@@ -135,6 +135,7 @@
 			     class="cover"
 			     height="160" width="160"
 			     eager="true"
+			     style="view-transition-name: story-cover-@Model.Story.Id"
 			     itemprop="thumbnailUrl" cf />
 
 			<div class="description" itemprop="abstract">
