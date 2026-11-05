@@ -31,12 +31,6 @@ if (git.IsDirty && !allowDirty)
 builder
 	.AddDockerComposeEnvironment("ogma3-docker")
 	.ConfigureComposeFile(file => {
-		file.AddVolume(new Volume
-		{
-			Name = "ogma-config",
-			Driver = "local",
-		});
-
 		if (!file.Networks.TryGetValue("aspire", out var network)) return;
 
 		network.DriverOpts["com.docker.network.enable_ipv6"] = "true";
@@ -73,8 +67,7 @@ var database = builder
 	.WithDataVolume()
 	.WithRepl()
 	.WithLifetime(ContainerLifetime.Persistent)
-	.WithEndpoint("tcp", e =>
-	{
+	.WithEndpoint("tcp", e => {
 		e.Port = 5433;
 		e.TargetPort = 5432;
 		e.IsProxied = false;
@@ -108,22 +101,7 @@ var genfic = builder
 
 if (builder.ExecutionContext.IsPublishMode)
 {
-	if (builder.ExecutionContext.IsPublishMode)
-	{
-		genfic
-			.WithEnvironment("OGMA_CONFIG_PATH", "/var/lib/ogma/config.json5")
-			.PublishAsDockerComposeService((_, service) =>
-			{
-				service.AddVolume(new Volume
-				{
-					Name = "ogma-config",
-					Source = "ogma-config",
-					Target = "/var/lib/ogma",
-					Type = "volume",
-					ReadOnly = false,
-				});
-			});
-	}
+	_ = genfic.WithVolume("ogma-volume", "/var/lib/ogma", "OGMA_CONFIG_PATH");
 }
 else
 {
