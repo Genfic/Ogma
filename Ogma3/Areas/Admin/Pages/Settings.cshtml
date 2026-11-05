@@ -6,7 +6,12 @@
 	ViewData["ActivePage"] = NavPages.Settings;
 }
 
-<span asp-validation-summary="all"></span>
+<ul>
+	@foreach (var err in Model.Errors)
+	{
+		<li>@err</li>
+	}
+</ul>
 
 <autoform
 	for="@Model.Config"

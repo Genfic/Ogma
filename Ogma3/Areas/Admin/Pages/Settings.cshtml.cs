@@ -30,10 +30,17 @@ public sealed class Settings(
 		return Page();
 	}
 
+	public string[] Errors { get; set; } = [];
+
 	public async Task<IActionResult> OnPostAsync()
 	{
 		if (!ModelState.IsValid)
 		{
+			Errors = ModelState.Values
+				.SelectMany(v => v.Errors)
+				.Select(e => e.ErrorMessage)
+				.ToArray();
+
 			return Page();
 		}
 
