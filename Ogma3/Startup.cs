@@ -227,13 +227,6 @@ public static class Startup
 				options.Conventions.AuthorizeAreaFolder("Admin", "/", AuthorizationPolicies.RequireAdminRole);
 			});
 
-		if (builder.Environment.IsDevelopment())
-		{
-		#if DEBUG
-			pages.AddRazorRuntimeCompilation();
-		#endif
-		}
-
 		// X-CSRF
 		services.AddAntiforgery();
 
