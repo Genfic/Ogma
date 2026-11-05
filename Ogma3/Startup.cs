@@ -78,7 +78,8 @@ public static class Startup
 		builder.UseAddHeaders();
 
 		// Custom persistent config
-		await services.AddOgmaConfigAsync("config.json5");
+		var configPath = Environment.GetEnvironmentVariable("OGMA_CONFIG_PATH") ?? "config.json5";
+		await services.AddOgmaConfigAsync(configPath);
 
 		// Routing
 		services.AddRouting(options => {

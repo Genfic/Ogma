@@ -85,7 +85,7 @@ public sealed class AutoformTagHelper(IHtmlGenerator generator) : TagHelper
 				{
 					meta ??= new()
 					{
-						["list"] = $"list=\"datalist-{prop.Name.ToLowerInvariant()}\"",
+						["list"] = $"datalist-{prop.Name.ToLowerInvariant()}",
 					};
 				}
 
@@ -93,10 +93,21 @@ public sealed class AutoformTagHelper(IHtmlGenerator generator) : TagHelper
 					.Select(kvp => $"{kvp.Key}=\"{kvp.Value}\"")
 					.Aggregate((a, b) => $"{a} {b}");
 
+				var valueAttr = (type, val) switch
+				{
+					("checkbox", true) => "checked value=\"true\"",
+					("checkbox", false) => "value=\"true\"",
+					_ => $"value=\"{value}\"",
+				};
+
 				output.Content.AppendHtml("""<div class="o-form-group">""");
 				output.Content.AppendHtml($"""<label for="{objName}_{label}">{label.Humanize()}</label>""");
 				output.Content.AppendHtml(
-					$"""<input {attrs} type="{type}" id="{objName}_{label}" name="{objName}.{label}" value="{value}" class="o-form-control active-border">""");
+					$"""<input {attrs} type="{type}" id="{objName}_{label}" name="{objName}.{label}" {valueAttr} class="o-form-control active-border">""");
+				if (type == "checkbox")
+				{
+					output.Content.AppendHtml($"""<input type="hidden" name="{objName}.{label}" value="false">""");
+				}
 				if (hasDatalist && datalist is IEnumerable items)
 				{
 					output.Content.AppendHtml($"""<datalist id="datalist-{prop.Name.ToLowerInvariant()}">""");

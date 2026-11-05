@@ -22,10 +22,17 @@ public sealed class OgmaConfigPersistence
 	/// <returns>A task that represents the asynchronous operation. The task result contains an instance of <see cref="OgmaConfigPersistence"/>.</returns>
 	public static async Task<OgmaConfigPersistence> InitAsync(string fileLocation)
 	{
-		var path = Path.Combine(AppContext.BaseDirectory, fileLocation);
+		var path = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, fileLocation));
+		var defaultPath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "config.json5"));
+
+		Directory.CreateDirectory(Path.GetDirectoryName(path) ?? "");
 
 		if (!File.Exists(path))
 		{
+			if (!string.Equals(path, defaultPath, StringComparison.Ordinal) && File.Exists(defaultPath))
+			{
+				File.Copy(defaultPath, path, false);
+			}
 			return new OgmaConfigPersistence(new(), path);
 		}
 
@@ -51,6 +58,6 @@ public sealed class OgmaConfigPersistence
 			await fs.FlushAsync();
 		}
 
-		File.Replace(tmpPath, _path, null);
+		File.Move(tmpPath, _path, true);
 	}
 }

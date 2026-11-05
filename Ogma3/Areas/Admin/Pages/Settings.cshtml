@@ -6,6 +6,8 @@
 	ViewData["ActivePage"] = NavPages.Settings;
 }
 
+<span asp-validation-summary="all"></span>
+
 <autoform
 	for="@Model.Config"
 	datalist-for-PrivacyPolicyDoc="@Model.DocNames"

@@ -1,3 +1,4 @@
+using Aspire.Hosting.Docker.Resources.ServiceNodes;
 using Microsoft.Extensions.Configuration;
 using Ogma3.AppHost.Helpers;
 
@@ -30,6 +31,12 @@ if (git.IsDirty && !allowDirty)
 builder
 	.AddDockerComposeEnvironment("ogma3-docker")
 	.ConfigureComposeFile(file => {
+		file.AddVolume(new Volume
+		{
+			Name = "ogma-config",
+			Driver = "local",
+		});
+
 		if (!file.Networks.TryGetValue("aspire", out var network)) return;
 
 		network.DriverOpts["com.docker.network.enable_ipv6"] = "true";
@@ -99,7 +106,26 @@ var genfic = builder
 	.WithReference(garnet)
 	.WaitFor(garnet);
 
-if (!builder.ExecutionContext.IsPublishMode)
+if (builder.ExecutionContext.IsPublishMode)
+{
+	if (builder.ExecutionContext.IsPublishMode)
+	{
+		genfic
+			.WithEnvironment("OGMA_CONFIG_PATH", "/var/lib/ogma/config.json5")
+			.PublishAsDockerComposeService((_, service) =>
+			{
+				service.AddVolume(new Volume
+				{
+					Name = "ogma-config",
+					Source = "ogma-config",
+					Target = "/var/lib/ogma",
+					Type = "volume",
+					ReadOnly = false,
+				});
+			});
+	}
+}
+else
 {
 	builder
 		.AddContainer("tunnel", "cloudflare/cloudflared")

@@ -9,7 +9,12 @@ using Ogma3.Infrastructure.ServiceRegistrations;
 namespace Ogma3.Areas.Admin.Pages;
 
 [Authorize(AuthorizationPolicies.RequireAdminRole)]
-public sealed class Settings(OgmaConfig config, OgmaConfigPersistence persistence, AppDbContext context) : PageModel
+public sealed class Settings(
+	OgmaConfig config,
+	OgmaConfigPersistence persistence,
+	AppDbContext context,
+	ILogger<Settings> logger
+) : PageModel
 {
 	[BindProperty] public required OgmaConfig Config { get; set; }
 	public required List<string> DocNames { get; set; } = [];
@@ -27,6 +32,12 @@ public sealed class Settings(OgmaConfig config, OgmaConfigPersistence persistenc
 
 	public async Task<IActionResult> OnPostAsync()
 	{
+		if (!ModelState.IsValid)
+		{
+			return Page();
+		}
+
+		logger.LogInformation("Settings updated to {@Config}", Config);
 		OgmaConfigMapper.CopyTo(Config, config);
 		await persistence.PersistAsync();
 		return Routes.Areas.Admin.Pages.Settings.Get().Redirect(this);
