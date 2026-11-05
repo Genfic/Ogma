@@ -14,6 +14,12 @@ public sealed class DeleteDraftsRecurringJob
 
 	protected override async Task Run(CancellationToken ct)
 	{
+		if (config.StopDraftDeletion)
+		{
+			logger.LogInformation("Draft deletion is disabled");
+			return;
+		}
+
 		using var scope = ServiceProvider.CreateScope();
 		var ctx = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 

@@ -18,6 +18,7 @@ public sealed class OgmaConfig
 
 	// Content
 	[AutoformCategory("Content")] public int BlogpostExcerptDefaultCutoff { get; set; } = 500;
+	[AutoformCategory("Content")] public bool StopDraftDeletion { get; set; } = false;
 
 	// Pagination settings
 	[AutoformCategory("Pagination")] public int CommentsPerPage { get; set; } = 25;
