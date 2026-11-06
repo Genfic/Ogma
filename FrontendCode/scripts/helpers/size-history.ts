@@ -24,7 +24,7 @@ export class SizeHistory {
 		const text = await file.text();
 		const lines = text.split("\n").filter((l) => l.startsWith(this.label));
 		const line = lines.at(index);
-		const [_, stamp, size] = line?.split(":") ?? [null, null, null];
+		const [, stamp, size] = line?.split(":") ?? [null, null, null];
 		return [Number.parseInt(size ?? "-1", 10), new Date(stamp ?? 0)];
 	};
 

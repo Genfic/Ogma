@@ -21,6 +21,8 @@
 	}
 
 	// noinspection Stylelint
+	// Kept for legacy content markup containing literal <strike> tags
+	/* stylelint-disable-next-line selector-no-deprecated */
 	strike {
 		text-decoration: line-through;
 	}

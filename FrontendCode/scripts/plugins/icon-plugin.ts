@@ -28,7 +28,7 @@ export function iconPlugin(options: IconOptions): BunPlugin {
 			}
 
 			build.onResolve({ filter: /^icon:/ }, async (args) => {
-				const [_, collection, icon] = args.path.toLowerCase().split(":");
+				const [, collection, icon] = args.path.toLowerCase().split(":");
 				const path = join(cacheDir, `${pascalCase(collection)}${pascalCase(icon)}.tsx`);
 
 				const file = Bun.file(path);

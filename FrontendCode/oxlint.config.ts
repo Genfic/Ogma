@@ -18,6 +18,7 @@ export default defineConfig({
 		"unicorn/prefer-number-properties": "error",
 		"unicorn/no-document-cookie": "off", // Let's wait until at least 95% support: https://caniuse.com/cookie-store-api
 		"no-cond-assign": "off",
+		"no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
 		curly: "warn",
 	},
 	settings: {
@@ -40,6 +41,14 @@ export default defineConfig({
 			files: ["./scripts/**/*.ts"],
 			rules: {
 				"eslint/no-underscore-dangle": "off",
+			},
+		},
+		{
+			// Custom-element dropdown: `<option>` buttons inside a `<details>` popover
+			// can't be replaced by a native `<select>`/`<option>` markup.
+			files: ["./typescript/src/comp/theme-selector.tsx"],
+			rules: {
+				"jsx-a11y/prefer-tag-over-role": "off",
 			},
 		},
 	],

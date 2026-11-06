@@ -25,11 +25,11 @@ const headers = { RequestVerificationToken: parent.dataset.csrf ?? "" };
 const Ns = TagNamespace;
 
 const FormNamespaceSchema = v.object({
-	name: v.pipe(v.string(), v.trim(), v.minLength(Number(Ns.MinNameLength)), v.maxLength(Number(Ns.MaxNameLength))),
-	slug: v.nullable(v.pipe(v.string(), v.trim(), v.maxLength(Number(Ns.MaxSlugLength)))),
-	alias: v.nullable(v.pipe(v.string(), v.trim(), v.maxLength(Number(Ns.MaxAliasLength)))),
+	name: v.pipe(v.string(), v.trim(), v.minLength(Ns.MinNameLength), v.maxLength(Ns.MaxNameLength)),
+	slug: v.nullable(v.pipe(v.string(), v.trim(), v.maxLength(Ns.MaxSlugLength))),
+	alias: v.nullable(v.pipe(v.string(), v.trim(), v.maxLength(Ns.MaxAliasLength))),
 	color: v.nullable(strippedHexColor),
-	description: v.nullable(v.pipe(v.string(), v.trim(), v.maxLength(Number(Ns.MaxDescLength)))),
+	description: v.nullable(v.pipe(v.string(), v.trim(), v.maxLength(Ns.MaxDescLength))),
 	id: v.optional(v.pipe(v.string(), v.transform(Number), v.integer())),
 });
 
