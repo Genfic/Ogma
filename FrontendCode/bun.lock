@@ -26,7 +26,7 @@
         "valibot": "^1.5.0",
       },
       "devDependencies": {
-        "@angius/bun-plugin-solid": "^1.4.2",
+        "@angius/bun-plugin-solid": "^1.5.0",
         "@commander-js/extra-typings": "^15.0.0",
         "@happy-dom/global-registrator": "^21.0.4",
         "@parcel/watcher": "^2.6.0",
@@ -63,7 +63,7 @@
     "stylelint-config-standard": "^41.0.0-next.0",
   },
   "packages": {
-    "@angius/bun-plugin-solid": ["@angius/bun-plugin-solid@1.4.2", "", { "dependencies": { "@babel/preset-typescript": "^7.28.5", "babel-preset-solid": "^1.9.10", "bun-only": "^0.0.1" }, "peerDependencies": { "@babel/core": "^7.29.0", "@types/babel__core": "^7.20.5", "typescript": "^5.9.3" } }, "sha512-WUGjMZj+3ZuWvBjKe2eMVmF1i5ce2JALO2s3z8H90OPfNwyS/r3bH/N/hgZYd79NwyR1ZkU6RqV9vy0cbo/CFw=="],
+    "@angius/bun-plugin-solid": ["@angius/bun-plugin-solid@1.5.0", "", { "dependencies": { "@babel/preset-typescript": "^7.28.5", "@jridgewell/gen-mapping": "^0.3.13", "@jridgewell/sourcemap-codec": "^1.5.4", "@jridgewell/trace-mapping": "^0.3.31", "babel-preset-solid": "^1.9.10", "bun-only": "^0.0.1" }, "peerDependencies": { "@babel/core": "^7.29.0", "@types/babel__core": "^7.20.5", "typescript": "^5.9.3" } }, "sha512-5VvQtE1FXyvYXKc1V8zzWT9APhJgDm0EWWdNuxzwUAot++s0w+lmpW/fhgOQwoft+zYXTBmgpzoqufjMaJEH9Q=="],
 
     "@angius/htmldiff": ["@angius/htmldiff@2.0.1", "", {}, "sha512-FlDwDJHglEeSDVF52s0vzjZBL8Y3zU1cvWa7RgHtsnoOWKkaKakqXr9pana7FoZQjSnKCH8QN5431kXp+VxrfA=="],
 

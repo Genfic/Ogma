@@ -1,5 +1,5 @@
 import { rm } from "node:fs/promises";
-import { dirname, join } from "node:path";
+import { dirname, join, relative, resolve } from "node:path";
 import { SolidPlugin } from "@angius/bun-plugin-solid";
 import { program } from "@commander-js/extra-typings";
 import { Glob } from "bun";
@@ -41,6 +41,35 @@ const clean = async () => {
 	await rm(_iconCache, { recursive: true, force: true });
 };
 
+/**
+ * Bun emits sources of a `.js.map` relative to the *outdir root*, even when the
+ * map itself is nested in a subdirectory (`js/comp/*.map`). Sourcemap consumers
+ * resolve sources relative to the map's own location, so those links break.
+ * Re-anchor them to the map's directory.
+ */
+const fixSourceMapSources = async (outdir: string) => {
+	const maps = [...new Glob("**/*.js.map").scanSync({ cwd: outdir, onlyFiles: true })];
+	await Promise.all(
+		maps.map(async (rel) => {
+			const mapPath = join(outdir, rel);
+			const map = JSON.parse(await Bun.file(mapPath).text());
+			const mapDir = dirname(mapPath);
+			let changed = false;
+			map.sources = map.sources.map((s: string) => {
+				if (!s.startsWith(".")) {
+					return s;
+				}
+				const fixed = relative(mapDir, resolve(outdir, s)).replaceAll("\\", "/");
+				changed ||= fixed !== s;
+				return fixed;
+			});
+			if (changed) {
+				await Bun.write(mapPath, JSON.stringify(map));
+			}
+		}),
+	);
+};
+
 if (values.clean) {
 	await clean();
 }
@@ -78,6 +107,7 @@ const compile = async (from: Glob, to: string, root: string) => {
 
 	if (success) {
 		logger.log(ct`{dim Files compiled in}`, timer);
+		await fixSourceMapSources(to);
 	} else {
 		logger.error(ct`{red Build of files failed after}`, timer);
 		for (const log of logs.filter((l) => ["error", "warning"].includes(l.level))) {

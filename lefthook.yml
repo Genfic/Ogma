@@ -1,18 +1,22 @@
 assert_lefthook_installed: true
 pre-commit:
-  parallel: true
   jobs:
-    - name: Frontend Checks
+    - name: Lint TS
       root: "FrontendCode"
-      group:
-        jobs:
-          - name: Lint TS
-            run: bun run lint:fix -- --quiet || true
-          - name: Format TS
-            run: bun run format:fix || true
-          - name: Typecheck
-            run: bun run js:typecheck || true
-          - name: Lint SCSS
-            run: bun run css:lint || true
-          - name: Webtypes
-            run: bun run webtypes || true
+      run: bun run lint:fix -- --quiet
+      stage_fixed: true
+    - name: Webtypes
+      root: "FrontendCode"
+      run: bun run webtypes
+      files: git ls-files -- FrontendCode/web-types.json
+      stage_fixed: true
+    - name: Format TS
+      root: "FrontendCode"
+      run: bun run format:fix
+      stage_fixed: true
+    - name: Lint SCSS
+      root: "FrontendCode"
+      run: bun run css:lint
+    - name: Typecheck
+      root: "FrontendCode"
+      run: bun run js:typecheck

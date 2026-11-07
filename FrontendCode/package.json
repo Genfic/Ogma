@@ -41,7 +41,7 @@
 		"valibot": "^1.5.0"
 	},
 	"devDependencies": {
-		"@angius/bun-plugin-solid": "^1.4.2",
+		"@angius/bun-plugin-solid": "^1.5.0",
 		"@commander-js/extra-typings": "^15.0.0",
 		"@happy-dom/global-registrator": "^21.0.4",
 		"@parcel/watcher": "^2.6.0",
