@@ -1,5 +1,5 @@
 import fs, { rm } from "node:fs/promises";
-import { dirname, join, parse } from "node:path";
+import { dirname, join, parse, relative } from "node:path";
 import { program } from "@commander-js/extra-typings";
 import { Glob } from "bun";
 import c from "chalk";
@@ -79,6 +79,17 @@ const compileSass = async (file: string) => {
 	}
 
 	const { css, sourceMap } = compileResult;
+
+	// sass reports sources as absolute `file://` URLs. Passed through like this,
+	// lightningcss leaves them in an encoded form that browsers can no longer
+	// resolve relative to the emitted `.css.map`. Rewrite them to paths relative
+	// to the CSS output directory before chaining.
+	if (sourceMap) {
+		sourceMap.sources = sourceMap.sources.map((u: string) => {
+			if (!u.startsWith("file:")) return u;
+			return relative(_dest, Bun.fileURLToPath(u)).replaceAll("\\", "/");
+		});
+	}
 
 	if (values.raw) {
 		await Bun.write(join(_dest, `${filename}.raw.css`), css);
