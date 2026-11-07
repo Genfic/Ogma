@@ -15,6 +15,7 @@ public sealed class News : BaseModel
 	public DateTimeOffset CreationDate { get; init; }
 	public DateTimeOffset? PublicationDate { get; init => field ??= value; } // immutable once set
 	public bool IsVisible { get; init; }
+	public required string CommitHash { get; init => field ??= value; } // immutable once set
 
 	public OgmaUser Author { get; init; } = null!;
 	public required long AuthorId { get; init; }

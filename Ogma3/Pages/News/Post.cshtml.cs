@@ -48,8 +48,7 @@ public sealed record NewsDetails
 	string Slug,
 	string Body,
 	DateTimeOffset PublicationDate,
-	string AuthorUserName,
-	string AuthorAvatarUrl
+	string CommitHash
 );
 
 [Mapper]

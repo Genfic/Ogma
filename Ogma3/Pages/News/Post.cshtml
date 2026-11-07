@@ -14,7 +14,12 @@
 	<meta property="og:url" content="@Url.PageLink("/News/Post", values: new { Model.NewsPost.Id, Model.NewsPost.Slug })">
 	<meta property="og:description" content="@Model.NewsPost.Body[..200]">
 }
-<article class="blogpost-details" itemscope itemtype="https://bib.schema.org/Article">
+
+<article
+	class="blogpost-details"
+	itemscope itemtype="https://bib.schema.org/Article"
+	data-version="@Model.NewsPost.CommitHash"
+>
 	<h1 class="title" itemprop="name">@Model.NewsPost.Title</h1>
 
 	<time-display

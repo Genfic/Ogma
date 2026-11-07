@@ -23,7 +23,7 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
     // If you encounter a merge conflict in the line below, it means you need to
     // discard one of the migration branches and recreate its migrations on top of
     // the other branch. See https://aka.ms/efcore-docs-migrations-conflicts for more info.
-    public override string LastMigrationId => "20261002230704_BetterReportsStructureWithComputedColumns";
+    public override string LastMigrationId => "20261107175200_IncludeVersionHashInNewsPost";
 
     protected override void BuildModel(ModelBuilder modelBuilder)
     {
@@ -31,7 +31,7 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
         modelBuilder
             .HasAnnotation("Npgsql:CollationDefinition:nocase", "und-u-ks-level2,und-u-ks-level2,icu,False")
             .HasAnnotation("Npgsql:CollationDefinition:nocase-noaccent", "und-u-ks-level1,und-u-ks-level1,icu,False")
-            .HasAnnotation("ProductVersion", "11.0.0-rc.1.26425.128")
+            .HasAnnotation("ProductVersion", "11.0.0-rc.2.26504.105")
             .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
         NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "e_club_member_roles", new[] { "admin", "founder", "moderator", "user" });
@@ -1192,6 +1192,13 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                     .IsRequired()
                     .HasMaxLength(2147483647)
                     .HasColumnType("text");
+
+                b.Property<string>("CommitHash")
+                    .IsRequired()
+                    .ValueGeneratedOnAdd()
+                    .HasMaxLength(64)
+                    .HasColumnType("character varying(64)")
+                    .HasDefaultValue("CAFEBABE");
 
                 b.Property<DateTimeOffset>("CreationDate")
                     .ValueGeneratedOnAdd()

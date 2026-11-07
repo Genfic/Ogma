@@ -2,8 +2,10 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Options;
 using Ogma3.Data;
 using Ogma3.Data.CommentsThreads;
+using Ogma3.Infrastructure.Config;
 using Ogma3.Infrastructure.Extensions;
 using Ogma3.Infrastructure.OgmaConfig;
 using Ogma3.Infrastructure.ServiceRegistrations;
@@ -14,7 +16,13 @@ using Utils.Extensions;
 namespace Ogma3.Areas.Admin.Pages.News;
 
 [Authorize(AuthorizationPolicies.RequireAdminOrModeratorRole)]
-public sealed class CreateModel(AppDbContext ctx, OgmaConfig config, IModeratorActionService moderatorActionService) : PageModel
+public sealed class CreateModel
+(
+	AppDbContext ctx,
+	OgmaConfig config,
+	IOptions<GitState> gitState,
+	IModeratorActionService moderatorActionService
+) : PageModel
 {
 	[BindProperty] public required InputModel Input { get; set; }
 
@@ -66,6 +74,7 @@ public sealed class CreateModel(AppDbContext ctx, OgmaConfig config, IModeratorA
 			PublicationDate = Input.Published
 				? DateTimeOffset.UtcNow
 				: null,
+			CommitHash = gitState.Value.CommitHash,
 			AuthorId = uid,
 			CommentThread = new CommentThread(),
 		};

@@ -52,6 +52,11 @@ public class NewsConfiguration : BaseConfiguration<News>
 			.Property(b => b.AuthorId)
 			.HasDefaultValue(SystemUserConstants.Deleted.Id);
 
+		builder
+			.Property(b => b.CommitHash)
+			.HasMaxLength(64)
+			.HasDefaultValue("CAFEBABE");
+
 		// NAVIGATION
 		builder
 			.HasOne(b => b.Author)
