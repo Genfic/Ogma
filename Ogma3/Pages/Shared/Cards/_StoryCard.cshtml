@@ -37,9 +37,17 @@
 		{
 			<tag tag="t"></tag>
 		}
-		@foreach (var et in Model.ExtraTags)
+		@if (Model.ExtraTags.Count > 0)
 		{
-			<span class="extra tag">@et</span>
+			<label class="more-tags">
+				<input type="checkbox" aria-label="Show more tags">
+				<icon name="lucide:plus" class="open"></icon>
+				<icon name="lucide:minus" class="close"></icon>
+			</label>
+			foreach (var et in Model.ExtraTags)
+			{
+				<span class="extra tag">@et</span>
+			}
 		}
 	</div>
 

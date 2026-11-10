@@ -1,6 +1,48 @@
 .tags {
 	display: flex;
 	gap: 2px;
+
+	label.more-tags {
+		order: 999;
+		display: flex;
+		place-items: center;
+		cursor: pointer;
+		aspect-ratio: 1;
+
+		input[type="checkbox"] {
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			margin: -1px;
+			clip-path: rect(0, 0, 0, 0);
+		}
+
+		.icon {
+			&.close {
+				display: none;
+			}
+
+			&.open {
+				display: block;
+			}
+		}
+
+		&:has(:checked) {
+			.icon {
+				&.close {
+					display: block;
+				}
+
+				&.open {
+					display: none;
+				}
+			}
+		}
+	}
+
+	&:has(.more-tags > :checked) .tag.extra {
+		display: flex;
+	}
 }
 
 .tag {
@@ -65,6 +107,7 @@
 		padding: calc(var(--pad) + 0.1rem) calc(var(--pad) + 0.2rem);
 		text-transform: capitalize;
 		cursor: default;
+		display: none;
 	}
 
 	> .name {
