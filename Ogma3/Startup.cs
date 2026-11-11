@@ -3,22 +3,15 @@ using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using ConfigBinder;
-using FluentValidation;
-using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
-using Microsoft.AspNetCore.DataProtection.StackExchangeRedis;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.Rewrite;
-using MinHash;
 using Ogma3.Data;
 using Ogma3.Data.Roles;
 using Ogma3.Data.Users;
@@ -32,7 +25,6 @@ using Ogma3.Infrastructure.Middleware;
 using Ogma3.Infrastructure.Middleware.RequestTimingMiddleware;
 using Ogma3.Infrastructure.OgmaConfig;
 using Ogma3.Infrastructure.OpenApi;
-using Ogma3.Infrastructure.OpenApi.Transformers;
 using Ogma3.Infrastructure.ServiceRegistrations;
 using Ogma3.ServiceDefaults;
 using Ogma3.Services.Initializers;
@@ -40,11 +32,6 @@ using Ogma3.Services.OAuthProviders.Discord;
 using Ogma3.Services.OAuthProviders.Patreon;
 using Ogma3.Services.OAuthProviders.Tumblr;
 using Ogma3.Services.S3Storage;
-using Scalar.AspNetCore;
-using Sqids;
-using StackExchange.Redis;
-using ZiggyCreatures.Caching.Fusion;
-using ZiggyCreatures.Caching.Fusion.Serialization.CysharpMemoryPack;
 using IPNetwork = System.Net.IPNetwork;
 using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
 
@@ -92,6 +79,9 @@ public static class Startup
 		services.AddSingleton<IUrlHelperFactory, UrlHelperFactory>();
 
 		// Identity
+		// Identity and other time-sensitive services resolve TimeProvider from DI;
+		// tests override this with a FakeTimeProvider for deterministic clock control
+		services.AddSingleton(TimeProvider.System);
 		services.AddIdentity<OgmaUser, OgmaRole>(config => {
 				config.SignIn.RequireConfirmedEmail = true;
 				config.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_ ";

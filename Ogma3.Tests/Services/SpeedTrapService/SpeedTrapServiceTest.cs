@@ -1,23 +1,24 @@
-using Microsoft.AspNetCore.DataProtection;
 using SpeedTrap = Ogma3.Services.SpeedTrapService.SpeedTrapService;
 
 namespace Ogma3.Tests.Services.SpeedTrapService;
 
 public sealed class SpeedTrapServiceTest
 {
-	private static SpeedTrap CreateService() => new(new EphemeralDataProtectionProvider());
+	private static readonly DateTimeOffset Start = new(2026, 11, 11, 12, 0, 0, TimeSpan.Zero);
+
+	private static SpeedTrap CreateService(TimeProvider timeProvider) => new(new EphemeralDataProtectionProvider(), timeProvider);
 
 	[Test]
 	public async Task TestGenerateTokenReturnsNonEmptyToken()
 	{
-		var token = CreateService().GenerateToken();
+		var token = CreateService(new FakeTimeProvider(Start)).GenerateToken();
 		await Assert.That(token).IsNotEmpty();
 	}
 
 	[Test]
 	public async Task TestIsHumanSpeedReturnsTrueForNewToken()
 	{
-		var service = CreateService();
+		var service = CreateService(new FakeTimeProvider(Start));
 		var token = service.GenerateToken();
 
 		await Assert.That(service.IsHumanSpeed(token, 0)).IsTrue();
@@ -26,16 +27,38 @@ public sealed class SpeedTrapServiceTest
 	[Test]
 	public async Task TestIsHumanSpeedReturnsFalseWhenMinimumNotMet()
 	{
-		var service = CreateService();
+		var service = CreateService(new FakeTimeProvider(Start));
 		var token = service.GenerateToken();
 
 		await Assert.That(service.IsHumanSpeed(token, int.MaxValue)).IsFalse();
 	}
 
 	[Test]
+	public async Task TestIsHumanSpeedReturnsFalseBeforeTheMinimumElapsed()
+	{
+		var clock = new FakeTimeProvider(Start);
+		var service = CreateService(clock);
+		var token = service.GenerateToken();
+		clock.Advance(TimeSpan.FromSeconds(9));
+
+		await Assert.That(service.IsHumanSpeed(token, 10)).IsFalse();
+	}
+
+	[Test]
+	public async Task TestIsHumanSpeedReturnsTrueWhenExactlyTheMinimumElapsed()
+	{
+		var clock = new FakeTimeProvider(Start);
+		var service = CreateService(clock);
+		var token = service.GenerateToken();
+		clock.Advance(TimeSpan.FromSeconds(10));
+
+		await Assert.That(service.IsHumanSpeed(token, 10)).IsTrue();
+	}
+
+	[Test]
 	public async Task TestIsHumanSpeedWithGarbageTokenReturnsFalse()
 	{
-		var service = CreateService();
+		var service = CreateService(new FakeTimeProvider(Start));
 
 		await Assert.That(service.IsHumanSpeed("garbage", 0)).IsFalse();
 	}
@@ -43,7 +66,7 @@ public sealed class SpeedTrapServiceTest
 	[Test]
 	public async Task TestIsHumanSpeedWithTamperedTokenReturnsFalse()
 	{
-		var service = CreateService();
+		var service = CreateService(new FakeTimeProvider(Start));
 		var token = service.GenerateToken();
 
 		await Assert.That(service.IsHumanSpeed(token[..^1], 0)).IsFalse();
@@ -52,7 +75,7 @@ public sealed class SpeedTrapServiceTest
 	[Test]
 	public async Task TestIsHumanSpeedWithNonNumericDecryptedTokenReturnsFalse()
 	{
-		var service = new SpeedTrap(new FakeDataProtectionProvider(new GarbageProtector()));
+		var service = new SpeedTrap(new FakeDataProtectionProvider(new GarbageProtector()), new FakeTimeProvider(Start));
 
 		await Assert.That(service.IsHumanSpeed("YW55dGhpbmc", 0)).IsFalse();
 	}

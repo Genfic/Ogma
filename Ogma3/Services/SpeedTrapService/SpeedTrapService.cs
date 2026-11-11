@@ -1,17 +1,16 @@
 using System.Security.Cryptography;
-using Immediate.Injections.Shared;
 using Microsoft.AspNetCore.DataProtection;
 
 namespace Ogma3.Services.SpeedTrapService;
 
 [RegisterSingleton<ISpeedTrapService>]
-public sealed class SpeedTrapService(IDataProtectionProvider dataProtection) : ISpeedTrapService
+public sealed class SpeedTrapService(IDataProtectionProvider dataProtection, TimeProvider timeProvider) : ISpeedTrapService
 {
 	private readonly IDataProtector _protector = dataProtection.CreateProtector("Register.SpeedTrap.v1");
 
 	public string GenerateToken()
 	{
-		var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString();
+		var timestamp = timeProvider.GetUtcNow().ToUnixTimeSeconds().ToString();
 		return _protector.Protect(timestamp);
 	}
 
@@ -25,7 +24,7 @@ public sealed class SpeedTrapService(IDataProtectionProvider dataProtection) : I
 				return false;
 			}
 
-			var now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+			var now = timeProvider.GetUtcNow().ToUnixTimeSeconds();
 			return now - startTime >= minimumSeconds;
 		}
 		catch (CryptographicException)

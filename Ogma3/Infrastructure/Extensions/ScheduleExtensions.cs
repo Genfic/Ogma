@@ -26,8 +26,9 @@ public static class ScheduleExtensions
 		/// converted, and the resulting instant is checked against the configured publication window.
 		/// </summary>
 		/// <param name="wallClock">Schedule as entered by the user, or `null` if none was</param>
+		/// <param name="timeProvider">Source of the current instant; defaults to the system clock</param>
 		/// <returns>The accepted instant, or the reason the entered value was rejected</returns>
-		public ScheduleResolution ResolveSchedule(DateTimeOffset? wallClock)
+		public ScheduleResolution ResolveSchedule(DateTimeOffset? wallClock, TimeProvider? timeProvider = null)
 		{
 			if (wallClock is not {} entered)
 			{
@@ -45,7 +46,7 @@ public static class ScheduleExtensions
 
 			var utc = new DateTimeOffset(TimeZoneInfo.ConvertTimeToUtc(local, tz));
 
-			var now = DateTimeOffset.UtcNow;
+			var now = (timeProvider ?? TimeProvider.System).GetUtcNow();
 			var earliest = now + CTConfig.Publication.MinDelay;
 			var latest = now + CTConfig.Publication.MaxDelay;
 

@@ -1,5 +1,4 @@
 using System.Security.Claims;
-using Ogma3.Data;
 using Ogma3.Infrastructure.Extensions;
 
 namespace Ogma3.Tests.Infrastructure.Extensions;
@@ -11,6 +10,9 @@ public sealed class ScheduleExtensionsTest
 	private static ClaimsPrincipal UserIn(string timezone)
 		=> new(new ClaimsIdentity([new Claim(ClaimTypes.Timezone, timezone)]));
 
+	private static FakeTimeProvider ClockAt(int year, int month, int day, int hour = 12)
+		=> new(new DateTimeOffset(year, month, day, hour, 0, 0, TimeSpan.Zero));
+
 	/// <summary>
 	/// The wall clock a `datetime-local` input would submit for <paramref name="instant"/>, carrying the
 	/// offset the model binder happens to assume rather than the user's own.
@@ -21,7 +23,7 @@ public sealed class ScheduleExtensionsTest
 	[Test]
 	public async Task TestResolveScheduleReturnsNothingWhenNoneWasEntered()
 	{
-		var result = UserIn(Warsaw).ResolveSchedule(null);
+		var result = UserIn(Warsaw).ResolveSchedule(null, ClockAt(2027, 6, 1));
 
 		await Assert.That(result.Utc).IsNull();
 		await Assert.That(result.Error).IsNull();
@@ -33,10 +35,10 @@ public sealed class ScheduleExtensionsTest
 		var user = UserIn(Warsaw);
 
 		// Mid-June, so the entered wall clock is clear of any clock change, and far enough ahead to sit
-		// inside the publication window whenever the suite happens to run
-		var wallClock = new DateTimeOffset(DateTimeOffset.UtcNow.Year + 1, 6, 15, 12, 0, 0, TimeSpan.Zero);
+		// inside the publication window relative to the pinned clock
+		var wallClock = new DateTimeOffset(2027, 6, 15, 12, 0, 0, TimeSpan.Zero);
 
-		var result = user.ResolveSchedule(wallClock);
+		var result = user.ResolveSchedule(wallClock, ClockAt(2027, 6, 1));
 
 		await Assert.That(result.Error).IsNull();
 
@@ -48,12 +50,13 @@ public sealed class ScheduleExtensionsTest
 	public async Task TestResolveScheduleIgnoresTheOffsetTheFormWasRenderedWith()
 	{
 		var user = UserIn(Warsaw);
-		var wallClock = new DateTimeOffset(DateTimeOffset.UtcNow.Year + 1, 6, 15, 12, 0, 0, TimeSpan.Zero);
+		var wallClock = new DateTimeOffset(2027, 6, 15, 12, 0, 0, TimeSpan.Zero);
+		var clock = ClockAt(2027, 6, 1);
 
 		// The same wall clock submitted with two different offsets has to resolve to the same instant
-		var asUtc = user.ResolveSchedule(wallClock);
+		var asUtc = user.ResolveSchedule(wallClock, clock);
 		var shifted = new DateTimeOffset(wallClock.DateTime, TimeSpan.FromHours(-7));
-		var asOffset = user.ResolveSchedule(shifted);
+		var asOffset = user.ResolveSchedule(shifted, clock);
 
 		await Assert.That(asOffset.Utc).IsEqualTo(asUtc.Utc);
 	}
@@ -61,10 +64,12 @@ public sealed class ScheduleExtensionsTest
 	[Test]
 	public async Task TestResolveScheduleRejectsATimeSkippedByDaylightSaving()
 	{
-		// Warsaw jumps from 02:00 straight to 03:00 on 2026-03-29
+		// Warsaw jumps from 02:00 straight to 03:00 on 2026-03-29; the clock is pinned before it so
+		// the rejection is the skipped time itself, not the publication window
+		var clock = ClockAt(2026, 3, 1);
 		var entered = new DateTimeOffset(2026, 3, 29, 2, 30, 0, TimeSpan.Zero);
 
-		var result = UserIn(Warsaw).ResolveSchedule(entered);
+		var result = UserIn(Warsaw).ResolveSchedule(entered, clock);
 
 		await Assert.That(result.Utc).IsNull();
 		await Assert.That(result.Error).Contains("does not exist");
@@ -73,10 +78,11 @@ public sealed class ScheduleExtensionsTest
 	[Test]
 	public async Task TestResolveScheduleRejectsATimeBeforeTheMinimumDelay()
 	{
+		var clock = ClockAt(2027, 6, 1);
 		var tz = TimeZoneInfo.FindSystemTimeZoneById(Warsaw);
-		var entered = WallClockIn(tz, DateTimeOffset.UtcNow);
+		var entered = WallClockIn(tz, clock.GetUtcNow());
 
-		var result = UserIn(Warsaw).ResolveSchedule(entered);
+		var result = UserIn(Warsaw).ResolveSchedule(entered, clock);
 
 		await Assert.That(result.Utc).IsNull();
 		await Assert.That(result.Error).Contains("at least");
@@ -84,13 +90,38 @@ public sealed class ScheduleExtensionsTest
 	}
 
 	[Test]
+	public async Task TestResolveScheduleAcceptsATimeAtExactlyTheMinimumDelay()
+	{
+		var clock = ClockAt(2027, 6, 1);
+		var tz = TimeZoneInfo.FindSystemTimeZoneById(Warsaw);
+		var entered = WallClockIn(tz, clock.GetUtcNow() + CTConfig.Publication.MinDelay);
+
+		var result = UserIn(Warsaw).ResolveSchedule(entered, clock);
+
+		await Assert.That(result.Error).IsNull();
+	}
+
+	[Test]
+	public async Task TestResolveScheduleAcceptsATimeAtExactlyTheMaximumDelay()
+	{
+		var clock = ClockAt(2027, 6, 1);
+		var tz = TimeZoneInfo.FindSystemTimeZoneById(Warsaw);
+		var entered = WallClockIn(tz, clock.GetUtcNow() + CTConfig.Publication.MaxDelay);
+
+		var result = UserIn(Warsaw).ResolveSchedule(entered, clock);
+
+		await Assert.That(result.Error).IsNull();
+	}
+
+	[Test]
 	public async Task TestResolveScheduleRejectsATimeBeyondTheMaximumDelay()
 	{
+		var clock = ClockAt(2027, 6, 1);
 		var tz = TimeZoneInfo.FindSystemTimeZoneById(Warsaw);
-		var beyond = DateTimeOffset.UtcNow + CTConfig.Publication.MaxDelay + TimeSpan.FromDays(1);
+		var beyond = clock.GetUtcNow() + CTConfig.Publication.MaxDelay + TimeSpan.FromDays(1);
 		var entered = WallClockIn(tz, beyond);
 
-		var result = UserIn(Warsaw).ResolveSchedule(entered);
+		var result = UserIn(Warsaw).ResolveSchedule(entered, clock);
 
 		await Assert.That(result.Utc).IsNull();
 		await Assert.That(result.Error).Contains("no later than");
@@ -100,10 +131,11 @@ public sealed class ScheduleExtensionsTest
 	[Test]
 	public async Task TestResolveScheduleFallsBackToUtcForAnUnknownTimezone()
 	{
-		var instant = DateTimeOffset.UtcNow.AddDays(30);
+		var clock = ClockAt(2027, 6, 1);
+		var instant = clock.GetUtcNow().AddDays(30);
 		var entered = new DateTimeOffset(instant.DateTime, TimeSpan.Zero);
 
-		var result = UserIn("Not/ARealZone").ResolveSchedule(entered);
+		var result = UserIn("Not/ARealZone").ResolveSchedule(entered, clock);
 
 		await Assert.That(result.Error).IsNull();
 		await Assert.That(result.Utc).IsEqualTo(instant);
