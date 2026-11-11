@@ -4,7 +4,7 @@ import {
 	GetApiPasskeysList as listPasskeys,
 	PostApiPasskeysRegister as setPasskey,
 } from "@g/paths-public";
-import { attempt, attemptAsync } from "@h/error-helpers";
+import { attempt, attemptAsync, responseErrorMessage } from "@h/error-helpers";
 import { log } from "@h/logger";
 import { iso8601 } from "@h/tinytime-templates";
 import { component } from "@h/web-components";
@@ -27,7 +27,7 @@ const SetupPasskey: Component<{ csrf: string }> = (props) => {
 	const [passkeys, { mutate }] = createResource(async () => {
 		const res = await listPasskeys();
 		if (!res.ok) {
-			throw new Error(res.data ?? res.statusText);
+			throw new Error(responseErrorMessage(res));
 		}
 		return res.data;
 	});
@@ -43,7 +43,7 @@ const SetupPasskey: Component<{ csrf: string }> = (props) => {
 
 		const res = await deletePasskey(encodeURIComponent(id), headers);
 		if (!res.ok) {
-			throw new Error(res.data ?? res.statusText);
+			throw new Error(responseErrorMessage(res));
 		}
 		mutate((old) => old?.filter((p) => p.id !== id));
 	};
@@ -53,7 +53,7 @@ const SetupPasskey: Component<{ csrf: string }> = (props) => {
 		const res = await getOptions();
 
 		if (!res.ok) {
-			throw new Error(res.data ?? res.statusText);
+			throw new Error(responseErrorMessage(res));
 		}
 
 		const optionsResult = attempt<PublicKeyCredentialCreationOptions, Error>(() =>

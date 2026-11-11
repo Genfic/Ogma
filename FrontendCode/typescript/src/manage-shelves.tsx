@@ -1,5 +1,6 @@
 import { Shelf } from "@g/ctconfig";
 import { DeleteApiShelves, GetApiShelves, PostApiShelves, PutApiShelves } from "@g/paths-public";
+import { responseErrorMessage } from "@h/error-helpers";
 import { component } from "@h/web-components";
 import type { ProblemDetails } from "@t/utils";
 import { omit } from "es-toolkit";
@@ -104,7 +105,7 @@ const ManageShelves = (props: Props) => {
 		if (confirm("Deleting a bookshelf is irreversible. Are you sure?")) {
 			const res = await DeleteApiShelves(id);
 			if (!res.ok) {
-				throw new Error(res.data);
+				throw new Error(responseErrorMessage(res));
 			}
 			await refetch();
 		}

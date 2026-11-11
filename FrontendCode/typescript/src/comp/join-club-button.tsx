@@ -1,4 +1,5 @@
 import { PostApiClubjoin as joinClub, DeleteApiClubjoin as leaveClub } from "@g/paths-public";
+import { responseErrorMessage } from "@h/error-helpers";
 import { log } from "@h/logger";
 import { component } from "@h/web-components";
 import { type ComponentType, noShadowDOM } from "solid-element";
@@ -23,7 +24,7 @@ const JoinClubButton: ComponentType<{ clubId: number; csrf: string; isMember: bo
 		if (res.ok) {
 			isMember = res.data;
 		} else {
-			log.warn(res.data ?? res.statusText);
+			log.warn(responseErrorMessage(res));
 		}
 	};
 

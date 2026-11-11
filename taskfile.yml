@@ -18,13 +18,11 @@ tasks:
 
   # Generate JS API clients based on Swagger
   paths:
-    env:
-      DENO_TLS_CA_STORE: system
     vars:
       DEST: ./FrontendCode/typescript/generated/
-      URL: https://localhost:5001/openapi/
+      URL: https://localhost:5001/openapi
     cmds:
-      - ogma-tool generate-paths {{.DEST}} --path.public="{{.URL}}public.json" --path.internal="{{.URL}}internal.json"
+      - ogma-tool generate-paths -k {{.DEST}} --path.public="{{.URL}}/public.json" --path.internal="{{.URL}}/internal.json"
 
   packageguard:
     cmds:

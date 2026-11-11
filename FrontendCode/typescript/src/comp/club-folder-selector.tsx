@@ -4,6 +4,7 @@ import {
 	GetApiClubsUser as getUserClubs,
 } from "@g/paths-public";
 import type { GetFolderResult, GetJoinedClubsResponse } from "@g/types-public";
+import { responseErrorMessage } from "@h/error-helpers";
 import { component } from "@h/web-components";
 import { type ComponentType, noShadowDOM } from "solid-element";
 import { createResource, For, Match, Switch } from "solid-js";
@@ -76,7 +77,7 @@ const ClubFolderSelector: ComponentType<{ storyId: number; csrf: string }> = (pr
 
 		if (!response.ok) {
 			status = {
-				message: response.data ?? response.statusText,
+				message: responseErrorMessage(response),
 				success: false,
 			};
 			return;

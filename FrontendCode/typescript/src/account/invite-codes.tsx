@@ -1,6 +1,7 @@
 import { GetApiInviteCodes, PostApiInviteCodes } from "@g/paths-public";
 import type { InviteCodeDto } from "@g/types-public";
 import { $id } from "@h/dom";
+import { responseErrorMessage } from "@h/error-helpers";
 import { createResource, For, Match, Switch } from "solid-js";
 import { render } from "solid-js/web";
 import { InviteCode } from "../comp/common/_invite-code";
@@ -28,7 +29,7 @@ const InviteCodes = () => {
 		if (res.ok) {
 			mutate((prev) => [res.data, ...prev]);
 		} else {
-			console.error(res.data ?? res.statusText);
+			console.error(responseErrorMessage(res));
 		}
 	};
 

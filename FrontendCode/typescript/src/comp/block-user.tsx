@@ -1,4 +1,5 @@
 import { PostApiUsersBlock as blockUser, DeleteApiUsersBlock as unblockUser } from "@g/paths-public";
+import { responseErrorMessage } from "@h/error-helpers";
 import { log } from "@h/logger";
 import { component } from "@h/web-components";
 import IcRoundBlock from "icon:ic:round-block";
@@ -25,7 +26,7 @@ const BlockUser: Component<{ userName: string; csrf: string; isBlocked: boolean 
 		if (res.ok) {
 			isBlocked = res.data;
 		} else {
-			log.warn(res.data ?? res.statusText);
+			log.warn(responseErrorMessage(res));
 		}
 	};
 

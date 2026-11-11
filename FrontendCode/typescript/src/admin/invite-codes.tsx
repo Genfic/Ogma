@@ -1,6 +1,7 @@
 import { DeleteApiInviteCodes, GetApiInviteCodesPaginated, PostApiInviteCodesNoLimit } from "@g/paths-public";
 import type { InviteCodeDto } from "@g/types-public";
 import { $id } from "@h/dom";
+import { responseErrorMessage } from "@h/error-helpers";
 import LucideTrash2 from "icon:lucide:trash-2";
 import { createResource, For, Match, Show, Switch } from "solid-js";
 import { render } from "solid-js/web";
@@ -47,7 +48,7 @@ const InviteCodes = () => {
 				return res.data;
 			}
 
-			throw new Error(res.data ?? res.statusText);
+			throw new Error(responseErrorMessage(res));
 		},
 	);
 
@@ -55,7 +56,7 @@ const InviteCodes = () => {
 		const res = await PostApiInviteCodesNoLimit(headers);
 
 		if (!res.ok) {
-			throw new Error(res.data ?? res.statusText);
+			throw new Error(responseErrorMessage(res));
 		}
 
 		newCode = res.data.id;

@@ -1,6 +1,7 @@
 import { Comment } from "@g/ctconfig";
 import { GetApiCommentsThread, GetApiPowIssue, PostApiComments, PostApiCommentsThreadLock } from "@g/paths-public";
 import type { CommentSource } from "@g/types-public";
+import { responseErrorMessage } from "@h/error-helpers";
 import { minePow, type PowResult } from "@h/pow";
 import { component } from "@h/web-components";
 import { createVisibilityObserver } from "@solid-primitives/intersection-observer";
@@ -62,7 +63,7 @@ const maxCommentLength = Comment.MaxBodyLength;
 const getPow = async () => {
 	const res = await GetApiPowIssue();
 	if (!res.ok) {
-		throw new Error(res.data ?? res.statusText);
+		throw new Error(responseErrorMessage(res));
 	}
 	return res.data;
 };
@@ -79,7 +80,7 @@ const Comments = (props: Props) => {
 		async () => {
 			const res = await GetApiCommentsThread(props.threadId);
 			if (!res.ok) {
-				throw new Error(res.data ?? res.statusText);
+				throw new Error(responseErrorMessage(res));
 			}
 			const isStaff = res.headers.get("X-IsStaff")?.toLowerCase() === "true";
 			return { ...res.data, isStaff };
@@ -174,7 +175,7 @@ const Comments = (props: Props) => {
 		}
 		const res = await PostApiCommentsThreadLock({ threadId: props.threadId });
 		if (!res.ok) {
-			console.error(res.data ?? res.statusText);
+			console.error(responseErrorMessage(res));
 			return false;
 		}
 		isLocked = res.ok && res.data;

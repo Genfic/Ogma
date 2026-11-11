@@ -1,5 +1,6 @@
 import { GetApiComments, GetApiCommentsLocate } from "@g/paths-public";
 import type { CommentDto } from "@g/types-public";
+import { responseErrorMessage } from "@h/error-helpers";
 import {
 	type Component,
 	createEffect,
@@ -34,7 +35,7 @@ export const CommentList: Component<Props> = (props) => {
 		async ([id, page]) => {
 			const res = await GetApiComments(id, page);
 			if (!res.ok) {
-				throw new Error(res.data ?? res.statusText);
+				throw new Error(responseErrorMessage(res));
 			}
 			setUsername(res.headers.get("X-Username"));
 			return res.data;
@@ -116,7 +117,7 @@ export const CommentList: Component<Props> = (props) => {
 		if (res.ok) {
 			setCurrentPage(res.data.page);
 		} else {
-			console.error(res.data ?? res.statusText);
+			console.error(responseErrorMessage(res));
 		}
 	});
 

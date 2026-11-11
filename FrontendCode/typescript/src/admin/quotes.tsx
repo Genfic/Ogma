@@ -1,6 +1,7 @@
 import { DeleteApiQuotes, GetAllQuotes, PostApiQuotes, PostApiQuotesJson, PutApiQuotes } from "@g/paths-public";
 import type { FullQuoteDto } from "@g/types-public";
 import { $id } from "@h/dom";
+import { responseErrorMessage } from "@h/error-helpers";
 import { getFormData } from "@h/form-helpers";
 import { makeEmpty } from "@h/type-helpers";
 import LucidePencil from "icon:lucide:pencil";
@@ -52,7 +53,7 @@ const Quotes = () => {
 		const res = await PostApiQuotesJson({ quotes: output });
 
 		if (!res.ok) {
-			throw new Error(res.data ?? res.statusText);
+			throw new Error(responseErrorMessage(res));
 		}
 
 		alert(`Created ${res.data} quotes`);
@@ -62,7 +63,7 @@ const Quotes = () => {
 		if (confirm("Delete permanently?")) {
 			const res = await DeleteApiQuotes(q.id);
 			if (!res.ok) {
-				throw new Error(res.data ?? res.statusText);
+				throw new Error(responseErrorMessage(res));
 			}
 			mutate((old) => old?.filter((i) => i.id !== res.data));
 		}
@@ -88,13 +89,13 @@ const Quotes = () => {
 		if (id) {
 			const res = await PutApiQuotes({ ...data, id }, headers);
 			if (!res.ok) {
-				throw new Error(res.data ?? res.statusText);
+				throw new Error(responseErrorMessage(res));
 			}
 			mutate((old) => old?.map((qd) => (qd.id === id ? { id, author, body } : qd)));
 		} else {
 			const res = await PostApiQuotes(data, headers);
 			if (!res.ok) {
-				throw new Error(res.data ?? res.statusText);
+				throw new Error(responseErrorMessage(res));
 			}
 			mutate((old) => (old ? [res.data, ...old] : [res.data]));
 		}

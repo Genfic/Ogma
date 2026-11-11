@@ -1,4 +1,5 @@
 import { GetAdminApiTelemetryGetTableInfo } from "@g/paths-internal";
+import { responseErrorMessage } from "@h/error-helpers";
 import { component } from "@h/web-components";
 import { convert } from "convert";
 import { orderBy } from "es-toolkit";
@@ -17,7 +18,7 @@ const TableInfo: Component = () => {
 		async () => {
 			const res = await GetAdminApiTelemetryGetTableInfo();
 			if (!res.ok) {
-				throw new Error(res.data ?? res.statusText);
+				throw new Error(responseErrorMessage(res));
 			}
 
 			const data = res.data;

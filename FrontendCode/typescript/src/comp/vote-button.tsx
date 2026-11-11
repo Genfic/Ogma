@@ -1,4 +1,5 @@
 import { DeleteApiVotes as deleteVote, GetApiVotes as getVotes, PostApiVotes as postVote } from "@g/paths-public";
+import { responseErrorMessage } from "@h/error-helpers";
 import { log } from "@h/logger";
 import { component } from "@h/web-components";
 import IcRoundStar from "icon:ic:round-star";
@@ -16,7 +17,7 @@ const VoteButton: ComponentType<{ storyId: number; csrf: string }> = (props) => 
 			if (result.ok) {
 				return result.data;
 			}
-			throw new Error(result.data ?? result.statusText);
+			throw new Error(responseErrorMessage(result));
 		},
 	);
 

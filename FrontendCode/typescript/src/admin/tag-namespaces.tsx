@@ -7,6 +7,7 @@ import {
 } from "@g/paths-public";
 import type { TagNamespaceDto } from "@g/types-public";
 import { $id } from "@h/dom";
+import { responseErrorMessage } from "@h/error-helpers";
 import { getFormData } from "@h/form-helpers";
 import { strippedHexColor } from "@h/valibot-schemas";
 import LucidePencil from "icon:lucide:pencil";
@@ -131,7 +132,7 @@ const TagNamespaces = () => {
 			: await PostApiTagnamespaces(data, headers);
 
 		if (!res.ok) {
-			setErrors((e) => [...e, res.data ?? res.statusText]);
+			setErrors((e) => [...e, responseErrorMessage(res)]);
 			return;
 		}
 

@@ -1,5 +1,6 @@
 import { DeleteApiRatings, GetApiRatings, PostApiRatings, PutApiRatings } from "@g/paths-public";
 import { $id } from "@h/dom";
+import { responseErrorMessage } from "@h/error-helpers";
 import { expose } from "@h/expose";
 import { getFormData } from "@h/form-helpers";
 import { checkboxBool, strippedHexColor } from "@h/valibot-schemas";
@@ -53,7 +54,7 @@ const Ratings = () => {
 		if (res.ok) {
 			await refetch();
 		} else {
-			throw new Error(res.data ?? res.statusText);
+			throw new Error(responseErrorMessage(res));
 		}
 	};
 
@@ -71,14 +72,14 @@ const Ratings = () => {
 			if (res.ok) {
 				await refetch();
 			} else {
-				throw new Error(res.data ?? res.statusText);
+				throw new Error(responseErrorMessage(res));
 			}
 		} else {
 			const res = await PostApiRatings(data, headers);
 			if (res.ok) {
 				await refetch();
 			} else {
-				throw new Error(res.data ?? res.statusText);
+				throw new Error(responseErrorMessage(res));
 			}
 		}
 

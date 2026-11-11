@@ -1,6 +1,7 @@
 import { DeleteApiFaqs, GetApiFaqs, PostApiFaqs, PutApiFaqs } from "@g/paths-public";
 import type { FaqDto } from "@g/types-public";
 import { $id } from "@h/dom";
+import { responseErrorMessage } from "@h/error-helpers";
 import { getFormData } from "@h/form-helpers";
 import LucidePencil from "icon:lucide:pencil";
 import LucideTrash2 from "icon:lucide:trash-2";
@@ -36,7 +37,7 @@ const FAQ = () => {
 		if (res.ok) {
 			await refetch();
 		} else {
-			throw new Error(res.data ?? res.statusText);
+			throw new Error(responseErrorMessage(res));
 		}
 	};
 
@@ -55,14 +56,14 @@ const FAQ = () => {
 			if (res.ok) {
 				await refetch();
 			} else {
-				throw new Error(res.data ?? res.statusText);
+				throw new Error(responseErrorMessage(res));
 			}
 		} else {
 			const res = await PostApiFaqs(data, headers);
 			if (res.ok) {
 				await refetch();
 			} else {
-				throw new Error(res.data ?? res.statusText);
+				throw new Error(responseErrorMessage(res));
 			}
 		}
 		setForm({ question: "", answer: "", id: undefined });

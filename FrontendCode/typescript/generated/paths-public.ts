@@ -33,6 +33,7 @@ import type {
 	GetTagNamespacesNamespaceDto,
 	GetThreadDetailsResult,
 	GetUserNotificationsResult,
+	HttpValidationProblemDetails,
 	InviteCodeDto,
 	IssueInviteCodeCommand,
 	IssueNewPowResponse,
@@ -68,6 +69,7 @@ import type {
 	UpdateShelfCommand,
 	UpdateTagCommand,
 	UpdateTagNamespaceCommand,
+	UploadFileQuery,
 	VoteResult,
 } from './types-public';
 const _enc = (p: string | number | boolean | Date | null | undefined): string => {
@@ -77,7 +79,7 @@ const _enc = (p: string | number | boolean | Date | null | undefined): string =>
 };
 
 
-export const DeleteApiChaptersread = async (body: MarkChapterAsUnreadCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: number[]; 204: undefined; 400: undefined; 401: undefined }, MarkChapterAsUnreadCommand>("/api/chaptersread",
+export const DeleteApiChaptersread = async (body: MarkChapterAsUnreadCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: number[]; 204: undefined; 400: HttpValidationProblemDetails; 401: undefined }, MarkChapterAsUnreadCommand>("/api/chaptersread",
     DELETE,
     body,
     headers,
@@ -91,28 +93,28 @@ export const DeleteApiClubjoin = async (body: LeaveClubCommand, headers?: Header
     options,
 );
 
-export const DeleteApiComments = async (commentId: string, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: string; 400: undefined; 401: undefined; 404: undefined }, undefined>(`/api/comments/${commentId}`,
+export const DeleteApiComments = async (commentId: string, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: string; 400: HttpValidationProblemDetails; 401: undefined; 404: undefined }, undefined>(`/api/comments/${commentId}`,
     DELETE,
     undefined,
     headers,
     options,
 );
 
-export const DeleteApiFaqs = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: number; 400: undefined; 401: undefined; 404: undefined }, undefined>(`/api/faqs?id=${_enc(id)}`,
+export const DeleteApiFaqs = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: number; 400: HttpValidationProblemDetails; 401: undefined; 404: undefined }, undefined>(`/api/faqs?id=${_enc(id)}`,
     DELETE,
     undefined,
     headers,
     options,
 );
 
-export const DeleteApiInviteCodes = async (codeId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: number; 400: undefined; 401: undefined; 404: undefined }, undefined>(`/api/InviteCodes/${codeId}`,
+export const DeleteApiInviteCodes = async (codeId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: number; 400: HttpValidationProblemDetails; 401: undefined; 404: undefined }, undefined>(`/api/InviteCodes/${codeId}`,
     DELETE,
     undefined,
     headers,
     options,
 );
 
-export const DeleteApiNotifications = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: undefined; 400: undefined; 401: undefined; 404: undefined }, undefined>(`/api/notifications/${id}`,
+export const DeleteApiNotifications = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: undefined; 400: HttpValidationProblemDetails; 401: undefined; 404: undefined }, undefined>(`/api/notifications/${id}`,
     DELETE,
     undefined,
     headers,
@@ -133,77 +135,77 @@ export const DeleteApiPasskeysDelete = async (id: string, headers?: HeadersInit,
     options,
 );
 
-export const DeleteApiQuotes = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: number; 400: undefined; 401: undefined; 404: undefined }, undefined>(`/api/quotes/${id}`,
+export const DeleteApiQuotes = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: number; 400: HttpValidationProblemDetails; 401: undefined; 404: undefined }, undefined>(`/api/quotes/${id}`,
     DELETE,
     undefined,
     headers,
     options,
 );
 
-export const DeleteApiRatings = async (ratingId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: number; 400: undefined; 401: undefined; 404: undefined }, undefined>(`/api/ratings/${ratingId}`,
+export const DeleteApiRatings = async (ratingId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: number; 400: HttpValidationProblemDetails; 401: undefined; 404: undefined }, undefined>(`/api/ratings/${ratingId}`,
     DELETE,
     undefined,
     headers,
     options,
 );
 
-export const DeleteApiRoles = async (roleId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: number; 400: undefined; 401: undefined; 404: undefined }, undefined>(`/api/roles?roleId=${_enc(roleId)}`,
+export const DeleteApiRoles = async (roleId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: number; 400: HttpValidationProblemDetails; 401: undefined; 404: undefined }, undefined>(`/api/roles?roleId=${_enc(roleId)}`,
     DELETE,
     undefined,
     headers,
     options,
 );
 
-export const DeleteApiShelfStories = async (body: RemoveBookFromShelfCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: RemoveBookFromShelfResult; 400: undefined; 401: undefined; 404: undefined }, RemoveBookFromShelfCommand>("/api/ShelfStories",
+export const DeleteApiShelfStories = async (body: RemoveBookFromShelfCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: RemoveBookFromShelfResult; 400: HttpValidationProblemDetails; 401: undefined; 404: undefined }, RemoveBookFromShelfCommand>("/api/ShelfStories",
     DELETE,
     body,
     headers,
     options,
 );
 
-export const DeleteApiShelves = async (shelfId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: number; 400: undefined; 401: undefined; 404: undefined }, undefined>(`/api/shelves/${shelfId}`,
+export const DeleteApiShelves = async (shelfId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: number; 400: HttpValidationProblemDetails; 401: undefined; 404: undefined }, undefined>(`/api/shelves/${shelfId}`,
     DELETE,
     undefined,
     headers,
     options,
 );
 
-export const DeleteApiSubscriptionsThread = async (threadId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: boolean; 400: undefined; 401: undefined }, undefined>(`/api/subscriptions/thread?threadId=${_enc(threadId)}`,
+export const DeleteApiSubscriptionsThread = async (threadId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: boolean; 400: HttpValidationProblemDetails; 401: undefined }, undefined>(`/api/subscriptions/thread?threadId=${_enc(threadId)}`,
     DELETE,
     undefined,
     headers,
     options,
 );
 
-export const DeleteApiTagnamespaces = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: number; 400: undefined; 401: undefined; 404: undefined }, undefined>(`/api/tagnamespaces?id=${_enc(id)}`,
+export const DeleteApiTagnamespaces = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: number; 400: HttpValidationProblemDetails; 401: undefined; 404: undefined }, undefined>(`/api/tagnamespaces?id=${_enc(id)}`,
     DELETE,
     undefined,
     headers,
     options,
 );
 
-export const DeleteApiTags = async (tagId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: number; 400: undefined; 401: undefined; 404: undefined }, undefined>(`/api/tags?tagId=${_enc(tagId)}`,
+export const DeleteApiTags = async (tagId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: number; 400: HttpValidationProblemDetails; 401: undefined; 404: undefined }, undefined>(`/api/tags?tagId=${_enc(tagId)}`,
     DELETE,
     undefined,
     headers,
     options,
 );
 
-export const DeleteApiUsersBlock = async (body: UnblockUserCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: boolean; 400: undefined; 401: undefined; 404: undefined }, UnblockUserCommand>("/api/users/block",
+export const DeleteApiUsersBlock = async (body: UnblockUserCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: boolean; 400: HttpValidationProblemDetails; 401: undefined; 404: undefined }, UnblockUserCommand>("/api/users/block",
     DELETE,
     body,
     headers,
     options,
 );
 
-export const DeleteApiUsersFollow = async (body: UnfollowUserCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: boolean; 400: undefined; 401: undefined; 404: undefined }, UnfollowUserCommand>("/api/users/follow",
+export const DeleteApiUsersFollow = async (body: UnfollowUserCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: boolean; 400: HttpValidationProblemDetails; 401: undefined; 404: undefined }, UnfollowUserCommand>("/api/users/follow",
     DELETE,
     body,
     headers,
     options,
 );
 
-export const DeleteApiVotes = async (body: DeleteVoteCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: VoteResult; 400: undefined; 401: undefined; 404: undefined }, DeleteVoteCommand>("/api/votes",
+export const DeleteApiVotes = async (body: DeleteVoteCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: VoteResult; 400: HttpValidationProblemDetails; 401: undefined; 404: undefined }, DeleteVoteCommand>("/api/votes",
     DELETE,
     body,
     headers,
@@ -217,21 +219,21 @@ export const GetAllQuotes = async (headers?: HeadersInit, options?: RequestInit)
     options,
 );
 
-export const GetApiChaptersRead = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: number[]; 400: undefined; 401: undefined }, undefined>(`/api/ChaptersRead/${id}`,
+export const GetApiChaptersRead = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: number[]; 400: HttpValidationProblemDetails; 401: undefined }, undefined>(`/api/ChaptersRead/${id}`,
     GET,
     undefined,
     headers,
     options,
 );
 
-export const GetApiClubJoin = async (clubId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: boolean; 400: undefined; 401: undefined }, undefined>(`/api/ClubJoin/${clubId}`,
+export const GetApiClubJoin = async (clubId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: boolean; 400: HttpValidationProblemDetails; 401: undefined }, undefined>(`/api/ClubJoin/${clubId}`,
     GET,
     undefined,
     headers,
     options,
 );
 
-export const GetApiClubsStory = async (storyId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: GetClubsWithStoryResult[]; 400: undefined }, undefined>(`/api/clubs/story/${storyId}`,
+export const GetApiClubsStory = async (storyId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: GetClubsWithStoryResult[]; 400: HttpValidationProblemDetails }, undefined>(`/api/clubs/story/${storyId}`,
     GET,
     undefined,
     headers,
@@ -256,7 +258,7 @@ export const GetApiComments = async (thread: number, page: number | null, header
     pages: number;
     /** The requested page */
     page: number;
-}; 304: undefined; 400: undefined; 404: undefined }, undefined>(`/api/comments?thread=${_enc(thread)}&page=${_enc(page ?? "")}`,
+}; 304: undefined; 400: HttpValidationProblemDetails; 404: undefined }, undefined>(`/api/comments?thread=${_enc(thread)}&page=${_enc(page ?? "")}`,
     GET,
     undefined,
     headers,
@@ -270,14 +272,14 @@ export const GetApiCommentsLocate = async (threadId: number, commentId: string, 
     options,
 );
 
-export const GetApiCommentsRevisions = async (commentId: string, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: GetRevisionResult[]; 400: undefined; 404: undefined }, undefined>(`/api/comments/${commentId}/revisions`,
+export const GetApiCommentsRevisions = async (commentId: string, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: GetRevisionResult[]; 400: HttpValidationProblemDetails; 404: undefined }, undefined>(`/api/comments/${commentId}/revisions`,
     GET,
     undefined,
     headers,
     options,
 );
 
-export const GetApiCommentsThread = async (threadId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: GetThreadDetailsResult; 400: undefined; 401: undefined; 404: undefined }, undefined>(`/api/CommentsThread/${threadId}`,
+export const GetApiCommentsThread = async (threadId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: GetThreadDetailsResult; 400: HttpValidationProblemDetails; 401: undefined; 404: undefined }, undefined>(`/api/CommentsThread/${threadId}`,
     GET,
     undefined,
     headers,
@@ -298,7 +300,7 @@ export const GetApiFaqs = async (headers?: HeadersInit, options?: RequestInit) =
     options,
 );
 
-export const GetApiFolders = async (clubId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: GetFolderResult[]; 400: undefined; 401: undefined }, undefined>(`/api/folders?clubId=${_enc(clubId)}`,
+export const GetApiFolders = async (clubId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: GetFolderResult[]; 400: HttpValidationProblemDetails; 401: undefined }, undefined>(`/api/folders?clubId=${_enc(clubId)}`,
     GET,
     undefined,
     headers,
@@ -319,7 +321,7 @@ export const GetApiInviteCodes = async (headers?: HeadersInit, options?: Request
     options,
 );
 
-export const GetApiInviteCodesPaginated = async (page: number, perPage: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: InviteCodeDto[]; 400: undefined; 401: undefined }, undefined>(`/api/InviteCodes/paginated?page=${_enc(page)}&perPage=${_enc(perPage)}`,
+export const GetApiInviteCodesPaginated = async (page: number, perPage: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: InviteCodeDto[]; 400: HttpValidationProblemDetails; 401: undefined }, undefined>(`/api/InviteCodes/paginated?page=${_enc(page)}&perPage=${_enc(perPage)}`,
     GET,
     undefined,
     headers,
@@ -389,35 +391,35 @@ export const GetApiRoles = async (headers?: HeadersInit, options?: RequestInit) 
     options,
 );
 
-export const GetApiShelfStories = async (storyId: number, page: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: GetPaginatedCurrentUserShelvesResult[]; 400: undefined; 401: undefined }, undefined>(`/api/ShelfStories/${storyId}?page=${_enc(page)}`,
+export const GetApiShelfStories = async (storyId: number, page: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: GetPaginatedCurrentUserShelvesResult[]; 400: HttpValidationProblemDetails; 401: undefined }, undefined>(`/api/ShelfStories/${storyId}?page=${_enc(page)}`,
     GET,
     undefined,
     headers,
     options,
 );
 
-export const GetApiShelfStoriesQuick = async (storyId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: GetCurrentUserQuickShelvesResult[]; 400: undefined; 401: undefined }, undefined>(`/api/ShelfStories/${storyId}/quick`,
+export const GetApiShelfStoriesQuick = async (storyId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: GetCurrentUserQuickShelvesResult[]; 400: HttpValidationProblemDetails; 401: undefined }, undefined>(`/api/ShelfStories/${storyId}/quick`,
     GET,
     undefined,
     headers,
     options,
 );
 
-export const GetApiShelves = async (userName: string, page: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: ShelfDto[]; 400: undefined; 401: undefined }, undefined>(`/api/shelves/${userName}?page=${_enc(page)}`,
+export const GetApiShelves = async (userName: string, page: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: ShelfDto[]; 400: HttpValidationProblemDetails; 401: undefined }, undefined>(`/api/shelves/${userName}?page=${_enc(page)}`,
     GET,
     undefined,
     headers,
     options,
 );
 
-export const GetApiSignin = async (name: string, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: GetSignInDataResult; 400: undefined }, undefined>(`/api/signin?name=${_enc(name)}`,
+export const GetApiSignin = async (name: string, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: GetSignInDataResult; 400: HttpValidationProblemDetails }, undefined>(`/api/signin?name=${_enc(name)}`,
     GET,
     undefined,
     headers,
     options,
 );
 
-export const GetApiSubscriptionsThread = async (threadId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: boolean; 400: undefined; 401: undefined }, undefined>(`/api/subscriptions/thread?threadId=${_enc(threadId)}`,
+export const GetApiSubscriptionsThread = async (threadId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: boolean; 400: HttpValidationProblemDetails; 401: undefined }, undefined>(`/api/subscriptions/thread?threadId=${_enc(threadId)}`,
     GET,
     undefined,
     headers,
@@ -431,7 +433,7 @@ export const GetApiTagnamespaces = async (headers?: HeadersInit, options?: Reque
     options,
 );
 
-export const GetApiTags = async (page: number, perPage: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: TagDto[]; 400: undefined }, undefined>(`/api/tags?page=${_enc(page)}&perPage=${_enc(perPage)}`,
+export const GetApiTags = async (page: number, perPage: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: TagDto[]; 400: HttpValidationProblemDetails }, undefined>(`/api/tags?page=${_enc(page)}&perPage=${_enc(perPage)}`,
     GET,
     undefined,
     headers,
@@ -445,14 +447,14 @@ export const GetApiTagsAll = async (headers?: HeadersInit, options?: RequestInit
     options,
 );
 
-export const GetApiTagsSearch = async (searchString: string, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: TagDto[]; 400: undefined }, undefined>(`/api/tags/search?searchString=${_enc(searchString)}`,
+export const GetApiTagsSearch = async (searchString: string, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: TagDto[]; 400: HttpValidationProblemDetails }, undefined>(`/api/tags/search?searchString=${_enc(searchString)}`,
     GET,
     undefined,
     headers,
     options,
 );
 
-export const GetApiTagsStory = async (storyId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: TagDto[]; 400: undefined; 404: undefined }, undefined>(`/api/tags/story/${storyId}`,
+export const GetApiTagsStory = async (storyId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: TagDto[]; 400: HttpValidationProblemDetails; 404: undefined }, undefined>(`/api/tags/story/${storyId}`,
     GET,
     undefined,
     headers,
@@ -466,7 +468,7 @@ export const GetApiTestThree = async (headers?: HeadersInit, options?: RequestIn
     options,
 );
 
-export const GetApiUsersNames = async (name: string, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: string[]; 400: undefined; 401: undefined; 422: string }, undefined>(`/api/users/names?name=${_enc(name)}`,
+export const GetApiUsersNames = async (name: string, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: string[]; 400: HttpValidationProblemDetails; 401: undefined; 422: string }, undefined>(`/api/users/names?name=${_enc(name)}`,
     GET,
     undefined,
     headers,
@@ -480,63 +482,63 @@ export const GetApiUsersStopImpersonation = async (headers?: HeadersInit, option
     options,
 );
 
-export const GetApiVotes = async (storyId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: VoteResult; 400: undefined; 401: undefined }, undefined>(`/api/votes/${storyId}`,
+export const GetApiVotes = async (storyId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: VoteResult; 400: HttpValidationProblemDetails; 401: undefined }, undefined>(`/api/votes/${storyId}`,
     GET,
     undefined,
     headers,
     options,
 );
 
-export const GetComment = async (commentId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: CommentDto; 400: undefined; 401: undefined; 404: undefined }, undefined>(`/api/comments/${commentId}`,
+export const GetComment = async (commentId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: CommentDto; 400: HttpValidationProblemDetails; 401: undefined; 404: undefined }, undefined>(`/api/comments/${commentId}`,
     GET,
     undefined,
     headers,
     options,
 );
 
-export const GetRatingById = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: RatingApiDto; 400: undefined; 404: undefined }, undefined>(`/api/ratings/${id}`,
+export const GetRatingById = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: RatingApiDto; 400: HttpValidationProblemDetails; 404: undefined }, undefined>(`/api/ratings/${id}`,
     GET,
     undefined,
     headers,
     options,
 );
 
-export const GetRoleById = async (roleId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: RoleDto; 400: undefined; 404: undefined }, undefined>(`/api/roles/${roleId}`,
+export const GetRoleById = async (roleId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: RoleDto; 400: HttpValidationProblemDetails; 404: undefined }, undefined>(`/api/roles/${roleId}`,
     GET,
     undefined,
     headers,
     options,
 );
 
-export const GetShelf = async (shelfId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: ShelfDto; 400: undefined; 401: undefined; 404: undefined }, undefined>(`/api/shelves/${shelfId}`,
+export const GetShelf = async (shelfId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: ShelfDto; 400: HttpValidationProblemDetails; 401: undefined; 404: undefined }, undefined>(`/api/shelves/${shelfId}`,
     GET,
     undefined,
     headers,
     options,
 );
 
-export const GetSingleFaq = async (faqId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: FaqDto; 400: undefined; 404: undefined }, undefined>(`/api/faqs/${faqId}`,
+export const GetSingleFaq = async (faqId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: FaqDto; 400: HttpValidationProblemDetails; 404: undefined }, undefined>(`/api/faqs/${faqId}`,
     GET,
     undefined,
     headers,
     options,
 );
 
-export const GetSingleQuote = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: QuoteDto; 400: undefined; 404: undefined }, undefined>(`/api/quotes/${id}`,
+export const GetSingleQuote = async (id: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: QuoteDto; 400: HttpValidationProblemDetails; 404: undefined }, undefined>(`/api/quotes/${id}`,
     GET,
     undefined,
     headers,
     options,
 );
 
-export const GetSingleTag = async (tagId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: TagDto; 400: undefined; 404: undefined }, undefined>(`/api/tags/${tagId}`,
+export const GetSingleTag = async (tagId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: TagDto; 400: HttpValidationProblemDetails; 404: undefined }, undefined>(`/api/tags/${tagId}`,
     GET,
     undefined,
     headers,
     options,
 );
 
-export const GetSingleTagNamespace = async (namespaceId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: TagNamespaceDto; 400: undefined; 401: undefined; 404: undefined }, undefined>(`/api/tagnamespaces/${namespaceId}`,
+export const GetSingleTagNamespace = async (namespaceId: number, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: TagNamespaceDto; 400: HttpValidationProblemDetails; 401: undefined; 404: undefined }, undefined>(`/api/tagnamespaces/${namespaceId}`,
     GET,
     undefined,
     headers,
@@ -550,21 +552,21 @@ export const GetTagNamespaces = async (headers?: HeadersInit, options?: RequestI
     options,
 );
 
-export const PatchApiComments = async (body: UpdateCommentCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: UpdateCommentResponse; 400: undefined; 401: undefined; 404: undefined }, UpdateCommentCommand>("/api/comments",
+export const PatchApiComments = async (body: UpdateCommentCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: UpdateCommentResponse; 400: HttpValidationProblemDetails; 401: undefined; 404: undefined }, UpdateCommentCommand>("/api/comments",
     PATCH,
     body,
     headers,
     options,
 );
 
-export const PostApiChaptersread = async (body: MarkChapterAsReadCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: number[]; 400: undefined; 401: undefined }, MarkChapterAsReadCommand>("/api/chaptersread",
+export const PostApiChaptersread = async (body: MarkChapterAsReadCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: number[]; 400: HttpValidationProblemDetails; 401: undefined }, MarkChapterAsReadCommand>("/api/chaptersread",
     POST,
     body,
     headers,
     options,
 );
 
-export const PostApiClubjoin = async (body: JoinClubCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: boolean; 400: undefined; 401: undefined; 404: undefined }, JoinClubCommand>("/api/clubjoin",
+export const PostApiClubjoin = async (body: JoinClubCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: boolean; 400: HttpValidationProblemDetails; 401: undefined; 404: undefined }, JoinClubCommand>("/api/clubjoin",
     POST,
     body,
     headers,
@@ -578,28 +580,28 @@ export const PostApiComments = async (body: CreateCommentCommand, headers?: Head
     options,
 );
 
-export const PostApiCommentsThreadLock = async (body: LockThreadCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: boolean; 400: undefined; 401: undefined; 404: undefined }, LockThreadCommand>("/api/CommentsThread/lock",
+export const PostApiCommentsThreadLock = async (body: LockThreadCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: boolean; 400: HttpValidationProblemDetails; 401: undefined; 404: undefined }, LockThreadCommand>("/api/CommentsThread/lock",
     POST,
     body,
     headers,
     options,
 );
 
-export const PostApiFaqs = async (body: CreateFaqCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 201: FaqDto; 400: undefined; 401: undefined }, CreateFaqCommand>("/api/faqs",
+export const PostApiFaqs = async (body: CreateFaqCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 201: FaqDto; 400: HttpValidationProblemDetails; 401: undefined }, CreateFaqCommand>("/api/faqs",
     POST,
     body,
     headers,
     options,
 );
 
-export const PostApiFilesUpload = async (headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: string; 401: undefined }, undefined>("/api/files/upload",
+export const PostApiFilesUpload = async (body: UploadFileQuery, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: string; 401: undefined }, UploadFileQuery>("/api/files/upload",
     POST,
-    undefined,
+    body,
     headers,
     options,
 );
 
-export const PostApiFoldersAddStory = async (body: AddStoryToFolderCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: AddStoryToFolderResponse; 400: undefined; 401: undefined; 404: string; 409: string }, AddStoryToFolderCommand>("/api/folders/AddStory",
+export const PostApiFoldersAddStory = async (body: AddStoryToFolderCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: AddStoryToFolderResponse; 400: HttpValidationProblemDetails; 401: undefined; 404: string; 409: string }, AddStoryToFolderCommand>("/api/folders/AddStory",
     POST,
     body,
     headers,
@@ -634,70 +636,70 @@ export const PostApiPasskeysSignin = async (body: SignInWithPasskeyQuery, header
     options,
 );
 
-export const PostApiQuotes = async (body: CreateQuoteCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 201: FullQuoteDto; 400: undefined; 401: undefined }, CreateQuoteCommand>("/api/quotes",
+export const PostApiQuotes = async (body: CreateQuoteCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 201: FullQuoteDto; 400: HttpValidationProblemDetails; 401: undefined }, CreateQuoteCommand>("/api/quotes",
     POST,
     body,
     headers,
     options,
 );
 
-export const PostApiQuotesJson = async (body: CreateQuotesFromJsonQuery, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: number; 400: undefined; 401: undefined }, CreateQuotesFromJsonQuery>("/api/quotes/json",
+export const PostApiQuotesJson = async (body: CreateQuotesFromJsonQuery, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: number; 400: HttpValidationProblemDetails; 401: undefined }, CreateQuotesFromJsonQuery>("/api/quotes/json",
     POST,
     body,
     headers,
     options,
 );
 
-export const PostApiRatings = async (body: CreateRatingCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 201: RatingApiDto; 400: undefined; 401: undefined }, CreateRatingCommand>("/api/ratings",
+export const PostApiRatings = async (body: CreateRatingCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 201: RatingApiDto; 400: HttpValidationProblemDetails; 401: undefined }, CreateRatingCommand>("/api/ratings",
     POST,
     body,
     headers,
     options,
 );
 
-export const PostApiReports = async (body: ReportContentCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: number; 400: undefined; 401: undefined; 429: undefined }, ReportContentCommand>("/api/reports",
+export const PostApiReports = async (body: ReportContentCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: number; 400: HttpValidationProblemDetails; 401: undefined; 429: undefined }, ReportContentCommand>("/api/reports",
     POST,
     body,
     headers,
     options,
 );
 
-export const PostApiRoles = async (body: CreateRoleCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 201: RoleDto; 400: undefined; 401: undefined; 409: string }, CreateRoleCommand>("/api/roles",
+export const PostApiRoles = async (body: CreateRoleCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 201: RoleDto; 400: HttpValidationProblemDetails; 401: undefined; 409: string }, CreateRoleCommand>("/api/roles",
     POST,
     body,
     headers,
     options,
 );
 
-export const PostApiShelfStories = async (body: AddBookToShelfCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: AddBookToShelfResult; 400: undefined; 401: undefined; 404: undefined }, AddBookToShelfCommand>("/api/ShelfStories",
+export const PostApiShelfStories = async (body: AddBookToShelfCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: AddBookToShelfResult; 400: HttpValidationProblemDetails; 401: undefined; 404: undefined }, AddBookToShelfCommand>("/api/ShelfStories",
     POST,
     body,
     headers,
     options,
 );
 
-export const PostApiShelves = async (body: CreateShelfCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 201: ShelfDto; 400: undefined; 401: undefined }, CreateShelfCommand>("/api/shelves",
+export const PostApiShelves = async (body: CreateShelfCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 201: ShelfDto; 400: HttpValidationProblemDetails; 401: undefined }, CreateShelfCommand>("/api/shelves",
     POST,
     body,
     headers,
     options,
 );
 
-export const PostApiSubscriptionsThread = async (body: SubscribeCommentsThreadCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: boolean; 400: undefined; 401: undefined }, SubscribeCommentsThreadCommand>("/api/subscriptions/thread",
+export const PostApiSubscriptionsThread = async (body: SubscribeCommentsThreadCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: boolean; 400: HttpValidationProblemDetails; 401: undefined }, SubscribeCommentsThreadCommand>("/api/subscriptions/thread",
     POST,
     body,
     headers,
     options,
 );
 
-export const PostApiTagnamespaces = async (body: CreateTagNamespaceCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 201: TagNamespaceDto; 400: undefined; 401: undefined; 409: string }, CreateTagNamespaceCommand>("/api/tagnamespaces",
+export const PostApiTagnamespaces = async (body: CreateTagNamespaceCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 201: TagNamespaceDto; 400: HttpValidationProblemDetails; 401: undefined; 409: string }, CreateTagNamespaceCommand>("/api/tagnamespaces",
     POST,
     body,
     headers,
     options,
 );
 
-export const PostApiTags = async (body: CreateTagCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 201: TagDto; 400: undefined; 401: undefined; 409: string }, CreateTagCommand>("/api/tags",
+export const PostApiTags = async (body: CreateTagCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 201: TagDto; 400: HttpValidationProblemDetails; 401: undefined; 409: string }, CreateTagCommand>("/api/tags",
     POST,
     body,
     headers,
@@ -711,28 +713,28 @@ export const PostApiTagsBulk = async (body: BulkCreateTagCommand, headers?: Head
     options,
 );
 
-export const PostApiUsersBlock = async (body: BlockUserCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: boolean; 400: undefined; 401: undefined; 404: undefined }, BlockUserCommand>("/api/users/block",
+export const PostApiUsersBlock = async (body: BlockUserCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: boolean; 400: HttpValidationProblemDetails; 401: undefined; 404: undefined }, BlockUserCommand>("/api/users/block",
     POST,
     body,
     headers,
     options,
 );
 
-export const PostApiUsersFollow = async (body: FollowUserCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: boolean; 400: undefined; 401: undefined; 404: undefined }, FollowUserCommand>("/api/users/follow",
+export const PostApiUsersFollow = async (body: FollowUserCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: boolean; 400: HttpValidationProblemDetails; 401: undefined; 404: undefined }, FollowUserCommand>("/api/users/follow",
     POST,
     body,
     headers,
     options,
 );
 
-export const PostApiUsersRoles = async (body: UpdateRolesCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: undefined; 400: undefined; 401: undefined; 404: undefined }, UpdateRolesCommand>("/api/users/roles",
+export const PostApiUsersRoles = async (body: UpdateRolesCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: undefined; 400: HttpValidationProblemDetails; 401: undefined; 404: undefined }, UpdateRolesCommand>("/api/users/roles",
     POST,
     body,
     headers,
     options,
 );
 
-export const PostApiVotes = async (body: CreateVoteCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: VoteResult; 400: undefined; 401: undefined }, CreateVoteCommand>("/api/votes",
+export const PostApiVotes = async (body: CreateVoteCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: VoteResult; 400: HttpValidationProblemDetails; 401: undefined }, CreateVoteCommand>("/api/votes",
     POST,
     body,
     headers,
@@ -746,49 +748,49 @@ export const PostHooksPatreon = async (headers?: HeadersInit, options?: RequestI
     options,
 );
 
-export const PutApiFaqs = async (body: UpdateFaqCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: undefined; 400: undefined; 401: undefined; 404: undefined }, UpdateFaqCommand>("/api/faqs",
+export const PutApiFaqs = async (body: UpdateFaqCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: undefined; 400: HttpValidationProblemDetails; 401: undefined; 404: undefined }, UpdateFaqCommand>("/api/faqs",
     PUT,
     body,
     headers,
     options,
 );
 
-export const PutApiQuotes = async (body: UpdateQuoteCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: undefined; 400: undefined; 401: undefined; 404: undefined }, UpdateQuoteCommand>("/api/quotes",
+export const PutApiQuotes = async (body: UpdateQuoteCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: undefined; 400: HttpValidationProblemDetails; 401: undefined; 404: undefined }, UpdateQuoteCommand>("/api/quotes",
     PUT,
     body,
     headers,
     options,
 );
 
-export const PutApiRatings = async (body: UpdateRatingCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: undefined; 400: undefined; 401: undefined; 404: undefined }, UpdateRatingCommand>("/api/ratings",
+export const PutApiRatings = async (body: UpdateRatingCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: undefined; 400: HttpValidationProblemDetails; 401: undefined; 404: undefined }, UpdateRatingCommand>("/api/ratings",
     PUT,
     body,
     headers,
     options,
 );
 
-export const PutApiRoles = async (body: UpdateRoleCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: undefined; 400: undefined; 401: undefined; 404: undefined }, UpdateRoleCommand>("/api/roles",
+export const PutApiRoles = async (body: UpdateRoleCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: undefined; 400: HttpValidationProblemDetails; 401: undefined; 404: undefined }, UpdateRoleCommand>("/api/roles",
     PUT,
     body,
     headers,
     options,
 );
 
-export const PutApiShelves = async (body: UpdateShelfCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: undefined; 400: undefined; 401: undefined; 404: undefined }, UpdateShelfCommand>("/api/shelves",
+export const PutApiShelves = async (body: UpdateShelfCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: undefined; 400: HttpValidationProblemDetails; 401: undefined; 404: undefined }, UpdateShelfCommand>("/api/shelves",
     PUT,
     body,
     headers,
     options,
 );
 
-export const PutApiTagnamespaces = async (body: UpdateTagNamespaceCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: undefined; 400: undefined; 401: undefined; 404: undefined; 409: string }, UpdateTagNamespaceCommand>("/api/tagnamespaces",
+export const PutApiTagnamespaces = async (body: UpdateTagNamespaceCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: undefined; 400: HttpValidationProblemDetails; 401: undefined; 404: undefined; 409: string }, UpdateTagNamespaceCommand>("/api/tagnamespaces",
     PUT,
     body,
     headers,
     options,
 );
 
-export const PutApiTags = async (body: UpdateTagCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: undefined; 400: undefined; 401: undefined; 404: undefined; 409: string }, UpdateTagCommand>("/api/tags",
+export const PutApiTags = async (body: UpdateTagCommand, headers?: HeadersInit, options?: RequestInit) => await typedFetch<{ 200: undefined; 400: HttpValidationProblemDetails; 401: undefined; 404: undefined; 409: string }, UpdateTagCommand>("/api/tags",
     PUT,
     body,
     headers,

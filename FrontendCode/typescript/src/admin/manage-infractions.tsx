@@ -1,5 +1,6 @@
 import { DeleteAdminApiInfractions, GetAdminApiUserInfractions } from "@g/paths-internal";
 import { toCurrentTimezone } from "@h/date-helpers";
+import { responseErrorMessage } from "@h/error-helpers";
 import { EU, iso8601 } from "@h/tinytime-templates";
 import { component } from "@h/web-components";
 import { noShadowDOM } from "solid-element";
@@ -21,7 +22,7 @@ const ManageInfractions = (props: { userId: number; csrf: string }) => {
 			return res.data;
 		}
 
-		throw new Error(res.data ?? res.statusText);
+		throw new Error(responseErrorMessage(res));
 	});
 
 	const infractions = $memo(infractionsResource());
@@ -37,7 +38,7 @@ const ManageInfractions = (props: { userId: number; csrf: string }) => {
 		const res = await DeleteAdminApiInfractions(id, headers);
 
 		if (!res.ok) {
-			throw new Error(res.data ?? res.statusText);
+			throw new Error(responseErrorMessage(res));
 		}
 
 		await refetch();

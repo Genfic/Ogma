@@ -1,4 +1,5 @@
 import { DeleteAdminApiCache, GetAdminApiCache } from "@g/paths-internal";
+import { responseErrorMessage } from "@h/error-helpers";
 import { component } from "@h/web-components";
 import type { ComponentType } from "solid-element";
 import { createResource, Match, Switch } from "solid-js";
@@ -11,7 +12,7 @@ const CacheInfo: ComponentType<{ csrf: string }> = (props) => {
 		const res = await GetAdminApiCache();
 
 		if (!res.ok) {
-			console.warn(res.data ?? res.statusText);
+			console.warn(responseErrorMessage(res));
 			return Number.NaN;
 		}
 

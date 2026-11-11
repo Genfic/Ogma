@@ -1,6 +1,7 @@
 import { DeleteApiComments, GetApiCommentsRevisions } from "@g/paths-public";
 import type { CommentDto, GetRevisionResult } from "@g/types-public";
 import { toCurrentTimezone } from "@h/date-helpers";
+import { responseErrorMessage } from "@h/error-helpers";
 import { long } from "@h/tinytime-templates";
 import LucideFlag from "icon:lucide:flag";
 import LucideLink from "icon:lucide:link";
@@ -47,7 +48,7 @@ export const Comment = (props: Props) => {
 		if (res.ok) {
 			props.onDelete();
 		} else {
-			console.error(res.data ?? res.statusText);
+			console.error(responseErrorMessage(res));
 		}
 	};
 
@@ -71,7 +72,7 @@ export const Comment = (props: Props) => {
 			setRevisions(res.data);
 			setShowRevision(true);
 		} else {
-			console.error(res.data ?? res.statusText);
+			console.error(responseErrorMessage(res));
 		}
 	};
 

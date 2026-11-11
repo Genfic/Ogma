@@ -1,5 +1,6 @@
 import { PostAdminApiInfractions } from "@g/paths-internal";
 import type { InfractionType } from "@g/types-internal";
+import { responseErrorMessage } from "@h/error-helpers";
 import { type Component, createSignal, For, onMount } from "solid-js";
 import { Dialog, type DialogApi } from "../../comp/common/_dialog";
 
@@ -57,7 +58,7 @@ export const ManageInfraction: Component<ManageInfractionProps> = (props) => {
 		setReason(null);
 
 		if (!res.ok) {
-			throw new Error(res.data ?? res.statusText);
+			throw new Error(responseErrorMessage(res));
 		}
 
 		props.onSuccess();

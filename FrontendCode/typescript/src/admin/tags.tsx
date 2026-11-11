@@ -9,6 +9,7 @@ import {
 } from "@g/paths-public";
 import type { TagDto } from "@g/types-public";
 import { $id, $target } from "@h/dom";
+import { responseErrorMessage } from "@h/error-helpers";
 import { getFormData } from "@h/form-helpers";
 import clsx from "clsx";
 import { compact, sortBy } from "es-toolkit";
@@ -55,7 +56,7 @@ const Tags = () => {
 	const [tags, { refetch }] = createResource(async () => {
 		const res = await GetApiTagsAll();
 		if (!res.ok) {
-			throw new Error(res.data ?? res.statusText);
+			throw new Error(responseErrorMessage(res));
 		}
 		return sortBy(res.data, ["namespaceName", "name"]);
 	});
@@ -70,7 +71,7 @@ const Tags = () => {
 		if (confirm("Delete permanently?")) {
 			const res = await DeleteApiTags(t.id, headers);
 			if (!res.ok) {
-				setErrors((e) => [...e, res.data ?? res.statusText]);
+				setErrors((e) => [...e, responseErrorMessage(res)]);
 				return;
 			}
 			await refetch();
@@ -109,7 +110,7 @@ const Tags = () => {
 		const res = id ? await PutApiTags({ id, ...data }, headers) : await PostApiTags(data, headers);
 
 		if (!res.ok) {
-			setErrors((e) => [...e, res.data ?? res.statusText]);
+			setErrors((e) => [...e, responseErrorMessage(res)]);
 			return;
 		}
 
@@ -137,7 +138,7 @@ const Tags = () => {
 
 		const res = await PostApiTagsBulk({ json: jsonBulk }, headers);
 		if (!res.ok) {
-			setErrors((e) => [...e, res.data ?? res.statusText]);
+			setErrors((e) => [...e, responseErrorMessage(res)]);
 			return;
 		}
 

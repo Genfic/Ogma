@@ -1,4 +1,5 @@
 import { PatchApiComments } from "@g/paths-public";
+import { responseErrorMessage } from "@h/error-helpers";
 import LucidePencil from "icon:lucide:pencil";
 import LucideX from "icon:lucide:x";
 import { createSignal } from "solid-js";
@@ -37,7 +38,7 @@ export const CommentBodyEditor = (props: Props) => {
 			setText("");
 			props.onUpdate(res.data.body);
 		} else {
-			console.error(res.data ?? res.statusText);
+			console.error(responseErrorMessage(res));
 		}
 	};
 
