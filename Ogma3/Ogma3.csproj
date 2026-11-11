@@ -155,6 +155,9 @@
 		<None Update="disposable_email_blocklist.txt">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
+		<None Update="passkey_aaguids.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 	</ItemGroup>
 	<ItemGroup>
 		<_ContentIncludedByDefault Remove="wwwroot/svg/spritesheet.svg"/>

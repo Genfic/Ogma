@@ -1,3 +1,5 @@
+using Ogma3.Services.PasskeyMetadata;
+
 namespace Ogma3.Infrastructure.Jobs;
 
 public static class JobsHelper
@@ -5,6 +7,7 @@ public static class JobsHelper
 	public static IServiceCollection RegisterJobs(this IServiceCollection services)
 	{
 		return services
+			.AddHostedService<PasskeyMetadataInitializer>()
 			.AddHostedService<UnbanRecurringJob>()
 			.AddHostedService<DeleteInactiveAccountsRecurringJob>()
 			.AddHostedService<DeleteDraftsRecurringJob>()
@@ -13,6 +16,7 @@ public static class JobsHelper
 			.AddHostedService<PublishScheduledContentRecurringJob>()
 			.AddHostedService<ProcessSoftDeletesRecurringJob>()
 			.AddHostedService<PurgeRevokedSubscriptionsRecurringJob>()
+			.AddHostedService<RefreshPasskeyMetadataRecurringJob>()
 			;
 	}
 }

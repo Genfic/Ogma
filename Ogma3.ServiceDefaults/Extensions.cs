@@ -111,13 +111,14 @@ public static class Extensions
 		}
 
 		// All health checks must pass for app to be considered ready to accept traffic after starting
-		app.MapHealthChecks("/health");
+		app.MapHealthChecks("/health").ShortCircuit();
 
 		// Only health checks tagged with the "live" tag must pass for app to be considered alive
 		app.MapHealthChecks("/alive", new HealthCheckOptions
-		{
-			Predicate = r => r.Tags.Contains("live"),
-		});
+			{
+				Predicate = r => r.Tags.Contains("live"),
+			})
+			.ShortCircuit();
 
 		return app;
 	}
