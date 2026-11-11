@@ -23,7 +23,6 @@ using Ogma3.Data;
 using Ogma3.Data.Roles;
 using Ogma3.Data.Users;
 using Ogma3.Infrastructure.Attributes;
-using Ogma3.Infrastructure.Compression;
 using Ogma3.Infrastructure.Constraints;
 using Ogma3.Infrastructure.CustomValidators.FileSizeValidator;
 using Ogma3.Infrastructure.Extensions;
@@ -61,11 +60,11 @@ public static class Startup
 		// Compression
 		services.AddResponseCompression(options => {
 				options.EnableForHttps = true;
-				options.Providers.Add<ZstdCompressionProvider>();
+				options.Providers.Add<ZstandardCompressionProvider>();
 				options.Providers.Add<BrotliCompressionProvider>();
 				options.Providers.Add<GzipCompressionProvider>();
 			})
-			.Configure<ZstdCompressionProvider.Options>(o => o.CompressionOptions.Quality = 5);
+			.Configure<ZstandardCompressionProviderOptions>(o => o.CompressionOptions.Quality = 5);
 
 		// Database
 		builder.AddApplicationDbContext();

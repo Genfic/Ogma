@@ -51,7 +51,7 @@ public static class Extensions
 			builder.Services.AddOpenTelemetry()
 				.WithMetrics(metrics => {
 					metrics
-						.AddAspNetCoreInstrumentation()
+						.AddMeter("Microsoft.AspNetCore.Hosting")
 						.AddHttpClientInstrumentation()
 						.AddRuntimeInstrumentation()
 						.AddMeter(
@@ -62,7 +62,7 @@ public static class Extensions
 				.WithTracing(tracing => {
 					tracing
 						.AddSource(builder.Environment.ApplicationName)
-						.AddAspNetCoreInstrumentation()
+						.AddSource("Microsoft.AspNetCore")
 						.AddHttpClientInstrumentation()
 						.AddEntityFrameworkCoreInstrumentation();
 				});
