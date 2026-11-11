@@ -16,7 +16,7 @@ public sealed class Data
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "type", IgnoreUnrecognizedTypeDiscriminators = true)]
 [JsonDerivedType(typeof(BenefitInclusion), "benefit")]
 [JsonDerivedType(typeof(TierInclusion), "tier")]
-public abstract class Inclusion
+public closed class Inclusion
 {
 	public required string Id { get; init; }
 }

@@ -32,48 +32,29 @@ public sealed class IndexModel(AppDbContext context, OgmaConfig config) : PageMo
 			query = query.Where(b => b.IsLocked == false);
 		}
 
-		if (!string.IsNullOrEmpty(q))
+		if (!string.IsNullOrWhiteSpace(q))
 		{
-			var tokens = BlogpostSearchQueryParser.Parse(q);
+			var tags = new HashSet<string>();
+			foreach (var token in BlogpostSearchQueryParser.Parse(q))
+			{
+				query = token switch
+				{
+					BlogpostAuthorToken t => query
+						.TagWith("Searching for blogposts by author")
+						.Where(b => b.Author.NormalizedUserName.Contains(t.Value)),
+					BlogpostTitleToken t => query
+						.TagWith("Searching for blogposts with title")
+						// ReSharper disable once EntityFramework.ClientSideDbFunctionCall
+						.Where(b => EF.Functions.ILike(b.Title, $"%{t.Value}%")),
+					BlogpostTagToken t => CollectTagToken(t, query, tags),
+				};
+			}
 
-			// Search by tags
-			var tags = tokens
-				.OfType<BlogpostTagToken>()
-				.Select(t => t.Value)
-				.ToArray();
-
-			if (tags.Length > 0)
+			if (tags.Count > 0)
 			{
 				query = query
 					.TagWith("Searching for blogposts with tags")
 					.Where(b => b.Hashtags.Intersect(tags).Any());
-			}
-
-			// Search in title
-			var title = tokens
-				.OfType<BlogpostTitleToken>()
-				.Select(t => t.Value)
-				.FirstOrDefault();
-
-			if (title is not null)
-			{
-				query = query
-					.TagWith("Searching for blogposts with title")
-					// ReSharper disable once EntityFramework.ClientSideDbFunctionCall
-					.Where(b => EF.Functions.ILike(b.Title, $"%{title}%"));
-			}
-
-			// Search by author
-			var author = tokens
-				.OfType<BlogpostAuthorToken>()
-				.Select(t => t.Value)
-				.FirstOrDefault();
-
-			if (author is not null)
-			{
-				query = query
-					.TagWith("Searching for blogposts by author")
-					.Where(b => b.Author.NormalizedUserName.Contains(author));
 			}
 		}
 
@@ -117,5 +98,11 @@ public sealed class IndexModel(AppDbContext context, OgmaConfig config) : PageMo
 		};
 
 		return Page();
+	}
+
+	private static IQueryable<Blogpost> CollectTagToken(BlogpostTagToken token, IQueryable<Blogpost> query, HashSet<string> tags)
+	{
+		tags.Add(token.Value);
+		return query;
 	}
 }

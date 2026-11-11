@@ -3,7 +3,7 @@ using Ogma3.Data.Stories;
 
 namespace Ogma3.Infrastructure.SearchQueryParser;
 
-public abstract record SearchToken;
+public closed record SearchToken;
 
 public sealed record TitleToken(string Value): SearchToken;
 

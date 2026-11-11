@@ -1,6 +1,6 @@
 namespace Ogma3.Infrastructure.BlogpostSearchQueryParser;
 
-public abstract record BlogpostSearchToken;
+public closed record BlogpostSearchToken;
 
 public sealed record BlogpostTitleToken(string Value) : BlogpostSearchToken;
 

@@ -54,47 +54,30 @@ public sealed class IndexModel(
 
 		var includedTags = new HashSet<string>();
 		var excludedTags = new HashSet<string>();
+
 		foreach (var token in tokens)
 		{
-			switch (token)
+			storiesQuery = token switch
 			{
-				case TitleToken t:
-					storiesQuery = storiesQuery.Where(s => s.Title.Contains(t.Value));
-					break;
-				case AuthorToken t:
-					storiesQuery = t.Negated
-						? storiesQuery.Where(s => !s.Author.NormalizedUserName.Contains(t.Value))
-						: storiesQuery.Where(s => s.Author.NormalizedUserName.Contains(t.Value));
-					break;
-				case RatingToken t:
-					storiesQuery = t.Negated
-						? storiesQuery.Where(s => s.Rating.Name != t.Value)
-						: storiesQuery.Where(s => s.Rating.Name == t.Value);
-					break;
-				case StatusToken t:
-					storiesQuery = t.Negated
-						? storiesQuery.Where(s => s.Status != t.Status)
-						: storiesQuery.Where(s => s.Status == t.Status);
-					break;
-				case TagToken { Negated: false } t:
-					includedTags.Add(t.FullName);
-					break;
-				case TagToken { Negated: true } t:
-					excludedTags.Add(t.FullName);
-					break;
-				case MyContentToken t:
-					storiesQuery = t.Type switch
-					{
-						MyContentType.Starred => storiesQuery
-							.Where(s => s.Votes.Any(v => v.UserId == uid)),
-						MyContentType.Shelved => storiesQuery
-							.Where(s => s.Shelves.Any(sh => sh.OwnerId == uid)),
-						MyContentType.Started => storiesQuery
-							.Where(s => context.ChaptersRead.Any(cr => cr.StoryId == s.Id && cr.UserId == uid)),
-						_ => storiesQuery,
-					};
-					break;
-			}
+				TitleToken t => storiesQuery.Where(s => s.Title.Contains(t.Value)),
+				AuthorToken { Negated: true } t => storiesQuery.Where(s => !s.Author.NormalizedUserName.Contains(t.Value)),
+				AuthorToken t => storiesQuery.Where(s => s.Author.NormalizedUserName.Contains(t.Value)),
+				RatingToken { Negated: true } t => storiesQuery.Where(s => s.Rating.Name != t.Value),
+				RatingToken t => storiesQuery.Where(s => s.Rating.Name == t.Value),
+				StatusToken { Negated: true } t => storiesQuery.Where(s => s.Status != t.Status),
+				StatusToken t => storiesQuery.Where(s => s.Status == t.Status),
+				TagToken t => CollectTagToken(t, storiesQuery, includedTags, excludedTags),
+				MyContentToken t => t.Type switch
+				{
+					MyContentType.Starred => storiesQuery
+						.Where(s => s.Votes.Any(v => v.UserId == uid)),
+					MyContentType.Shelved => storiesQuery
+						.Where(s => s.Shelves.Any(sh => sh.OwnerId == uid)),
+					MyContentType.Started => storiesQuery
+						.Where(s => context.ChaptersRead.Any(cr => cr.StoryId == s.Id && cr.UserId == uid)),
+					_ => throw new UnexpectedEnumValueException<MyContentType>(t.Type),
+				},
+			};
 		}
 
 		var includedTagIds = await tagCache.GetTagIds([..includedTags]);
@@ -134,6 +117,19 @@ public sealed class IndexModel(
 			ItemCount = count,
 			CurrentPage = page ?? 1,
 		};
+	}
+
+	private static IQueryable<Story> CollectTagToken(TagToken token, IQueryable<Story> query, HashSet<string> included, HashSet<string> excluded)
+	{
+		if (token.Negated)
+		{
+			excluded.Add(token.FullName);
+		}
+		else
+		{
+			included.Add(token.FullName);
+		}
+		return query;
 	}
 
 	private static IQueryable<Story> SortStories(IQueryable<Story> query, StorySort sortBy)
