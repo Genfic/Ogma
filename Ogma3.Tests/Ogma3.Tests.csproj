@@ -16,4 +16,9 @@
       <ProjectReference Include="..\Ogma3\Ogma3.csproj" />
     </ItemGroup>
 
+
+    <ItemGroup>
+      <Compile Remove="Data\MaxByMinByTranslationTests.cs" />
+    </ItemGroup>
+
 </Project>

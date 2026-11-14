@@ -54,32 +54,32 @@ foreach (var nested in rootClass.Members.OfType<ClassDeclarationSyntax>())
 	result[nested.Identifier.Text] = section;
 }
 
-var json = JsonSerializer.Serialize(result, new JsonSerializerOptions { WriteIndented = true, IndentCharacter = '\t', IndentSize = 1 });
+var json = JsonSerializer.Serialize(result, new JsonSerializerOptions { WriteIndented = true, IndentCharacter = '\t', IndentSize = 1, NewLine = "\n" });
 await File.WriteAllTextAsync(Path.Combine(targetDir, "ctconfig.json"), json);
 
 var ts = new StringBuilder();
-ts.AppendLine("// Auto-generated from CTConfig.cs — do not edit manually");
-ts.AppendLine();
+ts.AppendLf("// Auto-generated from CTConfig.cs — do not edit manually");
+ts.AppendLf();
 
 foreach (var (key, value) in result)
 {
 	if (value is Dictionary<string, object> section)
 	{
-		ts.AppendLine($"export const {key} = {{");
+		ts.AppendLf($"export const {key} = {{");
 		foreach (var (k, v) in section)
 		{
-			ts.AppendLine($"\t{k}: {ToTs(v)},");
+			ts.AppendLf($"\t{k}: {ToTs(v)},");
 		}
-		ts.AppendLine("} as const;");
-		ts.AppendLine();
+		ts.AppendLf("} as const;");
+		ts.AppendLf();
 	}
 	else
 	{
-		ts.AppendLine($"export const {key} = {ToTs(value)};");
+		ts.AppendLf($"export const {key} = {ToTs(value)};");
 	}
 }
 
-await File.WriteAllTextAsync(Path.Combine(targetDir, "CTConfig.ts"), ts.ToString());
+await File.WriteAllTextAsync(Path.Combine(targetDir, "ctconfig.ts"), ts.ToString());
 
 Console.WriteLine($"Exported CTConfig.json and CTConfig.ts in {start.ElapsedMilliseconds:N0}ms");
 
@@ -221,3 +221,13 @@ static string ToTs(object? value)
 		object o => '"' + o.ToString() + '"',
 		_ => value?.ToString() ?? "null",
 	};
+
+internal static class StringBuilderExtensions
+{
+	// Emit LF unconditionally so the generated files stay byte-identical across OSes
+	// (AppendLine uses Environment.NewLine, which differs between Windows and Linux)
+	extension(StringBuilder sb)
+	{
+		public void AppendLf(string value = "") => sb.Append(value).Append('\n');
+	}
+}

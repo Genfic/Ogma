@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.Extensions.Time.Testing;
 using SpeedTrap = Ogma3.Services.SpeedTrapService.SpeedTrapService;
 
 namespace Ogma3.Tests.Services.SpeedTrapService;
