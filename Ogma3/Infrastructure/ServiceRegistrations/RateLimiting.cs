@@ -10,6 +10,7 @@ public static class RateLimiting
 	public const string Reports = nameof(Reports);
 	public const string Registration = nameof(Registration);
 	public const string Login = nameof(Login);
+	public const string Reauth = nameof(Reauth);
 	public const string PowIssue = nameof(PowIssue);
 	public const string IssueInviteCodeExternal = nameof(IssueInviteCodeExternal);
 	public const string PatreonWebhook = nameof(PatreonWebhook);
@@ -39,6 +40,13 @@ public static class RateLimiting
 				.AddPartitionedSlidingWindowLimiter(policyName: Login, options => {
 					options.Window = TimeSpan.FromMinutes(30);
 					options.PermitLimit = 10;
+					options.SegmentsPerWindow = 10;
+					options.QueueLimit = 0;
+				})
+				// Reauthentication challenges and verification attempts, partitioned by user and IP
+				.AddPartitionedSlidingWindowLimiter(policyName: Reauth, options => {
+					options.Window = TimeSpan.FromMinutes(10);
+					options.PermitLimit = 20;
 					options.SegmentsPerWindow = 10;
 					options.QueueLimit = 0;
 				})

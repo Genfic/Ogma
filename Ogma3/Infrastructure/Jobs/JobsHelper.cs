@@ -17,6 +17,7 @@ public static class JobsHelper
 			.AddHostedService<ProcessSoftDeletesRecurringJob>()
 			.AddHostedService<PurgeRevokedSubscriptionsRecurringJob>()
 			.AddHostedService<RefreshPasskeyMetadataRecurringJob>()
+			.AddHostedService<SweepStaleSecurityTransactionsRecurringJob>()
 			;
 	}
 }

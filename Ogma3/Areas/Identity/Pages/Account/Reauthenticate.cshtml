@@ -1,0 +1,97 @@
+@page "/reauthenticate"
+@model Ogma3.Areas.Identity.Pages.Account.ReauthenticateModel
+@{
+	ViewData["Title"] = "Verify it's you";
+}
+@using Ogma3.Data.SecurityTransactions
+
+<h1 class="text-center">@ViewData["Title"]</h1>
+
+<hr>
+
+@if (Model.Message is not null)
+{
+	<div class="alert alert danger" role="alert">@Model.Message</div>
+}
+
+@if (Model.Transaction is { } txn)
+{
+	<p class="text-center">
+		Verifying account <strong>@Model.DisplayName</strong>.
+		This verifies it's you before making security changes — it does not sign you in.
+	</p>
+
+	<div class="reauth-methods">
+
+		@if ((txn.AllowedProofs & SecurityProof.Password) != 0)
+		{
+			<section class="reauth-method">
+				<h3>Password@((Model.TotpEnabled ? " + authenticator code" : ""))</h3>
+				<form class="form" method="post" asp-page-handler="VerifyPassword">
+					<input type="hidden" name="transaction" value="@txn.Id">
+					<input type="hidden" name="returnUrl" value="@Model.ReturnUrl">
+
+					<div class="o-form-group">
+						<label for="reauth-password">Password</label>
+						<input id="reauth-password" name="password" type="password" class="o-form-control active-border"
+						       autocomplete="current-password" required>
+					</div>
+
+					@if (Model.TotpEnabled)
+					{
+						<div class="o-form-group">
+							<label for="reauth-totp">Authenticator code</label>
+							<input id="reauth-totp" name="totpCode" type="text" class="o-form-control active-border"
+							       autocomplete="one-time-code" inputmode="numeric" pattern="[0-9 ]*" maxlength="7" required>
+						</div>
+					}
+
+					<button type="submit" class="btn btn-primary wide">Verify</button>
+				</form>
+			</section>
+		}
+
+		@if ((txn.AllowedProofs & SecurityProof.Passkey) != 0)
+		{
+			<section class="reauth-method">
+				<h3>Passkey</h3>
+				<p>Use a passkey already enrolled on this account.</p>
+				<form class="form" method="post" asp-page-handler="VerifyPasskey" id="reauth-passkey-form">
+					<input type="hidden" name="transaction" value="@txn.Id">
+					<input type="hidden" name="returnUrl" value="@Model.ReturnUrl">
+					<input type="hidden" name="credentials" value="" id="reauth-credentials">
+					<button type="button" class="btn btn-primary wide" id="reauth-passkey-button">
+						<icon name="ic:outline-fingerprint" size="24"></icon>
+						Verify with passkey
+					</button>
+				</form>
+			</section>
+		}
+
+		@if ((txn.AllowedProofs & SecurityProof.ExternalLogin) != 0 && Model.ExternalProviders.Count > 0)
+		{
+			<section class="reauth-method">
+				<h3>Linked provider</h3>
+				<p>Re-verify with a provider linked to this account. You will not be signed in again.</p>
+				@foreach (var (provider, displayName) in Model.ExternalProviders)
+				{
+					<a class="btn btn-primary wide"
+					   asp-page-handler="ChallengeExternal"
+					   asp-route-transaction="@txn.Id"
+					   asp-route-returnUrl="@Model.ReturnUrl"
+					   asp-route-provider="@provider">
+						Verify with @displayName
+					</a>
+				}
+			</section>
+		}
+	</div>
+}
+
+<p class="text-center">
+	<a href="@Model.ReturnUrl">Cancel and go back</a>
+</p>
+
+@section Scripts {
+	<script type="module" src="~/js/reauthenticate.js" asp-append-version="true"></script>
+}

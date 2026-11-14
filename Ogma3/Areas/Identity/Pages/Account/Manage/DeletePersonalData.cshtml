@@ -19,14 +19,7 @@
 	<form id="delete-user" method="post" class="form" autocomplete="off">
 		<div asp-validation-summary="All" class="text-danger"></div>
 
-		@if (Model.RequirePassword)
-		{
-			<div class="o-form-group">
-				<label asp-for="Input.Password"></label>
-				<input asp-for="Input.Password" class="o-form-control active-border" autocomplete="new-password"/>
-				<span asp-validation-for="Input.Password" class="text-danger"></span>
-			</div>
-		}
+		<p>You will first be asked to verify your credentials before the deletion is carried out.</p>
 
 		<div class="o-form-group">
 			<button class="btn btn-danger" type="submit">Delete data and close my account</button>

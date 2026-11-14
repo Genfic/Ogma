@@ -1,14 +1,18 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Ogma3.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Ogma3.Data.SecurityTransactions;
 using Ogma3.Data.Users;
+using Ogma3.Services.Security;
 using Routes.Areas.Identity.Pages;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage;
 
 public sealed class Disable2FaModel
 (
-	UserManager<OgmaUser> userManager,
+	OgmaUserManager userManager,
+	SecurityAuthorizationService securityAuth,
 	ILogger<Disable2FaModel> logger) : PageModel
 {
 	[TempData] public required string StatusMessage { get; set; }
@@ -36,6 +40,25 @@ public sealed class Disable2FaModel
 		if (user is null)
 		{
 			return NotFound($"Unable to load user with ID '{userManager.GetUserId(User)}'.");
+		}
+
+		if (!await userManager.GetTwoFactorEnabledAsync(user))
+		{
+			throw new InvalidOperationException(
+				$"Cannot disable 2FA for user with ID '{userManager.GetUserId(User)}' as it's not currently enabled.");
+		}
+
+		// Disabling 2FA requires fresh account proof
+		if (!await securityAuth.HasVerifiedGrantAsync(user, SecurityOperation.DisableTotp))
+		{
+			var txn = await securityAuth.BeginAsync(user, SecurityOperation.DisableTotp);
+			return ReauthRequired.RedirectToReauth(txn, Request.Path.ToString(), this);
+		}
+
+		if (!await securityAuth.ConsumeAsync(user, SecurityOperation.DisableTotp))
+		{
+			var txn = await securityAuth.BeginAsync(user, SecurityOperation.DisableTotp);
+			return ReauthRequired.RedirectToReauth(txn, Request.Path.ToString(), this);
 		}
 
 		var disable2FaResult = await userManager.SetTwoFactorEnabledAsync(user, false);

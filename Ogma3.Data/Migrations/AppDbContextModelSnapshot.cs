@@ -23,7 +23,7 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
     // If you encounter a merge conflict in the line below, it means you need to
     // discard one of the migration branches and recreate its migrations on top of
     // the other branch. See https://aka.ms/efcore-docs-migrations-conflicts for more info.
-    public override string LastMigrationId => "20261107175200_IncludeVersionHashInNewsPost";
+    public override string LastMigrationId => "20261114233838_SecurityTransactionsAndPasswordlessGuards";
 
     protected override void BuildModel(ModelBuilder modelBuilder)
     {
@@ -31,7 +31,7 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
         modelBuilder
             .HasAnnotation("Npgsql:CollationDefinition:nocase", "und-u-ks-level2,und-u-ks-level2,icu,False")
             .HasAnnotation("Npgsql:CollationDefinition:nocase-noaccent", "und-u-ks-level1,und-u-ks-level1,icu,False")
-            .HasAnnotation("ProductVersion", "11.0.0-rc.2.26504.105")
+            .HasAnnotation("ProductVersion", "11.0.0")
             .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
         NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "e_club_member_roles", new[] { "admin", "founder", "moderator", "user" });
@@ -1463,6 +1463,62 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                 b.ToTable("AspNetRoles");
             });
 
+        modelBuilder.Entity("Ogma3.Data.SecurityTransactions.SecurityTransaction", b =>
+            {
+                b.Property<string>("Id")
+                    .HasMaxLength(64)
+                    .HasColumnType("character varying(64)");
+
+                b.Property<int>("AllowedProofs")
+                    .HasColumnType("integer");
+
+                b.Property<int?>("CompletedProof")
+                    .HasColumnType("integer");
+
+                b.Property<DateTimeOffset?>("ConsumedAt")
+                    .HasColumnType("timestamp with time zone");
+
+                b.Property<DateTimeOffset>("CreatedAt")
+                    .HasColumnType("timestamp with time zone");
+
+                b.Property<DateTimeOffset>("ExpiresAt")
+                    .HasColumnType("timestamp with time zone");
+
+                b.Property<int>("Operation")
+                    .HasColumnType("integer");
+
+                b.Property<string>("ProposedSecret")
+                    .HasMaxLength(512)
+                    .HasColumnType("character varying(512)");
+
+                b.Property<string>("SecurityStamp")
+                    .IsRequired()
+                    .HasColumnType("text");
+
+                b.Property<string>("SessionId")
+                    .IsRequired()
+                    .HasMaxLength(64)
+                    .HasColumnType("character varying(64)");
+
+                b.Property<string>("Target")
+                    .HasMaxLength(512)
+                    .HasColumnType("character varying(512)");
+
+                b.Property<long>("UserId")
+                    .HasColumnType("bigint");
+
+                b.Property<DateTimeOffset?>("VerifiedAt")
+                    .HasColumnType("timestamp with time zone");
+
+                b.HasKey("Id");
+
+                b.HasIndex("UserId");
+
+                b.HasIndex("UserId", "SessionId");
+
+                b.ToTable("SecurityTransactions");
+            });
+
         modelBuilder.Entity("Ogma3.Data.Shelves.Shelf", b =>
             {
                 var id = b.Property<long>("Id")
@@ -1956,6 +2012,12 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                     .UseCollation("nocase-noaccent");
 
                 b.Property<string>("PasswordHash")
+                    .HasColumnType("text");
+
+                b.Property<DateTimeOffset?>("PasswordResetTokenExpiry")
+                    .HasColumnType("timestamp with time zone");
+
+                b.Property<string>("PasswordResetTokenHash")
                     .HasColumnType("text");
 
                 b.Property<DateTimeOffset>("PrivacyPolicyAcceptedAt")

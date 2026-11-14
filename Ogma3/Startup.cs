@@ -40,6 +40,7 @@ using Ogma3.Services.OAuthProviders.Discord;
 using Ogma3.Services.OAuthProviders.Patreon;
 using Ogma3.Services.OAuthProviders.Tumblr;
 using Ogma3.Services.S3Storage;
+using Ogma3.Services.Security;
 using Scalar.AspNetCore;
 using Sqids;
 using StackExchange.Redis;
@@ -182,7 +183,12 @@ public static class Startup
 			options.AccessDeniedPath = new PathString("/login");
 			options.Cookie.SameSite = SameSiteMode.Lax;
 			options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+
+			// Custom events mint and validate a stable per-session identifier (sid) and
+			// chain to SecurityStampValidator; see OgmaCookieAuthenticationEvents
+			options.EventsType = typeof(OgmaCookieAuthenticationEvents);
 		});
+		services.AddScoped<OgmaCookieAuthenticationEvents>();
 
 		// Cache
 		services.AddMemoryCache();

@@ -1,7 +1,7 @@
 import {
 	DeleteApiPasskeysDelete as deletePasskey,
-	GetApiPasskeysOptions as getOptions,
 	GetApiPasskeysList as listPasskeys,
+	GetApiPasskeysOptions as getOptions,
 	PostApiPasskeysRegister as setPasskey,
 } from "@g/paths-public";
 import { attempt, attemptAsync, responseErrorMessage } from "@h/error-helpers";
@@ -11,6 +11,7 @@ import { component } from "@h/web-components";
 import { clsx } from "clsx";
 import { noShadowDOM } from "solid-element";
 import { type Component, createResource, For, Show } from "solid-js";
+import { handleReauthResponse } from "../reauth-handling";
 import css from "./setup-passkey.css";
 
 const makeRaw = (data: ArrayBuffer): string =>
@@ -42,6 +43,18 @@ const SetupPasskey: Component<{ csrf: string }> = (props) => {
 		}
 
 		const res = await deletePasskey(encodeURIComponent(id), headers);
+
+		// A 428 response carries the reauthentication page URL — verify there, then retry manually
+		if (handleReauthResponse(res)) {
+			return;
+		}
+
+		// 409 (conflict) is not part of the generated union yet either
+		if ((res as { status: number }).status === 409) {
+			errors = ["You cannot remove your only usable login method."];
+			return;
+		}
+
 		if (!res.ok) {
 			throw new Error(responseErrorMessage(res));
 		}
@@ -103,6 +116,13 @@ const SetupPasskey: Component<{ csrf: string }> = (props) => {
 			},
 			headers,
 		);
+
+		// A 428 response carries the reauthentication page URL — verify there first;
+		// never auto-replay the request after the redirect
+		if (handleReauthResponse(keyRes)) {
+			loading = false;
+			return;
+		}
 
 		if (keyRes.status === 400) {
 			errors = Array.isArray(keyRes.data) ? keyRes.data : [keyRes.data];

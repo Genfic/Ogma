@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Ogma3.Data.Users;
 using Ogma3.Services.Mailer;
+using Ogma3.Services.Security;
 using Ogma3.Services.TurnstileService;
 using Routes.Areas.Identity.Pages;
 
@@ -18,6 +19,7 @@ public sealed class ForgotPasswordModel(
 	UserManager<OgmaUser> userManager,
 	IMailer emailSender,
 	ITurnstileService turnstile,
+	PasswordResetTokenGuard resetTokenGuard,
 	ILogger<ForgotPasswordModel> logger) : PageModel
 {
 	[BindProperty] public required InputModel Input { get; set; }
@@ -53,9 +55,33 @@ public sealed class ForgotPasswordModel(
 			return Account_ForgotPasswordConfirmation.Get().Redirect(this);
 		}
 
+		// An account with no password must not regain password authentication through the
+		// ordinary forgot-password flow — audit and respond generically
+		if (user.PasswordHash is null)
+		{
+			logger.LogWarning(
+				"Password reset requested for passwordless account (user {UserId}); no reset token was issued", user.Id);
+
+			await emailSender.SendEmailAsync(
+				Input.Email,
+				"Password reset requested",
+				"""
+				Someone requested a password reset for your Genfic account.
+				Password sign-in is not configured on this account, so no password could be reset.
+				If you did not request this, you can safely ignore this email.
+				""");
+
+			return Account_ForgotPasswordConfirmation.Get().Redirect(this);
+		}
+
 		// For more information on how to enable account confirmation and password reset, please
 		// visit https://go.microsoft.com/fwlink/?LinkID=532713
 		var code = await userManager.GeneratePasswordResetTokenAsync(user);
+
+		// Single-use marker: only the newest issued token is consumable, and removing the
+		// password clears the hash so tokens issued before the removal are rejected
+		await resetTokenGuard.IssueAsync(user, code);
+
 		code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
 		var callbackUrl = Url.Page(
 			"/Account/ResetPassword",
@@ -67,6 +93,8 @@ public sealed class ForgotPasswordModel(
 			Input.Email,
 			"Reset Password",
 			$"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl!)}'>clicking here</a>.");
+
+		logger.LogInformation("Password reset token issued for user {UserId}", user.Id);
 
 		return Account_ForgotPasswordConfirmation.Get().Redirect(this);
 	}

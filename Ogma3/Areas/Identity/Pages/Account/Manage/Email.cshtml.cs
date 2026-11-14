@@ -5,12 +5,18 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using Ogma3.Data.SecurityTransactions;
 using Ogma3.Data.Users;
 using Ogma3.Services.Mailer;
+using Ogma3.Services.Security;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage;
 
-public sealed class EmailModel(UserManager<OgmaUser> userManager, IMailer emailSender) : PageModel
+public sealed class EmailModel(
+	UserManager<OgmaUser> userManager,
+	IMailer emailSender,
+	SecurityAuthorizationService securityAuth)
+	: PageModel
 {
 	public required string Username { get; set; }
 
@@ -19,6 +25,8 @@ public sealed class EmailModel(UserManager<OgmaUser> userManager, IMailer emailS
 	public required bool IsEmailConfirmed { get; set; }
 
 	[TempData] public required string StatusMessage { get; set; }
+
+	[TempData] public string? PrefillEmail { get; set; }
 
 	[BindProperty] public required InputModel Input { get; set; }
 
@@ -40,7 +48,7 @@ public sealed class EmailModel(UserManager<OgmaUser> userManager, IMailer emailS
 
 		Input = new InputModel
 		{
-			NewEmail = email,
+			NewEmail = PrefillEmail ?? email,
 		};
 
 		IsEmailConfirmed = await userManager.IsEmailConfirmedAsync(user);
@@ -75,6 +83,22 @@ public sealed class EmailModel(UserManager<OgmaUser> userManager, IMailer emailS
 		var email = await userManager.GetEmailAsync(user);
 		if (Input.NewEmail != email)
 		{
+			// Changing the account email requires fresh account proof, and the grant is
+			// bound to the proposed new address
+			if (!await securityAuth.HasVerifiedGrantAsync(user, SecurityOperation.ChangeEmail, Input.NewEmail))
+			{
+				var txn = await securityAuth.BeginAsync(user, SecurityOperation.ChangeEmail, Input.NewEmail);
+				TempData[nameof(PrefillEmail)] = Input.NewEmail;
+				return ReauthRequired.RedirectToReauth(txn, Request.Path.ToString(), this);
+			}
+
+			if (!await securityAuth.ConsumeAsync(user, SecurityOperation.ChangeEmail, Input.NewEmail))
+			{
+				var txn = await securityAuth.BeginAsync(user, SecurityOperation.ChangeEmail, Input.NewEmail);
+				TempData[nameof(PrefillEmail)] = Input.NewEmail;
+				return ReauthRequired.RedirectToReauth(txn, Request.Path.ToString(), this);
+			}
+
 			var userName = await userManager.GetUserNameAsync(user);
 			var code = await userManager.GenerateChangeEmailTokenAsync(user, Input.NewEmail);
 			var callbackUrl = Url.Page(

@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Identity;
 using Ogma3.Data.Blacklists;
 using Ogma3.Data.Blogposts;
 using Ogma3.Data.CommentsThreads;
@@ -89,4 +88,11 @@ public sealed class OgmaUser : IdentityUser<long>, IReportableContent
 	public string? SafetyPinResetTokenHash { get; set; }
 	public DateTimeOffset? SafetyPinResetTokenExpiry { get; set; }
 	public DateTimeOffset? SafetyPinLockedOutUntil { get; set; }
+
+	/// <summary>
+	/// Hash of the currently outstanding password reset token; cleared when consumed or when the
+	/// password is removed. Passwordless accounts never accept password resets through this token.
+	/// </summary>
+	public string? PasswordResetTokenHash { get; set; }
+	public DateTimeOffset? PasswordResetTokenExpiry { get; set; }
 }

@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Ogma3.Data.SecurityTransactions;
 using Ogma3.Data.Users;
+using Ogma3.Services.Security;
 using Utils.Extensions;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage;
@@ -10,7 +12,8 @@ namespace Ogma3.Areas.Identity.Pages.Account.Manage;
 public sealed class ExternalLoginsModel
 (
 	UserManager<OgmaUser> userManager,
-	SignInManager<OgmaUser> signInManager)
+	SignInManager<OgmaUser> signInManager,
+	SecurityAuthorizationService securityAuth)
 	: PageModel
 {
 	public required List<LoginProvider> AllLogins { get; set; }
@@ -50,20 +53,79 @@ public sealed class ExternalLoginsModel
 			return NotFound("Unable to find user.");
 		}
 
-		var result = await userManager.RemoveLoginAsync(user, loginProvider, providerKey);
+		// Removing a login requires fresh account proof, and the grant is bound to the
+		// specific provider + key
+		var target = $"{loginProvider}:{providerKey}";
+		if (!await securityAuth.HasVerifiedGrantAsync(user, SecurityOperation.RemoveExternalLogin, target))
+		{
+			var txn = await securityAuth.BeginAsync(user, SecurityOperation.RemoveExternalLogin, target);
+			return ReauthRequired.RedirectToReauth(txn, Request.Path.ToString(), this);
+		}
+
+		await using var dbTx = await securityAuth.BeginCredentialMutationAsync(user.Id);
+
+		if (!await securityAuth.ConsumeAsync(user, SecurityOperation.RemoveExternalLogin, target))
+		{
+			await dbTx.RollbackAsync();
+			var txn = await securityAuth.BeginAsync(user, SecurityOperation.RemoveExternalLogin, target);
+			return ReauthRequired.RedirectToReauth(txn, Request.Path.ToString(), this);
+		}
+
+		// Re-read authoritative state inside the lock
+		if (await userManager.GetUserAsync(User) is not {} freshUser)
+		{
+			await dbTx.RollbackAsync();
+			return NotFound("Unable to find user.");
+		}
+
+		var logins = await userManager.GetLoginsAsync(freshUser);
+		var passkeys = await userManager.GetPasskeysAsync(freshUser);
+
+		// At least one usable primary login path must remain after the removal
+		if (!LoginPathPolicy.HasUsablePrimaryLoginPath(
+			    passkeys.Count,
+			    hasPassword: freshUser.PasswordHash is not null,
+			    externalLoginCount: logins.Count - 1))
+		{
+			await dbTx.RollbackAsync();
+			StatusMessage = "Error: you cannot remove your only usable login method.";
+			return RedirectToPage();
+		}
+
+		var result = await userManager.RemoveLoginAsync(freshUser, loginProvider, providerKey);
 		if (!result.Succeeded)
 		{
+			await dbTx.RollbackAsync();
 			StatusMessage = "The external login was not removed.";
 			return RedirectToPage();
 		}
 
-		await signInManager.RefreshSignInAsync(user);
+		// Bump the stamp so other sessions are revoked, and renew the current session's cookie
+		await userManager.UpdateSecurityStampAsync(freshUser);
+		await securityAuth.InvalidateForUserAsync(freshUser.Id);
+		await dbTx.CommitAsync();
+		await signInManager.RefreshSignInAsync(freshUser);
+
 		StatusMessage = "The external login was removed.";
 		return RedirectToPage();
 	}
 
 	public async Task<IActionResult> OnPostLinkLoginAsync(string provider)
 	{
+		var user = await userManager.GetUserAsync(User);
+		if (user is null)
+		{
+			return NotFound("Unable to find user.");
+		}
+
+		// Linking a new external login requires fresh account proof before the provider challenge;
+		// the grant is consumed at the callback, together with the actual change
+		if (!await securityAuth.HasVerifiedGrantAsync(user, SecurityOperation.LinkExternalLogin))
+		{
+			var txn = await securityAuth.BeginAsync(user, SecurityOperation.LinkExternalLogin);
+			return ReauthRequired.RedirectToReauth(txn, Request.Path.ToString(), this);
+		}
+
 		// Clear the existing external cookie to ensure a clean login process
 		await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
@@ -93,6 +155,13 @@ public sealed class ExternalLoginsModel
 			return NotFound("Unable to find user.");
 		}
 
+		// The grant was verified before the provider challenge; consume it with the mutation
+		if (!await securityAuth.ConsumeAsync(user, SecurityOperation.LinkExternalLogin))
+		{
+			StatusMessage = "The external login was not added: account verification is missing or expired. Start the link again.";
+			return RedirectToPage();
+		}
+
 		var info = await signInManager.GetExternalLoginInfoAsync(await userManager.GetUserIdAsync(user));
 		if (info is null)
 		{
@@ -105,6 +174,8 @@ public sealed class ExternalLoginsModel
 			StatusMessage = "The external login was not added. External logins can only be associated with one account.";
 			return RedirectToPage();
 		}
+
+		await securityAuth.InvalidateForUserAsync(user.Id);
 
 		// Clear the existing external cookie to ensure a clean login process
 		await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);

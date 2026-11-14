@@ -1,10 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ogma3.Data;
+using Ogma3.Data.SecurityTransactions;
 using Ogma3.Data.Users;
+using Ogma3.Services.Security;
 using Index = Routes.Pages.Index;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage;
@@ -13,21 +14,11 @@ public sealed class DeletePersonalDataModel
 (
 	UserManager<OgmaUser> userManager,
 	SignInManager<OgmaUser> signInManager,
+	SecurityAuthorizationService securityAuth,
 	ILogger<DeletePersonalDataModel> logger,
 	AppDbContext context)
 	: PageModel
 {
-	[BindProperty] public required InputModel Input { get; set; }
-
-	public sealed class InputModel
-	{
-		[Required]
-		[DataType(DataType.Password)]
-		public required string Password { get; set; }
-	}
-
-	public required bool RequirePassword { get; set; }
-
 	public async Task<IActionResult> OnGet()
 	{
 		var user = await userManager.GetUserAsync(User);
@@ -36,7 +27,6 @@ public sealed class DeletePersonalDataModel
 			return NotFound($"Unable to load user with ID '{userManager.GetUserId(User)}'.");
 		}
 
-		RequirePassword = await userManager.HasPasswordAsync(user);
 		return Page();
 	}
 
@@ -48,15 +38,20 @@ public sealed class DeletePersonalDataModel
 			return NotFound($"Unable to load user with ID '{userManager.GetUserId(User)}'.");
 		}
 
-		RequirePassword = await userManager.HasPasswordAsync(user);
-		if (RequirePassword)
+		// Deleting the account requires fresh account proof (password + TOTP, or a passkey);
+		// the old inline password prompt is replaced by the shared reauthentication gate
+		if (!await securityAuth.HasVerifiedGrantAsync(user, SecurityOperation.DeleteAccount))
 		{
-			if (!await userManager.CheckPasswordAsync(user, Input.Password))
-			{
-				ModelState.AddModelError(string.Empty, "Incorrect password.");
-				return Page();
-			}
+			var txn = await securityAuth.BeginAsync(user, SecurityOperation.DeleteAccount);
+			return ReauthRequired.RedirectToReauth(txn, Request.Path.ToString(), this);
 		}
+
+		if (!await securityAuth.ConsumeAsync(user, SecurityOperation.DeleteAccount))
+		{
+			var txn = await securityAuth.BeginAsync(user, SecurityOperation.DeleteAccount);
+			return ReauthRequired.RedirectToReauth(txn, Request.Path.ToString(), this);
+		}
+
 		await context.Users
 			.Where(u => u.Id == user.Id)
 			.ExecuteDeleteAsync();

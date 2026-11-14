@@ -1,8 +1,33 @@
-﻿@page "/confirm-email-change"
-@model ConfirmEmailChangeModel
+﻿@page
+@model Ogma3.Areas.Identity.Pages.Account.ConfirmEmailChangeModel
 @{
 	ViewData["Title"] = "Confirm email change";
 }
 
-<h1>@ViewData["Title"]</h1>
-<partial name="_StatusMessage" model="Model.StatusMessage"/>
+<h1 class="olde">@ViewData["Title"]</h1>
+
+@if (Model.Success)
+{
+	<h2>Your email has been changed.</h2>
+	<p>A notification was sent to your previous email address.</p>
+}
+else if (Model.InvalidToken)
+{
+	<div class="alert alert danger" role="alert">
+		The email change link is invalid or has expired. Request a new confirmation email from your account settings.
+	</div>
+}
+else
+{
+	<h2>Confirm your email change</h2>
+
+	<p>Change your account email to <strong>@Model.Email</strong>?</p>
+	<p>Your username will change to match the new email address. A notification will be sent to your previous email address.</p>
+
+	<form method="post" class="form">
+		<input asp-for="UserName" type="hidden" />
+		<input asp-for="Email" type="hidden" />
+		<input asp-for="Code" type="hidden" />
+		<button type="submit" class="btn btn-primary">Confirm email change</button>
+	</form>
+}

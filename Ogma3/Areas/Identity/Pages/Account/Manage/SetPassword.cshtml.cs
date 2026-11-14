@@ -3,15 +3,19 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Ogma3.Data;
+using Ogma3.Data.SecurityTransactions;
 using Ogma3.Data.Users;
+using Ogma3.Services.Security;
 using Routes.Areas.Identity.Pages;
 
 namespace Ogma3.Areas.Identity.Pages.Account.Manage;
 
 public sealed class SetPasswordModel
 (
-	UserManager<OgmaUser> userManager,
-	SignInManager<OgmaUser> signInManager)
+	OgmaUserManager userManager,
+	SignInManager<OgmaUser> signInManager,
+	SecurityAuthorizationService securityAuth,
+	SecurityNotificationService notifications)
 	: PageModel
 {
 
@@ -68,9 +72,32 @@ public sealed class SetPasswordModel
 			return NotFound($"Unable to load user with ID '{userManager.GetUserId(User)}'.");
 		}
 
+		if (await userManager.HasPasswordAsync(user))
+		{
+			return Account_Manage_ChangePassword.Get().Redirect(this);
+		}
+
+		// Adding a password requires fresh account proof — a passkey, or external provider
+		// re-verification for accounts without any passkey
+		if (!await securityAuth.HasVerifiedGrantAsync(user, SecurityOperation.AddPassword))
+		{
+			var txn = await securityAuth.BeginAsync(user, SecurityOperation.AddPassword);
+			return ReauthRequired.RedirectToReauth(txn, Request.Path.ToString(), this);
+		}
+
+		await using var dbTx = await securityAuth.BeginCredentialMutationAsync(user.Id);
+
+		if (!await securityAuth.ConsumeAsync(user, SecurityOperation.AddPassword))
+		{
+			await dbTx.RollbackAsync();
+			var txn = await securityAuth.BeginAsync(user, SecurityOperation.AddPassword);
+			return ReauthRequired.RedirectToReauth(txn, Request.Path.ToString(), this);
+		}
+
 		var addPasswordResult = await userManager.AddPasswordAsync(user, Input.NewPassword);
 		if (!addPasswordResult.Succeeded)
 		{
+			await dbTx.RollbackAsync();
 			foreach (var error in addPasswordResult.Errors)
 			{
 				ModelState.AddModelError(string.Empty, error.Description);
@@ -79,7 +106,15 @@ public sealed class SetPasswordModel
 			return Page();
 		}
 
+		await securityAuth.InvalidateForUserAsync(user.Id);
+		await dbTx.CommitAsync();
+
+		// AddPasswordAsync bumps the security stamp; renew the current session's cookie
 		await signInManager.RefreshSignInAsync(user);
+
+		await notifications.SendAsync(user, "Password sign-in was added to your account",
+			"Password sign-in was just added to your Genfic account. If this wasn't you, verify your account security immediately.");
+
 		StatusMessage = "Your password has been set.";
 
 		return RedirectToPage();
