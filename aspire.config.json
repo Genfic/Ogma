@@ -1,5 +1,11 @@
 {
-  "appHost": {
-    "path": "Ogma3.AppHost/Ogma3.AppHost.csproj"
-  }
+	"appHost": {
+		"path": "Ogma3.AppHost/Ogma3.AppHost.csproj"
+	},
+	"sdk": {
+		"version": "17.0.0"
+	},
+	"features": {
+		"appHostServerV2": true
+	}
 }
