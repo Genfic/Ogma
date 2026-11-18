@@ -1,4 +1,4 @@
-<Project Sdk="Aspire.AppHost.Sdk/13.6.5">
+<Project Sdk="Aspire.AppHost.Sdk/17.0.0">
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
@@ -14,6 +14,7 @@
     <ItemGroup>
         <PackageReference Include="Aspire.Hosting.Docker" />
         <PackageReference Include="Aspire.Hosting.Docker.SshDeploy" />
+        <PackageReference Include="Aspire.Hosting.Dotnet" />
         <PackageReference Include="Aspire.Hosting.Garnet" />
         <PackageReference Include="Aspire.Hosting.PostgreSQL" />
         <PackageReference Include="LibGit2Sharp" />

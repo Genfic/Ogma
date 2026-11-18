@@ -1,4 +1,3 @@
-using Aspire.Hosting.Docker.Resources.ServiceNodes;
 using Microsoft.Extensions.Configuration;
 using Ogma3.AppHost.Helpers;
 
@@ -76,12 +75,12 @@ var database = builder
 	.AddDatabase("ogma3-db");
 
 var migrator = builder
-	.AddProject<Projects.Ogma3_Migrator>("migrator")
+	.AddDotnetProject("migrator", "../Ogma3.Migrator/Ogma3.Migrator.csproj")
 	.WithReference(database)
 	.WaitFor(database);
 
 var genfic = builder
-	.AddProject<Projects.Ogma3>("ogma3")
+	.AddDotnetProject("ogma3", "../Ogma3/Ogma3.csproj")
 	.WithHttpEndpoint(port: 32773, targetPort: 8080)
 	.WithExternalHttpEndpoints()
 	.WithEnvironment("ASPNETCORE_ENVIRONMENT", isProd ? "Production" : "Development")
