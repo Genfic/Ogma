@@ -13,6 +13,8 @@ $blue: oklch(45% 0.185 261.749deg);
 $yellow: oklch(85% 0.18 90.382deg);
 
 :root {
+	color-scheme: light;
+
 	--trans: transparent;
 	--foreground: #{$foreground};
 

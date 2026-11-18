@@ -28,7 +28,7 @@
 				border-top-right-radius: 0.25rem;
 			}
 
-			&.active {
+			&[aria-selected="true"] {
 				background-color: var(--background);
 				border-top-right-radius: 0.25rem;
 				border-top-left-radius: 0.25rem;
@@ -41,12 +41,6 @@
 	}
 
 	.tab-body {
-		&:not(.active) {
-			visibility: hidden;
-			height: 0;
-			overflow: hidden;
-		}
-
 		> .title {
 			margin: 1rem 0 0.5rem;
 			font-family: var(--font-imfell), serif;

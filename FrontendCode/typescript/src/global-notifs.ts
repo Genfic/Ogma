@@ -1,4 +1,5 @@
 import { Cookies } from "@g/ctconfig";
+import { getCookieValue, setCookie } from "@h/cookies";
 import { $queryAll } from "@h/dom";
 
 const COOKIE_NAME = Cookies.DismissedNotifications;
@@ -16,18 +17,16 @@ for (const notif of notifs) {
 
 	btn.addEventListener("click", async () => {
 		console.log("Clicked");
-		const cookie = await cookieStore.get(COOKIE_NAME);
+		const cookie = await getCookieValue(COOKIE_NAME);
 		console.log("cookie:", cookie);
 
-		const dismissed = new Set(cookie?.value?.split(","));
+		const dismissed = new Set(cookie?.split(","));
 		dismissed.add(id);
 
 		console.log(dismissed);
 
-		await cookieStore.set({
-			name: COOKIE_NAME,
-			value: [...dismissed].join(","),
-			sameSite: "lax",
+		await setCookie(COOKIE_NAME, [...dismissed].join(","), {
+			sameSite: "Lax",
 			expires: Date.now() + 60 * 60 * 60 * 24 * 365 * 10,
 			path: "/",
 		});

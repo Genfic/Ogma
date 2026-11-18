@@ -11,30 +11,32 @@
 
 <div id="tabs" class="tab-view mt-3" tab-view>
 	<div class="tabs" role="tablist" aria-label="Story categories">
-		<button class="tab active"
+		<button class="tab"
 		        id="tab-1"
+		        type="button"
 		        role="tab"
-		        aria-controls="panel-1">
+		        aria-selected="true">
 			Top
 		</button>
 		<button class="tab"
 		        id="tab-2"
+		        type="button"
 		        role="tab"
-		        aria-controls="panel-2">
+		        aria-selected="false">
 			New
 		</button>
 		<button class="tab"
 		        id="tab-3"
+		        type="button"
 		        role="tab"
-		        aria-controls="panel-3">
+		        aria-selected="false">
 			Updated
 		</button>
 	</div>
 
-	<div class="tab-body active"
+	<div class="tab-body"
 	     id="panel-1"
 	     role="tabpanel"
-	     tabindex="0"
 	     aria-labelledby="tab-1">
 		<h2 class="title olde">Top stories of all time</h2>
 
@@ -49,7 +51,7 @@
 	<div class="tab-body"
 	     id="panel-2"
 	     role="tabpanel"
-	     tabindex="0"
+	     hidden
 	     aria-labelledby="tab-2">
 		<h2 class="title olde">Newest stories</h2>
 
@@ -64,7 +66,7 @@
 	<div class="tab-body"
 	     id="panel-3"
 	     role="tabpanel"
-	     tabindex="0"
+	     hidden
 	     aria-labelledby="tab-3">
 		<h2 class="title olde">Freshly updated</h2>
 

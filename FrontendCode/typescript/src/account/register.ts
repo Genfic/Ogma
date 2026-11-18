@@ -54,5 +54,8 @@ for (const input of formInputs) {
 }
 
 const turnstile = $query(".cf-turnstile");
-const theme = getCookieValue("theme");
-turnstile.dataset.theme = theme;
+const theme = await getCookieValue("theme");
+
+if (theme) {
+	turnstile.dataset.theme = theme;
+}
