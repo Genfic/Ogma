@@ -5,10 +5,11 @@
 @using Ogma3.Data
 @using Ogma3.Infrastructure.OgmaConfig
 @using Ogma3.Services.TurnstileService
+@using Routes.Pages
 @model RegisterModel
 @{
 	ViewData["Title"] = "Register";
-	var theme = Request.Cookies.TryGetValue("theme", out var t) ? t : "light";
+	var theme = Request.Cookies.TryGetValue("theme", out var t) ? t : "auto";
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -88,7 +89,7 @@
 
 			<div class="o-form-group inline">
 				<label asp-for="Input.TosAccepted">
-					I accept the <a for-route="@Routes.Pages.Docs.Get(Config.TosDoc)" target="_blank">Terms of Service</a>
+					I accept the <a for-route="@Docs.Get(Config.TosDoc)" target="_blank">Terms of Service</a>
 				</label>
 				<span asp-validation-for="Input.TosAccepted" class="text-danger"></span>
 				<input asp-for="Input.TosAccepted" type="checkbox" required>
@@ -96,7 +97,7 @@
 
 			<div class="o-form-group inline">
 				<label asp-for="Input.PrivacyPolicyAccepted">
-					I accept the <a for-route="@Routes.Pages.Docs.Get(Config.PrivacyPolicyDoc)" target="_blank">Privacy Policy</a>
+					I accept the <a for-route="@Docs.Get(Config.PrivacyPolicyDoc)" target="_blank">Privacy Policy</a>
 				</label>
 				<span asp-validation-for="Input.PrivacyPolicyAccepted" class="text-danger"></span>
 				<input asp-for="Input.PrivacyPolicyAccepted" type="checkbox" required>

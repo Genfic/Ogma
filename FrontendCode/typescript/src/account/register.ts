@@ -1,4 +1,3 @@
-import { getCookieValue } from "@h/cookies";
 import { $id, $query, $queryAll } from "@h/dom";
 import { minePow } from "@h/pow";
 
@@ -15,8 +14,12 @@ if (!token || !diff) {
 
 let powStarted = false;
 const runPow = async () => {
+	console.log("Running PoW with token", token, "and difficulty", diff);
+
 	const res = await minePow(token, Number.parseInt(diff, 10));
+
 	console.log("PoW", res);
+
 	for (const [k, v] of Object.entries({ ...res, token })) {
 		const el = $query<HTMLInputElement>(`[id="Input_Pow${k}" i]`);
 		el.value = String(v);
@@ -51,11 +54,4 @@ for (const input of formInputs) {
 			info.classList.remove(classname);
 		}, 50);
 	});
-}
-
-const turnstile = $query(".cf-turnstile");
-const theme = await getCookieValue("theme");
-
-if (theme) {
-	turnstile.dataset.theme = theme;
 }

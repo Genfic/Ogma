@@ -31,6 +31,7 @@ public static class SecurityHeaderPolicies
 						.None();
 					csp.AddScriptSrc()
 						.Self()
+						.WasmUnsafeEval()
 						.From("https://challenges.cloudflare.com")
 						.From("https://*.challenges.cloudflare.com")
 						.WithNonce();

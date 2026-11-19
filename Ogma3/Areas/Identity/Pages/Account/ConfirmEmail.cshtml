@@ -6,5 +6,30 @@
 
 <h1>@ViewData["Title"]</h1>
 
+<h2>Does everything look good?</h2>
+
 <partial name="_StatusMessage" model="Model.StatusMessage"/>
 
+<form class="form" method="post">
+	<div class="o-form-group">
+		<label asp-for="@Model.UserName"></label>
+		<input asp-for="@Model.UserName" readonly>
+	</div>
+
+	<div class="o-form-group">
+		<label asp-for="@Model.Code"></label>
+		<input asp-for="@Model.Code" readonly>
+	</div>
+
+	<input id="timezone" asp-for="@Model.Timezone" hidden>
+
+	<div class="o-form-group">
+		<button class="btn btn-primary" type="submit">
+			Confirm
+		</button>
+	</div>
+</form>
+
+@section Scripts {
+	<script type="module" src="~/js/account/timezone.js" asp-append-version="true"></script>
+}

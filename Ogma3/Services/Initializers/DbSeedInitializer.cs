@@ -265,7 +265,7 @@ public sealed class DbSeedInitializer : IHostedLifecycleService
 				var order = 0u;
 				var chapterGenerator = new Faker<Chapter>()
 					.RuleFor(c => c.Title, cf => cf.WaffleTitle())
-					.RuleFor(c => c.Body, cf => cf.WaffleMarkdown(f.Random.Int(10, 30), false))
+					.RuleFor(c => c.Body, cf => WaffleExtensions.WaffleMarkdown(cf, f.Random.Int(10, 30), false))
 					.RuleFor(c => c.PublicationDate, cf => s.PublicationDate is {} pd
 						? cf.Date.BetweenOffset(pd, DateTimeOffset.UtcNow).ToUniversalTime()
 						: null)
@@ -397,15 +397,17 @@ public sealed class DbSeedInitializer : IHostedLifecycleService
 
 	private static string RandomPassword()
 	{
-		var alpha = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()"u8;
+		var alpha = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()".AsSpan();
 		Span<byte> indices = stackalloc byte[20];
 		Span<char> chars = stackalloc char[20];
+
 		RandomNumberGenerator.Fill(indices);
 
-		foreach (var i in indices)
+		for (var i = 0; i < chars.Length; i++)
 		{
-			chars[i] = (char)alpha[i % alpha.Length];
+			chars[i] = alpha[indices[i] % alpha.Length];
 		}
+
 		return new string(chars);
 	}
 }

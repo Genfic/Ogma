@@ -10,6 +10,8 @@ using Ogma3.Data.CommentsThreads;
 using Ogma3.Data.Images;
 using Ogma3.Data.Shelves;
 using Ogma3.Services.GeneratedImagesService;
+using Ogma3.Services.TimeService;
+using Routes.Areas.Identity.Pages;
 using Utils.Extensions;
 
 namespace Ogma3.Areas.Identity.Pages.Account;
@@ -19,12 +21,13 @@ public sealed class ConfirmEmailModel(
 	OgmaUserManager userManager,
 	AppDbContext context,
 	GeneratedImagesService imagesService,
-	ILogger<ConfirmEmailModel> logger
+	ILogger<ConfirmEmailModel> logger,
+	ITimeService timeService
 ) : PageModel
 {
 	[TempData] public required string StatusMessage { get; set; }
 
-	public async Task<IActionResult> OnGetAsync(string? userName = null, string? code = null)
+	public IActionResult OnGetAsync(string? userName = null, string? code = null)
 	{
 		if (userName is null || code is null)
 		{
@@ -32,15 +35,30 @@ public sealed class ConfirmEmailModel(
 			return Page();
 		}
 
-		var user = await userManager.FindByNameAsync(userName);
+		UserName = userName;
+		Code = code;
+
+		return Page();
+	}
+
+	[BindProperty]
+	public required string UserName { get; set; }
+	[BindProperty]
+	public required string Code { get; set; }
+	[BindProperty]
+	public string? Timezone { get; set; }
+
+	public async Task<IActionResult> OnPostAsync()
+	{
+		var user = await userManager.FindByNameAsync(UserName);
 		if (user is null)
 		{
-			logger.LogWarning("Attempt to confirm email for nonexistent user '{UserName}'.", userName.RemoveNewLines());
+			logger.LogWarning("Attempt to confirm email for nonexistent user '{UserName}'.", UserName.RemoveNewLines());
 			StatusMessage = "Error: Invalid confirmation link.";
 			return Page();
 		}
 
-		var decodedCode = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
+		var decodedCode = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(Code));
 		var result = await userManager.ConfirmEmailAsync(user, decodedCode);
 
 		StatusMessage = result.Succeeded ? "Thank you for confirming your email." : "Error confirming your email.";
@@ -50,6 +68,13 @@ public sealed class ConfirmEmailModel(
 			return Page();
 		}
 
+		// Setup default timezone
+		var tzi = timeService.TryGetValid(Timezone, out var t)
+			? t
+			: TimeZoneInfo.Utc;
+
+		user.TimeZone = tzi.IanaId;
+
 		// Setup default avatar
 		var avatar = new Image
 		{
@@ -57,7 +82,6 @@ public sealed class ConfirmEmailModel(
 		};
 		context.Images.Add(avatar);
 		user.Avatar = avatar;
-
 
 		// Setup default blacklists
 		var defaultBlockedRatings = await context.Ratings
@@ -116,6 +140,6 @@ public sealed class ConfirmEmailModel(
 
 		StatusMessage = "Thank you for confirming your email.";
 
-		return Routes.Areas.Identity.Pages.Account_Login.Get().Redirect(this);
+		return Account_Login.Get().Redirect(this);
 	}
 }

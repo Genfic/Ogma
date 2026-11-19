@@ -131,7 +131,10 @@ public sealed class RegisterModel(
 		returnUrl ??= Url.Content("~/");
 		await Hydrate(returnUrl, invite);
 
-		if (!ModelState.IsValid) return Page();
+		if (!ModelState.IsValid)
+		{
+			return Page();
+		}
 
 		// Check honeypot
 		if (!string.IsNullOrEmpty(Input.Occupation))

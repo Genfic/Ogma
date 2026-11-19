@@ -1,14 +1,17 @@
 import { hexToBytes } from "@h/byte-hex-helpers";
+import { fileHash } from "@h/macros/file-hash.macro" with { type: "macro" };
 import * as Comlink from "comlink";
 import type { PowApi } from "../src/workers/pow.worker";
 
 let cache: { worker?: Worker; api?: Comlink.Remote<PowApi> } = {};
 
+const hash = await fileHash("src/workers/pow.worker.ts");
+
 const getWorkerApi = () => {
 	if (cache.worker && cache.api) {
 		return cache.api;
 	}
-	const worker = new Worker(new URL("/js/workers/pow.worker.js", import.meta.url), { type: "module" });
+	const worker = new Worker(new URL(`/js/workers/pow.worker.js?v=${hash}`, import.meta.url), { type: "module" });
 	const api = Comlink.wrap<PowApi>(worker);
 	cache = {
 		worker,
@@ -36,5 +39,5 @@ export const minePow = async (payload: string, difficulty: number): Promise<PowR
 
 	const targetHex = target.toString(16).padStart(64, "0");
 
-	return api.mine(payload, hexToBytes(targetHex));
+	return api.mine(payload, hexToBytes(targetHex), Comlink.proxy(console.log));
 };

@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 using Immediate.Injections.Shared;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Options;
@@ -47,5 +48,25 @@ public sealed class TimeService : ITimeService
 			.ThenBy(i => i.Text)
 			.Distinct()
 			.ToImmutableArray();
+	}
+
+	public bool TryGetValid(string? input, [NotNullWhen(true)]out TimeZoneInfo? timeZoneInfo)
+	{
+		if (string.IsNullOrWhiteSpace(input))
+		{
+			timeZoneInfo = null;
+			return false;
+		}
+
+		var id = input.Trim();
+
+		if (TimeZoneInfo.TryFindSystemTimeZoneById(id, out var zone))
+		{
+			timeZoneInfo = zone;
+			return true;
+		}
+
+		timeZoneInfo = null;
+		return false;
 	}
 }

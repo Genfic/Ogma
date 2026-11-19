@@ -2,61 +2,67 @@ import { bytesToHex } from "@h/byte-hex-helpers";
 import * as Comlink from "comlink";
 import { createSHA256 } from "hash-wasm";
 
-let hasher: Awaited<ReturnType<typeof createSHA256>> | null = null;
+const encoder = new TextEncoder();
 
-const checkHash = (bytes: Uint8Array, target: Uint8Array) => {
-	if (bytes.length !== target.length) {
-		return false;
-	}
+const checkHash = (hash: Uint8Array, target: Uint8Array): boolean => {
 	for (let i = 0; i < target.length; i++) {
-		if (bytes[i] < target[i]) {
+		if (hash[i] < target[i]) {
 			return true;
 		}
-		if (bytes[i] > target[i]) {
+		if (hash[i] > target[i]) {
 			return false;
 		}
 	}
+
 	return true;
 };
 
 let shouldAbort = false;
 
 const api = {
-	/**
-	 * Mines a hash that matches the target criteria by iterating over nonce values and checking the hash.
-	 *
-	 * @param {string} data The input data to include in the hash calculation along with the nonce.
-	 * @param {Uint8Array} target The target threshold used to validate the generated hash.
-	 * @return {Promise<{nonce: number, hash: string}>} A promise that resolves to an object containing the valid nonce and corresponding hash.
-	 */
-	async mine(data: string, target: Uint8Array): Promise<{ nonce: number; hash: string }> {
+	async mine(
+		data: string,
+		target: Uint8Array,
+		onLog: (text: string) => void,
+	): Promise<{ nonce: number; hash: string }> {
 		shouldAbort = false;
-		hasher ??= await createSHA256();
+		const start = performance.now();
+
+		const hasher = await createSHA256();
+		const prefix = encoder.encode(data);
 
 		let nonce = 0;
 		let lastYield = performance.now();
 
-		while (true) {
-			if (shouldAbort) {
-				throw new Error("Mining aborted");
-			}
+		onLog("Mining started.");
 
+		while (!shouldAbort) {
 			hasher.init();
-			hasher.update(`${data}${nonce}`);
+			hasher.update(prefix);
+			hasher.update(encoder.encode(nonce.toString()));
 
 			const hash = hasher.digest("binary");
 
 			if (checkHash(hash, target)) {
-				return { nonce, hash: bytesToHex(hash) };
+				onLog(`Mining completed in ${performance.now() - start} ms`);
+				shouldAbort = true;
+				return {
+					nonce,
+					hash: bytesToHex(hash),
+				};
 			}
 
 			nonce++;
 
-			if (performance.now() - lastYield > 16) {
-				await new Promise((resolve) => setTimeout(resolve, 0));
+			if (performance.now() - lastYield >= 100) {
+				onLog(`Mining nonce ${nonce}`);
+				await new Promise<void>((resolve) => setTimeout(resolve, 0));
 				lastYield = performance.now();
 			}
 		}
+
+		onLog("Mining aborted");
+		throw new Error("Mining aborted");
 	},
 
 	abort() {
@@ -65,4 +71,5 @@ const api = {
 };
 
 export type PowApi = typeof api;
+
 Comlink.expose(api);

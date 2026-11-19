@@ -63,7 +63,7 @@ var garnet = builder
 var database = builder
 	.AddPostgres("postgres", port: 5432, password: postgresPassword)
 	.WithImageTag("18")
-	.WithDataVolume()
+	.WithDataVolume("ogma3-postgres-volume")
 	.WithRepl()
 	.WithLifetime(ContainerLifetime.Persistent)
 	.WithEndpoint("tcp", e => {

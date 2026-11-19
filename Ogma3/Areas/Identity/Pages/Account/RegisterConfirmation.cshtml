@@ -5,6 +5,7 @@
 @model RegisterConfirmationModel
 @{
 	ViewData["Title"] = "Register confirmation";
+	var theme = Request.Cookies.TryGetValue("theme", out var t) ? t : "auto";
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -15,9 +16,9 @@
 
 <form method="post">
 	<input type="hidden" value="@Model.Email">
-	
-	<div class="cf-turnstile" data-sitekey="@TurnstileSettings.Value.SiteKey" data-action="register confirmation"></div>
-	
+
+	<div class="cf-turnstile" data-sitekey="@TurnstileSettings.Value.SiteKey" data-action="register confirmation" data-theme="@theme"></div>
+
 	<button class="btn btn-primary">Resend email</button>
 </form>
 
