@@ -61,6 +61,11 @@ tasks:
     cmds:
       - dotnet ef dbcontext optimize --output-dir CompiledModels --namespace CompiledModels {{.CLI_ARGS}}
 
+  db-squash:
+    cmds:
+      - rm -r ./Ogma3.Data/Migrations
+      - dotnet ef migrations add SquashBaseline
+
   # Frontend
   build-front:
     dir: ./FrontendCode

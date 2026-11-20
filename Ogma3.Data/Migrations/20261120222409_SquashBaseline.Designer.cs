@@ -13,15 +13,14 @@ using Ogma3.Data.Infractions;
 using Ogma3.Data.Notifications;
 using Ogma3.Data.Reports;
 using Ogma3.Data.Stories;
-using Ogma3.Data.Tags;
 
 #nullable disable
 
 namespace Ogma3.Data.Migrations;
 
 [DbContext(typeof(AppDbContext))]
-[Migration("20260711120237_MoreCaseInsensitiveCollations")]
-partial class _20260711120237_MoreCaseInsensitiveCollations
+[Migration("20261120222409_SquashBaseline")]
+partial class _20261120222409_SquashBaseline
 {
     /// <inheritdoc />
     protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -30,29 +29,31 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
         modelBuilder
             .HasAnnotation("Npgsql:CollationDefinition:nocase", "und-u-ks-level2,und-u-ks-level2,icu,False")
             .HasAnnotation("Npgsql:CollationDefinition:nocase-noaccent", "und-u-ks-level1,und-u-ks-level1,icu,False")
-            .HasAnnotation("ProductVersion", "11.0.0-preview.5.26302.115")
+            .HasAnnotation("ProductVersion", "11.0.0")
             .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
         NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "e_club_member_roles", new[] { "admin", "founder", "moderator", "user" });
         NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "e_deleted_by", new[] { "staff", "user" });
         NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "e_notification_event", new[] { "comment_reply", "followed_author_new_blogpost", "followed_author_new_story", "new_follower", "system", "watched_story_updated", "watched_thread_new_comment" });
         NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "e_story_status", new[] { "cancelled", "completed", "in_progress", "on_hiatus", "unspecified" });
-        NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "e_tag_namespace", new[] { "content_warning", "franchise", "genre" });
         NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "infraction_type", new[] { "ban", "mute", "note", "warning" });
         NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "report_status", new[] { "in_review", "open", "rejected", "resolved" });
         NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "citext");
+        NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "fuzzystrmatch");
         NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "intarray");
+        NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "pg_trgm");
         NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "tsm_system_rows");
+        NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "unaccent");
         NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "uuid-ossp");
         NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
         modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<long>", b =>
             {
-                b.Property<int>("Id")
+                var id = b.Property<int>("Id")
                     .ValueGeneratedOnAdd()
                     .HasColumnType("integer");
 
-                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(id);
 
                 b.Property<string>("ClaimType")
                     .HasColumnType("text");
@@ -67,16 +68,16 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
 
                 b.HasIndex("RoleId");
 
-                b.ToTable("AspNetRoleClaims", (string)null);
+                b.ToTable("AspNetRoleClaims");
             });
 
         modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<long>", b =>
             {
-                b.Property<int>("Id")
+                var id = b.Property<int>("Id")
                     .ValueGeneratedOnAdd()
                     .HasColumnType("integer");
 
-                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(id);
 
                 b.Property<string>("ClaimType")
                     .HasColumnType("text");
@@ -91,7 +92,7 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
 
                 b.HasIndex("UserId");
 
-                b.ToTable("AspNetUserClaims", (string)null);
+                b.ToTable("AspNetUserClaims");
             });
 
         modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<long>", b =>
@@ -114,7 +115,7 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
 
                 b.HasIndex("UserId");
 
-                b.ToTable("AspNetUserLogins", (string)null);
+                b.ToTable("AspNetUserLogins");
             });
 
         modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserPasskey<long>", b =>
@@ -164,7 +165,7 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
 
                 b.HasIndex("UserId");
 
-                b.ToTable("AspNetUserPasskeys", (string)null);
+                b.ToTable("AspNetUserPasskeys");
             });
 
         modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<long>", b =>
@@ -185,7 +186,7 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
 
                 b.HasKey("UserId", "LoginProvider", "Name");
 
-                b.ToTable("AspNetUserTokens", (string)null);
+                b.ToTable("AspNetUserTokens");
             });
 
         modelBuilder.Entity("Ogma3.Data.Blacklists.BlacklistedRating", b =>
@@ -220,11 +221,11 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
 
         modelBuilder.Entity("Ogma3.Data.Blacklists.ContentBlock", b =>
             {
-                b.Property<long>("Id")
+                var id = b.Property<long>("Id")
                     .ValueGeneratedOnAdd()
                     .HasColumnType("bigint");
 
-                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(id);
 
                 b.Property<DateTimeOffset>("DateTime")
                     .ValueGeneratedOnAdd()
@@ -253,11 +254,11 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
 
         modelBuilder.Entity("Ogma3.Data.Blogposts.Blogpost", b =>
             {
-                b.Property<long>("Id")
+                var id = b.Property<long>("Id")
                     .ValueGeneratedOnAdd()
                     .HasColumnType("bigint");
 
-                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(id);
 
                 b.Property<long?>("AttachedChapterId")
                     .HasColumnType("bigint");
@@ -266,7 +267,9 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
                     .HasColumnType("bigint");
 
                 b.Property<long>("AuthorId")
-                    .HasColumnType("bigint");
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("bigint")
+                    .HasDefaultValue(-1L);
 
                 b.Property<string>("Body")
                     .IsRequired()
@@ -281,17 +284,32 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
                     .HasColumnType("timestamp with time zone")
                     .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
+                b.Property<int>("ExcerptCutoff")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("integer")
+                    .HasDefaultValue(200);
+
                 b.PrimitiveCollection<string[]>("Hashtags")
                     .IsRequired()
                     .ValueGeneratedOnAdd()
-                    .HasMaxLength(10)
-                    .HasColumnType("text[]")
+                    .HasColumnType("character varying(20)[]")
                     .HasDefaultValue(new string[0]);
 
                 b.Property<bool>("IsLocked")
                     .HasColumnType("boolean");
 
+                b.Property<bool>("IsVisible")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("boolean")
+                    .HasDefaultValue(false);
+
                 b.Property<DateTimeOffset?>("PublicationDate")
+                    .HasColumnType("timestamp with time zone");
+
+                b.Property<DateTimeOffset?>("ScheduledFor")
+                    .HasColumnType("timestamp with time zone");
+
+                b.Property<DateTimeOffset?>("ScheduledForDeletion")
                     .HasColumnType("timestamp with time zone");
 
                 b.Property<string>("Slug")
@@ -302,7 +320,8 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
                 b.Property<string>("Title")
                     .IsRequired()
                     .HasMaxLength(100)
-                    .HasColumnType("character varying(100)");
+                    .HasColumnType("character varying(100)")
+                    .UseCollation("nocase");
 
                 b.Property<int>("WordCount")
                     .ValueGeneratedOnAdd()
@@ -320,20 +339,34 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
                 b.HasIndex("ContentBlockId")
                     .IsUnique();
 
-                b.HasIndex("CreationDate");
+                var index = b.HasIndex("Hashtags")
+                    .HasFilter("\"IsVisible\"");
+
+                NpgsqlIndexBuilderExtensions.HasMethod(index, "gin");
 
                 b.HasIndex("PublicationDate");
 
-                b.ToTable("Blogposts");
+                b.HasIndex("ScheduledFor")
+                    .HasFilter("\"ScheduledFor\" IS NOT NULL");
+
+                b.HasIndex("ScheduledForDeletion")
+                    .HasFilter("\"ScheduledForDeletion\" IS NOT NULL");
+
+                b.HasIndex("Title");
+
+                b.ToTable("Blogposts", t =>
+                    {
+                        t.HasCheckConstraint("CK_Blogpost_Hashtags_cardinality", "cardinality(\"Hashtags\") <= 20");
+                    });
             });
 
         modelBuilder.Entity("Ogma3.Data.Chapters.Chapter", b =>
             {
-                b.Property<long>("Id")
+                var id = b.Property<long>("Id")
                     .ValueGeneratedOnAdd()
                     .HasColumnType("bigint");
 
-                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(id);
 
                 b.Property<string>("Body")
                     .IsRequired()
@@ -352,10 +385,21 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
                     .HasMaxLength(500)
                     .HasColumnType("character varying(500)");
 
+                b.Property<bool>("IsVisible")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("boolean")
+                    .HasDefaultValue(false);
+
                 b.Property<long>("Order")
                     .HasColumnType("bigint");
 
                 b.Property<DateTimeOffset?>("PublicationDate")
+                    .HasColumnType("timestamp with time zone");
+
+                b.Property<DateTimeOffset?>("ScheduledFor")
+                    .HasColumnType("timestamp with time zone");
+
+                b.Property<DateTimeOffset?>("ScheduledForDeletion")
                     .HasColumnType("timestamp with time zone");
 
                 b.Property<int[]>("Signature")
@@ -391,9 +435,15 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
 
                 b.HasIndex("PublicationDate");
 
-                b.HasIndex("Signature");
+                b.HasIndex("ScheduledFor")
+                    .HasFilter("\"ScheduledFor\" IS NOT NULL");
 
-                NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("Signature"), "gin");
+                b.HasIndex("ScheduledForDeletion")
+                    .HasFilter("\"ScheduledForDeletion\" IS NOT NULL");
+
+                var index = b.HasIndex("Signature");
+
+                NpgsqlIndexBuilderExtensions.HasMethod(index, "gin");
 
                 b.HasIndex("StoryId");
 
@@ -422,11 +472,11 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
 
         modelBuilder.Entity("Ogma3.Data.ClubModeratorActions.ClubModeratorAction", b =>
             {
-                b.Property<long>("Id")
+                var id = b.Property<long>("Id")
                     .ValueGeneratedOnAdd()
                     .HasColumnType("bigint");
 
-                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(id);
 
                 b.Property<long>("ClubId")
                     .HasColumnType("bigint");
@@ -441,10 +491,12 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
                     .HasMaxLength(5000)
                     .HasColumnType("character varying(5000)");
 
-                b.Property<long>("ModeratorId")
+                b.Property<long?>("ModeratorId")
                     .HasColumnType("bigint");
 
                 b.HasKey("Id");
+
+                b.HasIndex("ClubId");
 
                 b.HasIndex("ModeratorId");
 
@@ -453,11 +505,11 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
 
         modelBuilder.Entity("Ogma3.Data.ClubThreads.ClubThread", b =>
             {
-                b.Property<long>("Id")
+                var id = b.Property<long>("Id")
                     .ValueGeneratedOnAdd()
                     .HasColumnType("bigint");
 
-                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(id);
 
                 b.Property<long>("AuthorId")
                     .HasColumnType("bigint");
@@ -497,11 +549,11 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
 
         modelBuilder.Entity("Ogma3.Data.Clubs.Club", b =>
             {
-                b.Property<long>("Id")
+                var id = b.Property<long>("Id")
                     .ValueGeneratedOnAdd()
                     .HasColumnType("bigint");
 
-                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(id);
 
                 b.Property<DateTimeOffset>("CreationDate")
                     .ValueGeneratedOnAdd()
@@ -566,14 +618,16 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
 
         modelBuilder.Entity("Ogma3.Data.Comments.Comment", b =>
             {
-                b.Property<long>("Id")
+                var id = b.Property<long>("Id")
                     .ValueGeneratedOnAdd()
                     .HasColumnType("bigint");
 
-                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(id);
 
                 b.Property<long>("AuthorId")
-                    .HasColumnType("bigint");
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("bigint")
+                    .HasDefaultValue(-1L);
 
                 b.Property<string>("Body")
                     .IsRequired()
@@ -607,11 +661,11 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
 
         modelBuilder.Entity("Ogma3.Data.Comments.CommentRevision", b =>
             {
-                b.Property<long>("Id")
+                var id = b.Property<long>("Id")
                     .ValueGeneratedOnAdd()
                     .HasColumnType("bigint");
 
-                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(id);
 
                 b.Property<string>("Body")
                     .IsRequired()
@@ -635,11 +689,11 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
 
         modelBuilder.Entity("Ogma3.Data.CommentsThreads.CommentThread", b =>
             {
-                b.Property<long>("Id")
+                var id = b.Property<long>("Id")
                     .ValueGeneratedOnAdd()
                     .HasColumnType("bigint");
 
-                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(id);
 
                 b.Property<long?>("BlogpostId")
                     .HasColumnType("bigint");
@@ -668,24 +722,59 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
                 b.Property<DateTimeOffset?>("LockDate")
                     .HasColumnType("timestamp with time zone");
 
+                b.Property<long?>("NewsId")
+                    .HasColumnType("bigint");
+
+                b.Property<short>("Source")
+                    .ValueGeneratedOnAddOrUpdate()
+                    .HasColumnType("smallint")
+                    .HasComputedColumnSql("CASE\r\n	WHEN \"ChapterId\" IS NOT NULL THEN 0\r\n	WHEN \"BlogpostId\" IS NOT NULL THEN 1\r\n	WHEN \"UserId\" IS NOT NULL THEN 2\r\n	WHEN \"ClubThreadId\" IS NOT NULL THEN 3\r\n	WHEN \"NewsId\" IS NOT NULL THEN 4\r\nEND", true);
+
+                b.Property<long>("SourceId")
+                    .ValueGeneratedOnAddOrUpdate()
+                    .HasColumnType("bigint")
+                    .HasComputedColumnSql("CASE\r\n	WHEN \"ChapterId\" IS NOT NULL THEN \"ChapterId\"\r\n	WHEN \"BlogpostId\" IS NOT NULL THEN \"BlogpostId\"\r\n	WHEN \"UserId\" IS NOT NULL THEN \"UserId\"\r\n	WHEN \"ClubThreadId\" IS NOT NULL THEN \"ClubThreadId\"\r\n	WHEN \"NewsId\" IS NOT NULL THEN \"NewsId\"\r\nEND", true);
+
                 b.Property<long?>("UserId")
                     .HasColumnType("bigint");
 
                 b.HasKey("Id");
 
                 b.HasIndex("BlogpostId")
-                    .IsUnique();
+                    .IsUnique()
+                    .HasFilter("\"BlogpostId\" IS NOT NULL");
 
                 b.HasIndex("ChapterId")
-                    .IsUnique();
+                    .IsUnique()
+                    .HasFilter("\"ChapterId\" IS NOT NULL");
 
                 b.HasIndex("ClubThreadId")
-                    .IsUnique();
+                    .IsUnique()
+                    .HasFilter("\"ClubThreadId\" IS NOT NULL");
+
+                b.HasIndex("NewsId")
+                    .IsUnique()
+                    .HasFilter("\"NewsId\" IS NOT NULL");
 
                 b.HasIndex("UserId")
-                    .IsUnique();
+                    .IsUnique()
+                    .HasFilter("\"UserId\" IS NOT NULL");
 
                 b.ToTable("CommentThreads");
+
+                b.HasData(
+                    new
+                    {
+                        Id = -1L,
+                        LockDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                        UserId = -1L
+                    },
+                    new
+                    {
+                        Id = -2L,
+                        LockDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                        UserId = -2L
+                    });
             });
 
         modelBuilder.Entity("Ogma3.Data.CommentsThreads.CommentThreadSubscriber", b =>
@@ -705,11 +794,11 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
 
         modelBuilder.Entity("Ogma3.Data.Documents.Document", b =>
             {
-                b.Property<long>("Id")
+                var id = b.Property<long>("Id")
                     .ValueGeneratedOnAdd()
                     .HasColumnType("bigint");
 
-                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(id);
 
                 b.Property<string>("Body")
                     .IsRequired()
@@ -723,6 +812,12 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
                     .ValueGeneratedOnAdd()
                     .HasColumnType("timestamp with time zone")
                     .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                b.Property<string>("CustomCss")
+                    .HasColumnType("text");
+
+                b.Property<string>("CustomJs")
+                    .HasColumnType("text");
 
                 b.Property<DateTimeOffset?>("RevisionDate")
                     .HasColumnType("timestamp with time zone");
@@ -772,11 +867,11 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
 
         modelBuilder.Entity("Ogma3.Data.Faqs.Faq", b =>
             {
-                b.Property<long>("Id")
+                var id = b.Property<long>("Id")
                     .ValueGeneratedOnAdd()
                     .HasColumnType("bigint");
 
-                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(id);
 
                 b.Property<string>("Answer")
                     .IsRequired()
@@ -800,11 +895,11 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
 
         modelBuilder.Entity("Ogma3.Data.Folders.Folder", b =>
             {
-                b.Property<long>("Id")
+                var id = b.Property<long>("Id")
                     .ValueGeneratedOnAdd()
                     .HasColumnType("bigint");
 
-                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(id);
 
                 b.Property<EClubMemberRoles>("AccessLevel")
                     .ValueGeneratedOnAdd()
@@ -860,13 +955,51 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
                 b.ToTable("FolderStories");
             });
 
-        modelBuilder.Entity("Ogma3.Data.Icons.Icon", b =>
+        modelBuilder.Entity("Ogma3.Data.GlobalNotifications.GlobalNotification", b =>
             {
-                b.Property<long>("Id")
+                var id = b.Property<long>("Id")
                     .ValueGeneratedOnAdd()
                     .HasColumnType("bigint");
 
-                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(id);
+
+                b.Property<DateTimeOffset?>("ArchivedAt")
+                    .HasColumnType("timestamp with time zone");
+
+                b.Property<string>("Color")
+                    .HasMaxLength(8)
+                    .HasColumnType("character varying(8)");
+
+                b.Property<DateTimeOffset>("CreatedAt")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("timestamp with time zone")
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                b.Property<long>("CreatedById")
+                    .HasColumnType("bigint");
+
+                b.Property<DateTimeOffset?>("ExpiresAt")
+                    .HasColumnType("timestamp with time zone");
+
+                b.Property<string>("Message")
+                    .IsRequired()
+                    .HasMaxLength(512)
+                    .HasColumnType("character varying(512)");
+
+                b.HasKey("Id");
+
+                b.HasIndex("CreatedById");
+
+                b.ToTable("GlobalNotifications");
+            });
+
+        modelBuilder.Entity("Ogma3.Data.Icons.Icon", b =>
+            {
+                var id = b.Property<long>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("bigint");
+
+                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(id);
 
                 b.Property<string>("Name")
                     .IsRequired()
@@ -883,11 +1016,11 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
 
         modelBuilder.Entity("Ogma3.Data.Images.Image", b =>
             {
-                b.Property<long>("Id")
+                var id = b.Property<long>("Id")
                     .ValueGeneratedOnAdd()
                     .HasColumnType("bigint");
 
-                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(id);
 
                 b.Property<string>("ETag")
                     .HasMaxLength(255)
@@ -901,15 +1034,27 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
                 b.HasKey("Id");
 
                 b.ToTable("Images");
+
+                b.HasData(
+                    new
+                    {
+                        Id = -1L,
+                        Url = "/img/placeholders/deleted-user.png"
+                    },
+                    new
+                    {
+                        Id = -2L,
+                        Url = "/img/placeholders/anonymous-user.png"
+                    });
             });
 
         modelBuilder.Entity("Ogma3.Data.Infractions.Infraction", b =>
             {
-                b.Property<long>("Id")
+                var id = b.Property<long>("Id")
                     .ValueGeneratedOnAdd()
                     .HasColumnType("bigint");
 
-                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(id);
 
                 b.Property<DateTimeOffset>("ActiveUntil")
                     .HasColumnType("timestamp with time zone");
@@ -957,11 +1102,11 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
 
         modelBuilder.Entity("Ogma3.Data.InviteCodes.InviteCode", b =>
             {
-                b.Property<long>("Id")
+                var id = b.Property<long>("Id")
                     .ValueGeneratedOnAdd()
                     .HasColumnType("bigint");
 
-                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(id);
 
                 b.Property<string>("Code")
                     .IsRequired()
@@ -989,6 +1134,9 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
 
                 b.HasKey("Id");
 
+                b.HasIndex("Code")
+                    .IsUnique();
+
                 b.HasIndex("IssuedById");
 
                 b.HasIndex("UsedById")
@@ -999,11 +1147,11 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
 
         modelBuilder.Entity("Ogma3.Data.ModeratorActions.ModeratorAction", b =>
             {
-                b.Property<long>("Id")
+                var id = b.Property<long>("Id")
                     .ValueGeneratedOnAdd()
                     .HasColumnType("bigint");
 
-                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(id);
 
                 b.Property<DateTimeOffset>("DateTime")
                     .ValueGeneratedOnAdd()
@@ -1025,13 +1173,78 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
                 b.ToTable("ModeratorActions");
             });
 
-        modelBuilder.Entity("Ogma3.Data.Notifications.Notification", b =>
+        modelBuilder.Entity("Ogma3.Data.NewsPosts.News", b =>
             {
-                b.Property<long>("Id")
+                var id = b.Property<long>("Id")
                     .ValueGeneratedOnAdd()
                     .HasColumnType("bigint");
 
-                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(id);
+
+                b.Property<long>("AuthorId")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("bigint")
+                    .HasDefaultValue(-1L);
+
+                b.Property<string>("Body")
+                    .IsRequired()
+                    .HasMaxLength(2147483647)
+                    .HasColumnType("text");
+
+                b.Property<string>("CommitHash")
+                    .IsRequired()
+                    .ValueGeneratedOnAdd()
+                    .HasMaxLength(64)
+                    .HasColumnType("character varying(64)")
+                    .HasDefaultValue("CAFEBABE");
+
+                b.Property<DateTimeOffset>("CreationDate")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("timestamp with time zone")
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                b.Property<int>("ExcerptCutoff")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("integer")
+                    .HasDefaultValue(200);
+
+                b.Property<bool>("IsVisible")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("boolean")
+                    .HasDefaultValue(false);
+
+                b.Property<DateTimeOffset?>("PublicationDate")
+                    .HasColumnType("timestamp with time zone");
+
+                b.Property<string>("Slug")
+                    .IsRequired()
+                    .HasMaxLength(2147483647)
+                    .HasColumnType("text");
+
+                b.Property<string>("Title")
+                    .IsRequired()
+                    .HasMaxLength(2147483647)
+                    .HasColumnType("text")
+                    .UseCollation("nocase");
+
+                b.HasKey("Id");
+
+                b.HasIndex("AuthorId");
+
+                b.HasIndex("PublicationDate");
+
+                b.HasIndex("Title");
+
+                b.ToTable("News");
+            });
+
+        modelBuilder.Entity("Ogma3.Data.Notifications.Notification", b =>
+            {
+                var id = b.Property<long>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("bigint");
+
+                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(id);
 
                 b.Property<string>("Body")
                     .HasColumnType("text");
@@ -1070,11 +1283,11 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
 
         modelBuilder.Entity("Ogma3.Data.Quotes.Quote", b =>
             {
-                b.Property<long>("Id")
+                var id = b.Property<long>("Id")
                     .ValueGeneratedOnAdd()
                     .HasColumnType("bigint");
 
-                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(id);
 
                 b.Property<string>("Author")
                     .IsRequired()
@@ -1091,11 +1304,11 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
 
         modelBuilder.Entity("Ogma3.Data.Ratings.Rating", b =>
             {
-                b.Property<long>("Id")
+                var id = b.Property<long>("Id")
                     .ValueGeneratedOnAdd()
                     .HasColumnType("bigint");
 
-                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(id);
 
                 b.Property<bool>("BlacklistedByDefault")
                     .ValueGeneratedOnAdd()
@@ -1133,11 +1346,11 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
 
         modelBuilder.Entity("Ogma3.Data.Reports.Report", b =>
             {
-                b.Property<long>("Id")
+                var id = b.Property<long>("Id")
                     .ValueGeneratedOnAdd()
                     .HasColumnType("bigint");
 
-                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(id);
 
                 b.Property<long?>("BlogpostId")
                     .HasColumnType("bigint");
@@ -1151,10 +1364,15 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
                 b.Property<long?>("CommentId")
                     .HasColumnType("bigint");
 
-                b.Property<string>("ContentType")
-                    .IsRequired()
-                    .HasMaxLength(32)
-                    .HasColumnType("character varying(32)");
+                b.Property<long>("ContentId")
+                    .ValueGeneratedOnAddOrUpdate()
+                    .HasColumnType("bigint")
+                    .HasComputedColumnSql("CASE\r\n	WHEN \"ChapterId\"  IS NOT NULL THEN \"ChapterId\"\r\n	WHEN \"BlogpostId\" IS NOT NULL THEN \"BlogpostId\"\r\n   WHEN \"StoryId\"    IS NOT NULL THEN \"StoryId\"\r\n	WHEN \"UserId\"     IS NOT NULL THEN \"UserId\"\r\n	WHEN \"CommentId\"  IS NOT NULL THEN \"CommentId\"\r\n	WHEN \"ClubId\"     IS NOT NULL THEN \"ClubId\"\r\nEND", true);
+
+                b.Property<short>("ContentType")
+                    .ValueGeneratedOnAddOrUpdate()
+                    .HasColumnType("smallint")
+                    .HasComputedColumnSql("CASE\r\n	WHEN \"ChapterId\"  IS NOT NULL THEN 3\r\n	WHEN \"BlogpostId\" IS NOT NULL THEN 4\r\n   WHEN \"StoryId\"    IS NOT NULL THEN 2\r\n	WHEN \"UserId\"     IS NOT NULL THEN 1\r\n	WHEN \"CommentId\"  IS NOT NULL THEN 0\r\n	WHEN \"ClubId\"     IS NOT NULL THEN 5\r\nEND", true);
 
                 b.Property<string>("Reason")
                     .IsRequired()
@@ -1199,11 +1417,11 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
 
         modelBuilder.Entity("Ogma3.Data.Roles.OgmaRole", b =>
             {
-                b.Property<long>("Id")
+                var id = b.Property<long>("Id")
                     .ValueGeneratedOnAdd()
                     .HasColumnType("bigint");
 
-                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(id);
 
                 b.Property<string>("Color")
                     .HasMaxLength(7)
@@ -1240,16 +1458,16 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
                     .IsUnique()
                     .HasDatabaseName("RoleNameIndex");
 
-                b.ToTable("AspNetRoles", (string)null);
+                b.ToTable("AspNetRoles");
             });
 
         modelBuilder.Entity("Ogma3.Data.Shelves.Shelf", b =>
             {
-                b.Property<long>("Id")
+                var id = b.Property<long>("Id")
                     .ValueGeneratedOnAdd()
                     .HasColumnType("bigint");
 
-                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(id);
 
                 b.Property<string>("Color")
                     .HasMaxLength(7)
@@ -1319,14 +1537,16 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
 
         modelBuilder.Entity("Ogma3.Data.Stories.Story", b =>
             {
-                b.Property<long>("Id")
+                var id = b.Property<long>("Id")
                     .ValueGeneratedOnAdd()
                     .HasColumnType("bigint");
 
-                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(id);
 
                 b.Property<long>("AuthorId")
-                    .HasColumnType("bigint");
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("bigint")
+                    .HasDefaultValue(-1L);
 
                 b.Property<int>("ChapterCount")
                     .ValueGeneratedOnAdd()
@@ -1349,6 +1569,12 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
                     .HasMaxLength(3000)
                     .HasColumnType("character varying(3000)");
 
+                b.PrimitiveCollection<List<string>>("ExtraTags")
+                    .IsRequired()
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("text[]")
+                    .HasDefaultValueSql("'{}'");
+
                 b.Property<string>("Hook")
                     .IsRequired()
                     .HasMaxLength(250)
@@ -1356,6 +1582,11 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
 
                 b.Property<bool>("IsLocked")
                     .HasColumnType("boolean");
+
+                b.Property<bool>("IsVisible")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("boolean")
+                    .HasDefaultValue(false);
 
                 b.Property<DateTimeOffset?>("LastUpdatedAt")
                     .ValueGeneratedOnAdd()
@@ -1367,6 +1598,12 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
 
                 b.Property<long>("RatingId")
                     .HasColumnType("bigint");
+
+                b.Property<DateTimeOffset?>("ScheduledFor")
+                    .HasColumnType("timestamp with time zone");
+
+                b.Property<DateTimeOffset?>("ScheduledForDeletion")
+                    .HasColumnType("timestamp with time zone");
 
                 b.Property<string>("Slug")
                     .IsRequired()
@@ -1420,6 +1657,12 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
 
                 b.HasIndex("RatingId");
 
+                b.HasIndex("ScheduledFor")
+                    .HasFilter("\"ScheduledFor\" IS NOT NULL");
+
+                b.HasIndex("ScheduledForDeletion")
+                    .HasFilter("\"ScheduledForDeletion\" IS NOT NULL");
+
                 b.ToTable("Stories");
             });
 
@@ -1440,11 +1683,11 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
 
         modelBuilder.Entity("Ogma3.Data.Subscriptions.Subscription", b =>
             {
-                b.Property<long>("Id")
+                var id = b.Property<long>("Id")
                     .ValueGeneratedOnAdd()
                     .HasColumnType("bigint");
 
-                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(id);
 
                 b.Property<DateTimeOffset>("CreationDate")
                     .ValueGeneratedOnAdd()
@@ -1470,6 +1713,9 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
                     .HasMaxLength(128)
                     .HasColumnType("character varying(128)");
 
+                b.Property<DateTimeOffset?>("RevokedAt")
+                    .HasColumnType("timestamp with time zone");
+
                 b.Property<long?>("TierId")
                     .HasColumnType("bigint");
 
@@ -1477,6 +1723,8 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
                     .HasColumnType("bigint");
 
                 b.HasKey("Id");
+
+                b.HasIndex("RevokedAt");
 
                 b.HasIndex("TierId");
 
@@ -1488,11 +1736,11 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
 
         modelBuilder.Entity("Ogma3.Data.Subscriptions.SubscriptionTier", b =>
             {
-                b.Property<long>("Id")
+                var id = b.Property<long>("Id")
                     .ValueGeneratedOnAdd()
                     .HasColumnType("bigint");
 
-                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(id);
 
                 b.Property<int>("AmountCents")
                     .HasColumnType("integer");
@@ -1510,17 +1758,105 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
                 b.ToTable("SubscriptionTiers");
             });
 
-        modelBuilder.Entity("Ogma3.Data.Tags.Tag", b =>
+        modelBuilder.Entity("Ogma3.Data.TagNamespaces.TagNamespace", b =>
             {
-                b.Property<long>("Id")
+                var id = b.Property<long>("Id")
                     .ValueGeneratedOnAdd()
                     .HasColumnType("bigint");
 
-                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(id);
+
+                b.Property<string>("Alias")
+                    .HasMaxLength(5)
+                    .HasColumnType("character varying(5)");
+
+                b.Property<string>("Color")
+                    .HasMaxLength(8)
+                    .HasColumnType("character varying(8)");
+
+                b.Property<string>("Description")
+                    .HasMaxLength(256)
+                    .HasColumnType("character varying(256)");
+
+                b.Property<string>("Name")
+                    .IsRequired()
+                    .HasMaxLength(32)
+                    .HasColumnType("character varying(32)");
+
+                b.Property<string>("Slug")
+                    .IsRequired()
+                    .HasMaxLength(32)
+                    .HasColumnType("character varying(32)");
+
+                b.HasKey("Id");
+
+                var index = b.HasIndex("Alias")
+                    .IsUnique()
+                    .HasFilter("\"Alias\" IS NOT NULL");
+
+                NpgsqlIndexBuilderExtensions.UseCollation(index, new[] { "nocase-noaccent" });
+
+                var index0 = b.HasIndex("Name")
+                    .IsUnique();
+
+                NpgsqlIndexBuilderExtensions.UseCollation(index0, new[] { "nocase-noaccent" });
+
+                var index1 = b.HasIndex("Slug")
+                    .IsUnique();
+
+                NpgsqlIndexBuilderExtensions.UseCollation(index1, new[] { "nocase-noaccent" });
+
+                b.ToTable("TagNamespaces");
+
+                b.HasData(
+                    new
+                    {
+                        Id = 1L,
+                        Alias = "cw",
+                        Color = "d91919",
+                        Name = "Content Warning",
+                        Slug = "content-warning"
+                    },
+                    new
+                    {
+                        Id = 2L,
+                        Alias = "ge",
+                        Color = "8c37f4",
+                        Name = "Genre",
+                        Slug = "genre"
+                    },
+                    new
+                    {
+                        Id = 3L,
+                        Alias = "fr",
+                        Color = "18f900",
+                        Name = "Franchise",
+                        Slug = "franchise"
+                    });
+            });
+
+        modelBuilder.Entity("Ogma3.Data.Tags.Tag", b =>
+            {
+                var id = b.Property<long>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("bigint");
+
+                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(id);
+
+                b.Property<DateTimeOffset>("CreatedAt")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("timestamp with time zone")
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                b.Property<long?>("CreatedById")
+                    .HasColumnType("bigint");
 
                 b.Property<string>("Description")
                     .HasMaxLength(250)
                     .HasColumnType("character varying(250)");
+
+                b.Property<DateTimeOffset?>("LastChange")
+                    .HasColumnType("timestamp with time zone");
 
                 b.Property<string>("Name")
                     .IsRequired()
@@ -1528,8 +1864,8 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
                     .HasColumnType("character varying(25)")
                     .UseCollation("nocase");
 
-                b.Property<ETagNamespace?>("Namespace")
-                    .HasColumnType("e_tag_namespace");
+                b.Property<long?>("NamespaceId")
+                    .HasColumnType("bigint");
 
                 b.Property<string>("Slug")
                     .IsRequired()
@@ -1539,27 +1875,33 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
 
                 b.HasKey("Id");
 
-                b.HasIndex("Name")
-                    .IsUnique();
+                b.HasIndex("CreatedById");
+
+                b.HasIndex("LastChange")
+                    .HasFilter("\"LastChange\" IS NOT NULL");
+
+                b.HasIndex("Name");
+
+                b.HasIndex("NamespaceId");
 
                 b.HasIndex("Slug")
                     .IsUnique();
 
-                b.HasIndex("Name", "Namespace")
+                var index = b.HasIndex("Name", "NamespaceId")
                     .IsUnique();
 
-                NpgsqlIndexBuilderExtensions.AreNullsDistinct(b.HasIndex("Name", "Namespace"), false);
+                NpgsqlIndexBuilderExtensions.AreNullsDistinct(index, false);
 
                 b.ToTable("Tags");
             });
 
         modelBuilder.Entity("Ogma3.Data.Users.OgmaUser", b =>
             {
-                b.Property<long>("Id")
+                var id = b.Property<long>("Id")
                     .ValueGeneratedOnAdd()
                     .HasColumnType("bigint");
 
-                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(id);
 
                 b.Property<int>("AccessFailedCount")
                     .HasColumnType("integer");
@@ -1574,9 +1916,6 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
                 b.Property<string>("ConcurrencyStamp")
                     .IsConcurrencyToken()
                     .HasColumnType("text");
-
-                b.Property<DateTimeOffset?>("DeletedAt")
-                    .HasColumnType("timestamp with time zone");
 
                 b.Property<string>("Email")
                     .IsRequired()
@@ -1594,7 +1933,6 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
                 b.PrimitiveCollection<List<string>>("Links")
                     .IsRequired()
                     .ValueGeneratedOnAdd()
-                    .HasMaxLength(5)
                     .HasColumnType("text[]")
                     .HasDefaultValueSql("'{}'");
 
@@ -1618,10 +1956,29 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
                 b.Property<string>("PasswordHash")
                     .HasColumnType("text");
 
+                b.Property<DateTimeOffset>("PrivacyPolicyAcceptedAt")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("timestamp with time zone")
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
                 b.Property<DateTimeOffset>("RegistrationDate")
                     .ValueGeneratedOnAdd()
                     .HasColumnType("timestamp with time zone")
                     .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                b.Property<string>("SafetyPinHash")
+                    .HasMaxLength(512)
+                    .HasColumnType("character varying(512)");
+
+                b.Property<DateTimeOffset?>("SafetyPinLockedOutUntil")
+                    .HasColumnType("timestamp with time zone");
+
+                b.Property<DateTimeOffset?>("SafetyPinResetTokenExpiry")
+                    .HasColumnType("timestamp with time zone");
+
+                b.Property<string>("SafetyPinResetTokenHash")
+                    .HasMaxLength(512)
+                    .HasColumnType("character varying(512)");
 
                 b.Property<string>("SecurityStamp")
                     .HasColumnType("text");
@@ -1631,12 +1988,19 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
 
                 b.Property<string>("TimeZone")
                     .IsRequired()
+                    .ValueGeneratedOnAdd()
                     .HasMaxLength(50)
-                    .HasColumnType("character varying(50)");
+                    .HasColumnType("character varying(50)")
+                    .HasDefaultValue("UTC");
 
                 b.Property<string>("Title")
                     .HasMaxLength(20)
                     .HasColumnType("character varying(20)");
+
+                b.Property<DateTimeOffset>("TosAcceptedAt")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("timestamp with time zone")
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                 b.Property<bool>("TwoFactorEnabled")
                     .HasColumnType("boolean");
@@ -1660,7 +2024,47 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
                     .IsUnique()
                     .HasDatabaseName("UserNameIndex");
 
-                b.ToTable("AspNetUsers", (string)null);
+                var index = b.HasIndex(new[] { "NormalizedUserName" }, "IX_AspNetUsers_NormalizedUserName_Trgm");
+
+                NpgsqlIndexBuilderExtensions.HasMethod(index, "gist");
+                NpgsqlIndexBuilderExtensions.HasOperators(index, new[] { "gist_trgm_ops" });
+
+                b.ToTable("AspNetUsers", t =>
+                    {
+                        t.HasCheckConstraint("CK_OgmaUser_Links_cardinality", "cardinality(\"Links\") <= 5");
+                    });
+
+                b.HasData(
+                    new
+                    {
+                        Id = -1L,
+                        AccessFailedCount = 0,
+                        AvatarId = -1L,
+                        ConcurrencyStamp = "00000000-0000-0000-0000-000000000001",
+                        Email = "",
+                        EmailConfirmed = false,
+                        LockoutEnabled = false,
+                        NormalizedEmail = "",
+                        NormalizedUserName = "DELETED USER",
+                        SecurityStamp = "00000000-0000-0000-0000-000000000001",
+                        TwoFactorEnabled = false,
+                        UserName = "Deleted User"
+                    },
+                    new
+                    {
+                        Id = -2L,
+                        AccessFailedCount = 0,
+                        AvatarId = -2L,
+                        ConcurrencyStamp = "00000000-0000-0000-0000-000000000002",
+                        Email = "",
+                        EmailConfirmed = false,
+                        LockoutEnabled = false,
+                        NormalizedEmail = "",
+                        NormalizedUserName = "ANONYMOUS USER",
+                        SecurityStamp = "00000000-0000-0000-0000-000000000002",
+                        TwoFactorEnabled = false,
+                        UserName = "Anonymous User"
+                    });
             });
 
         modelBuilder.Entity("Ogma3.Data.Users.UserBlock", b =>
@@ -1705,16 +2109,16 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
 
                 b.HasIndex("RoleId");
 
-                b.ToTable("AspNetUserRoles", (string)null);
+                b.ToTable("AspNetUserRoles");
             });
 
         modelBuilder.Entity("Ogma3.Data.Votes.Vote", b =>
             {
-                b.Property<long>("Id")
+                var id = b.Property<long>("Id")
                     .ValueGeneratedOnAdd()
                     .HasColumnType("bigint");
 
-                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(id);
 
                 b.Property<long>("StoryId")
                     .HasColumnType("bigint");
@@ -1841,7 +2245,7 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
                 b.HasOne("Ogma3.Data.Users.OgmaUser", "Author")
                     .WithMany("Blogposts")
                     .HasForeignKey("AuthorId")
-                    .OnDelete(DeleteBehavior.Cascade)
+                    .OnDelete(DeleteBehavior.SetDefault)
                     .IsRequired();
 
                 b.HasOne("Ogma3.Data.Blacklists.ContentBlock", "ContentBlock")
@@ -1897,15 +2301,14 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
             {
                 b.HasOne("Ogma3.Data.Clubs.Club", "Club")
                     .WithMany()
-                    .HasForeignKey("ModeratorId")
+                    .HasForeignKey("ClubId")
                     .OnDelete(DeleteBehavior.Cascade)
                     .IsRequired();
 
                 b.HasOne("Ogma3.Data.Users.OgmaUser", "Moderator")
                     .WithMany()
                     .HasForeignKey("ModeratorId")
-                    .OnDelete(DeleteBehavior.SetNull)
-                    .IsRequired();
+                    .OnDelete(DeleteBehavior.SetNull);
 
                 b.Navigation("Club");
 
@@ -1966,7 +2369,7 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
                 b.HasOne("Ogma3.Data.Users.OgmaUser", "Author")
                     .WithMany()
                     .HasForeignKey("AuthorId")
-                    .OnDelete(DeleteBehavior.Cascade)
+                    .OnDelete(DeleteBehavior.SetDefault)
                     .IsRequired();
 
                 b.HasOne("Ogma3.Data.CommentsThreads.CommentThread", "CommentThread")
@@ -1977,7 +2380,8 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
 
                 b.HasOne("Ogma3.Data.Users.OgmaUser", "DeletedByUser")
                     .WithMany()
-                    .HasForeignKey("DeletedByUserId");
+                    .HasForeignKey("DeletedByUserId")
+                    .OnDelete(DeleteBehavior.SetNull);
 
                 b.Navigation("Author");
 
@@ -2014,6 +2418,11 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
                     .HasForeignKey("Ogma3.Data.CommentsThreads.CommentThread", "ClubThreadId")
                     .OnDelete(DeleteBehavior.Cascade);
 
+                b.HasOne("Ogma3.Data.NewsPosts.News", "News")
+                    .WithOne("CommentThread")
+                    .HasForeignKey("Ogma3.Data.CommentsThreads.CommentThread", "NewsId")
+                    .OnDelete(DeleteBehavior.Cascade);
+
                 b.HasOne("Ogma3.Data.Users.OgmaUser", "User")
                     .WithOne("CommentThread")
                     .HasForeignKey("Ogma3.Data.CommentsThreads.CommentThread", "UserId")
@@ -2024,6 +2433,8 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
                 b.Navigation("Chapter");
 
                 b.Navigation("ClubThread");
+
+                b.Navigation("News");
 
                 b.Navigation("User");
             });
@@ -2085,6 +2496,17 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
                 b.Navigation("Story");
             });
 
+        modelBuilder.Entity("Ogma3.Data.GlobalNotifications.GlobalNotification", b =>
+            {
+                b.HasOne("Ogma3.Data.Users.OgmaUser", "CreatedBy")
+                    .WithMany()
+                    .HasForeignKey("CreatedById")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.Navigation("CreatedBy");
+            });
+
         modelBuilder.Entity("Ogma3.Data.Infractions.Infraction", b =>
             {
                 b.HasOne("Ogma3.Data.Users.OgmaUser", "IssuedBy")
@@ -2136,6 +2558,17 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
                     .IsRequired();
 
                 b.Navigation("StaffMember");
+            });
+
+        modelBuilder.Entity("Ogma3.Data.NewsPosts.News", b =>
+            {
+                b.HasOne("Ogma3.Data.Users.OgmaUser", "Author")
+                    .WithMany()
+                    .HasForeignKey("AuthorId")
+                    .OnDelete(DeleteBehavior.SetDefault)
+                    .IsRequired();
+
+                b.Navigation("Author");
             });
 
         modelBuilder.Entity("Ogma3.Data.Notifications.NotificationRecipients", b =>
@@ -2193,7 +2626,7 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
                 b.HasOne("Ogma3.Data.Users.OgmaUser", "User")
                     .WithMany("Reports")
                     .HasForeignKey("UserId")
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .OnDelete(DeleteBehavior.SetNull);
 
                 b.Navigation("Blogpost");
 
@@ -2252,7 +2685,7 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
                 b.HasOne("Ogma3.Data.Users.OgmaUser", "Author")
                     .WithMany("Stories")
                     .HasForeignKey("AuthorId")
-                    .OnDelete(DeleteBehavior.Cascade)
+                    .OnDelete(DeleteBehavior.SetDefault)
                     .IsRequired();
 
                 b.HasOne("Ogma3.Data.Blacklists.ContentBlock", "ContentBlock")
@@ -2312,6 +2745,22 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
                 b.Navigation("Tier");
 
                 b.Navigation("User");
+            });
+
+        modelBuilder.Entity("Ogma3.Data.Tags.Tag", b =>
+            {
+                b.HasOne("Ogma3.Data.Users.OgmaUser", "CreatedBy")
+                    .WithMany()
+                    .HasForeignKey("CreatedById");
+
+                b.HasOne("Ogma3.Data.TagNamespaces.TagNamespace", "Namespace")
+                    .WithMany("Tags")
+                    .HasForeignKey("NamespaceId")
+                    .OnDelete(DeleteBehavior.SetNull);
+
+                b.Navigation("CreatedBy");
+
+                b.Navigation("Namespace");
             });
 
         modelBuilder.Entity("Ogma3.Data.Users.OgmaUser", b =>
@@ -2444,6 +2893,12 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
                 b.Navigation("Comments");
             });
 
+        modelBuilder.Entity("Ogma3.Data.NewsPosts.News", b =>
+            {
+                b.Navigation("CommentThread")
+                    .IsRequired();
+            });
+
         modelBuilder.Entity("Ogma3.Data.Stories.Story", b =>
             {
                 b.Navigation("Chapters");
@@ -2451,6 +2906,11 @@ partial class _20260711120237_MoreCaseInsensitiveCollations
                 b.Navigation("Reports");
 
                 b.Navigation("Votes");
+            });
+
+        modelBuilder.Entity("Ogma3.Data.TagNamespaces.TagNamespace", b =>
+            {
+                b.Navigation("Tags");
             });
 
         modelBuilder.Entity("Ogma3.Data.Users.OgmaUser", b =>
