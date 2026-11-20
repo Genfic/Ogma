@@ -50,7 +50,7 @@ builder
 		db.WithEnvironment("Dashboard__Frontend__BrowserToken", Password.Generate(64, true));
 	})
 	.WithSshDeploySupport()
-	.WithAppFileTransfer("./Files", "");
+	.WithAppFileTransfer("./Files", ".");
 
 builder.AddDiscordWebhookNotify();
 
