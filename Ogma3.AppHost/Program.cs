@@ -65,6 +65,7 @@ var database = builder
 	.WithImageTag("18")
 	.WithDataVolume("ogma3-postgres-volume")
 	.WithRepl()
+	.WithDbDump()
 	.WithLifetime(ContainerLifetime.Persistent)
 	.WithEndpoint("tcp", e => {
 		e.Port = 5433;
