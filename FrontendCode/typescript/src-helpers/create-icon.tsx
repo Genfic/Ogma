@@ -7,8 +7,8 @@ export const createIcon = (width: number, height: number, innerHTML: string) => 
 		return (
 			<svg
 				viewBox={`0 0 ${width} ${height}`}
-				width="1.5em"
-				height="1.5em"
+				width="1.4rem"
+				height="1.4rem"
 				part="icon"
 				{...props}
 				innerHTML={innerHTML}

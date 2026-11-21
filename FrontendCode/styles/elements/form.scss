@@ -140,6 +140,7 @@ form.form {
 			min-height: 3rem;
 			resize: vertical;
 			font-family: var(--font-inconsolata), Consolas, Courier, monospace;
+			padding: clamp(0.5rem, 2%, 1rem);
 		}
 
 		input[type="color"] {

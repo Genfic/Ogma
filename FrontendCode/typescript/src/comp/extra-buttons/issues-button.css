@@ -1,5 +1,6 @@
 issues-btn {
-	display: contents;
+	display: flex;
+	place-items: center;
 }
 
 dialog.my-dialog > .content.issues {
@@ -12,6 +13,8 @@ dialog.my-dialog > .content.issues {
 
 	> .issues-fix-all {
 		align-self: flex-start;
+		display: flex;
+		gap: 0.5rem;
 	}
 
 	> .issues-rule {
@@ -35,14 +38,12 @@ dialog.my-dialog > .content.issues {
 
 			> .issues-fix-rule {
 				padding: 0.25rem 0.5rem;
-				font-size: 0.8rem;
 			}
 		}
 
 		> .issues-rule-description {
 			margin: 0;
 			color: var(--foreground-75);
-			font-size: 0.8rem;
 		}
 
 		> .issues-item {
@@ -60,7 +61,6 @@ dialog.my-dialog > .content.issues {
 			> .issues-message {
 				grid-area: message;
 				margin: 0;
-				font-size: 0.9rem;
 			}
 
 			> .issues-fix-one {
@@ -68,11 +68,19 @@ dialog.my-dialog > .content.issues {
 				padding: 0.25rem;
 			}
 
-			> .issues-snippet {
+			.issues-snippet {
 				grid-area: snippet;
 				overflow-wrap: anywhere;
-				font-size: 0.8rem;
 				white-space: pre-wrap;
+				border: 1px solid var(--foreground-25);
+				background-color: var(--background-25);
+				padding: 0 0.25rem;
+
+				> .hl {
+					text-decoration: underline;
+					text-decoration-style: wavy;
+					text-decoration-color: var(--red);
+				}
 			}
 		}
 	}

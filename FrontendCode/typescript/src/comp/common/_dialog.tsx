@@ -72,13 +72,12 @@ export const Dialog: ParentComponent<Props> = (props: ParentProps<Props>) => {
 			onmousedown={backdropClose}
 			aria-modal={true}
 		>
-			<button type="button" aria-controls={id} class="close-btn" autofocus onClick={close}>
-				<LucideX />
-			</button>
-
-			<Show when={props.header}>
-				<div class="header">{props.header}</div>
-			</Show>
+			<div class="header">
+				<Show when={props.header}>{props.header}</Show>
+				<button type="button" aria-controls={id} class="close-btn" autofocus onClick={close}>
+					<LucideX />
+				</button>
+			</div>
 
 			<div class={`content ${props.contentClass}`}>{props.children}</div>
 		</dialog>

@@ -1,4 +1,4 @@
-import { analyze, applyIssues, RULES, type Issue } from "@h/md-issues";
+import { analyze, applyIssues, type Issue, RULES } from "@h/md-issues";
 import { component } from "@h/web-components";
 import LucidePencil from "icon:lucide:pencil";
 import LucideRefreshCw from "icon:lucide:refresh-cw";
@@ -6,11 +6,26 @@ import { type ComponentType, noShadowDOM } from "solid-element";
 import { For, Show } from "solid-js";
 import { Dialog, type DialogApi } from "../common/_dialog";
 import type { ExtraButtonContext } from "./extra-button-types";
-import shared from "../shared.css";
+import extra from "./extra-button.css";
 import css from "./issues-button.css";
 
 /** Characters of context shown either side of an issue. */
 const CONTEXT = 28;
+
+const IssueSnippet: Component<{ source: string; issue: Issue }> = (props) => {
+	const from = () => Math.max(0, props.issue.start - CONTEXT);
+	const to = () => Math.min(props.source.length, props.issue.end + CONTEXT);
+
+	return (
+		<code class="issues-snippet">
+			{from() > 0 ? "…" : ""}
+			{props.source.slice(from(), props.issue.start)}
+			<span class="hl">{props.source.slice(props.issue.start, props.issue.end)}</span>
+			{props.source.slice(props.issue.end, to())}
+			{to() < props.source.length ? "…" : ""}
+		</code>
+	);
+};
 
 const IssuesButton: ComponentType<{ context?: ExtraButtonContext }> = (props) => {
 	noShadowDOM();
@@ -24,15 +39,6 @@ const IssuesButton: ComponentType<{ context?: ExtraButtonContext }> = (props) =>
 			(group) => group.issues.length > 0,
 		),
 	);
-
-	/** The offending range, quoted, inside a short window of its surroundings. */
-	const snippet = (issue: Issue) => {
-		const source = $get(text)();
-		const from = Math.max(0, issue.start - CONTEXT);
-		const to = Math.min(source.length, issue.end + CONTEXT);
-
-		return `${from > 0 ? "…" : ""}${source.slice(from, issue.start)}«${source.slice(issue.start, issue.end)}»${source.slice(issue.end, to)}${to < source.length ? "…" : ""}`;
-	};
 
 	/** Scan the editor, reporting whether it was reachable at all. */
 	const scan = () => {
@@ -83,7 +89,7 @@ const IssuesButton: ComponentType<{ context?: ExtraButtonContext }> = (props) =>
 				<LucidePencil />
 			</button>
 
-			<Dialog ref={(api) => (dialog = api)} header={<span>Writing issues</span>} contentClass="issues">
+			<Dialog ref={(api) => (dialog = api)} header={<h2>Writing issues (beta)</h2>} contentClass="issues">
 				<Show
 					when={$get(issues)().length > 0}
 					fallback={<p class="issues-clean">Nothing to fix in this text.</p>}
@@ -117,14 +123,14 @@ const IssuesButton: ComponentType<{ context?: ExtraButtonContext }> = (props) =>
 									{(issue) => (
 										<div class="issues-item">
 											<p class="issues-message">{issue.message}</p>
-											<code class="issues-snippet">{snippet(issue)}</code>
+											<IssueSnippet source={text} issue={issue} />
 											<button
 												type="button"
 												class="btn issues-fix-one"
 												title="Fix this issue"
 												onClick={() => fix((candidate) => candidate === issue)}
 											>
-												<LucidePencil />
+												Fix
 											</button>
 										</div>
 									)}
@@ -138,4 +144,4 @@ const IssuesButton: ComponentType<{ context?: ExtraButtonContext }> = (props) =>
 	);
 };
 
-component("issues-btn", { context: undefined }, IssuesButton, [shared, css], ["context"]);
+component("issues-btn", { context: undefined }, IssuesButton, [extra, css], ["context"]);

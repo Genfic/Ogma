@@ -151,9 +151,9 @@ textarea,
 optgroup,
 select {
 	font-family: inherit;
-	font-size: 100%;
 	line-height: 1.15;
 	margin: 0; // Remove margins in Firefox and Safari.
+	font-size: inherit;
 }
 
 // Remove vertical scrollbar in IE 10+.
