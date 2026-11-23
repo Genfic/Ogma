@@ -12,8 +12,6 @@
 
 @{
 	var duration = Context.GetRequestDuration() ?? TimeSpan.Zero;
-
-	var proto = Context.Request.Protocol;
 }
 
 <footer class="footer">
@@ -33,10 +31,6 @@
 
 			<span class="item">
 				Serving <story-count class="hl" cache-time="60"></story-count> stories
-			</span>
-
-			<span class="item">
-				Using <span class="hl">@proto</span>
 			</span>
 
 			<theme-selector class="item"></theme-selector>

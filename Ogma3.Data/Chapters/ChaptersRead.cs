@@ -34,6 +34,9 @@ public sealed class ChaptersRead
 	{
 		public void Configure(EntityTypeBuilder<ChaptersRead> builder)
 		{
+			// Matches the query filter on Story, so rows referencing soft-deleted stories stay hidden
+			builder.HasQueryFilter(cr => cr.Story.ScheduledForDeletion == null);
+
 			builder
 				.HasKey(cr => new { cr.StoryId, cr.UserId });
 
