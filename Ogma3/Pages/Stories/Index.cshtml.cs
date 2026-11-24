@@ -80,12 +80,12 @@ public sealed class IndexModel(
 			};
 		}
 
-		var includedTagIds = await tagCache.GetTagIds([..includedTags]);
-		var excludedTagIds = await tagCache.GetTagIds([..excludedTags]);
+		var includedTagIds = await tagCache.GetTagIds([.. includedTags]);
+		var excludedTagIds = await tagCache.GetTagIds([.. excludedTags]);
 
 		storiesQuery = storiesQuery
-			.WhereIf(s =>  includedTagIds.All(i => s.Tags.Any(t => t.Id == i)), includedTagIds.Length > 0)
-			.WhereIf(s => !s.Tags.Any(t =>  excludedTagIds.AsEnumerable().Contains(t.Id)), excludedTagIds.Length > 0)
+			.WhereIf(s => includedTagIds.All(i => s.Tags.Any(t => t.Id == i)), includedTagIds.Length > 0)
+			.WhereIf(s => !s.Tags.Any(t => excludedTagIds.AsEnumerable().Contains(t.Id)), excludedTagIds.Length > 0)
 			.WhereIf(s => s.RatingId == Rating, Rating != null)
 			.WhereIf(s => s.Status == Status, Status != null)
 			.Where(s => s.IsVisible)
@@ -94,7 +94,8 @@ public sealed class IndexModel(
 			.Blacklist(context, uid);
 
 		var key = Query + ":" + string.Join(':', [Rating, (long?)Status, (long?)Sort, page, uid]);
-		var (stories, count) = await cache.GetOrSetAsync<(List<StoryCard> s, int c)>(key, async ct => {
+		var (stories, count) = await cache.GetOrSetAsync(key, async ct =>
+		{
 
 			var s = await SortStories(storiesQuery, Sort ?? StorySort.DateDescending)
 				.TagWith("Searching for stories")

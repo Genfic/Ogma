@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NpgSqlGenerators;
+using Utils.Extensions;
 
 namespace Ogma3.Data;
 
@@ -13,13 +14,10 @@ public static class DbContextRegistration
 	{
 		var dev = builder.Environment.IsDevelopment();
 
-		builder.Services.AddPooledDbContextFactory<AppDbContext>(options => {
-			var conn = builder.Configuration.GetConnectionString("ogma3-db");
-
-			if (conn is null)
-			{
-				throw new InvalidOperationException("Connection string 'ogma3-db' is not defined.");
-			}
+		builder.Services.AddPooledDbContextFactory<AppDbContext>(options =>
+		{
+			var conn = builder.Configuration.GetConnectionString("ogma3-db")
+				?? throw new InvalidOperationException("Connection string 'ogma3-db' is not defined.");
 
 			if (dev)
 			{
@@ -28,6 +26,10 @@ public static class DbContextRegistration
 					conn += ';';
 				}
 				conn += "Include Error Detail=True;";
+
+				options
+					.EnableSensitiveDataLogging()
+					.EnableDetailedErrors();
 			}
 
 			options
@@ -38,14 +40,11 @@ public static class DbContextRegistration
 				// NOTE: uh-oh stinky poo-poo
 				// But without it, for some godforsaken reason, the Migrator project wholeheartedly believes, that the
 				// model has pending changes even if creating a new migration literally generates empty Up and Down methods.
-				.ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning));
-
-			if (builder.Environment.IsDevelopment())
-			{
-				options
-					.EnableSensitiveDataLogging()
-					.EnableDetailedErrors();
-			}
+				.ConfigureWarnings(w => w
+					.Ignore(RelationalEventId.PendingModelChangesWarning)
+					.Ignore(CoreEventId.MappedPropertyIgnoredWarning)
+					.If(dev, wr => wr.Ignore(CoreEventId.SensitiveDataLoggingEnabledWarning))
+				);
 		});
 
 		return builder;

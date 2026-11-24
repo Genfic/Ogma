@@ -37,7 +37,7 @@ public sealed class OgmaConfigPersistence
 		}
 
 		await using var fs = File.OpenRead(path);
-		var config = await JsonSerializer.DeserializeAsync<OgmaConfig>(fs, OgmaConfigJsonContext.Default.OgmaConfig) ?? new();
+		var config = await JsonSerializer.DeserializeAsync(fs, OgmaConfigJsonContext.Default.OgmaConfig) ?? new();
 
 		return new OgmaConfigPersistence(config, path);
 	}
