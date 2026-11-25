@@ -27,7 +27,7 @@ CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
 CultureInfo.CurrentUICulture = CultureInfo.InvariantCulture;
 Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
 Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
-Console.OutputEncoding = Encoding.Unicode;
+Console.OutputEncoding = new UTF8Encoding(false);
 
 NetVipsHelpers.EnsureInitialized();
 
@@ -39,7 +39,7 @@ builder.Configuration
 	.AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json5", true);
 
 builder.Configuration.AddUserSecrets(Assembly.GetAssembly(typeof(Program))
-                                     ?? throw new NullReferenceException("The assembly was, somehow, null"));
+									 ?? throw new NullReferenceException("The assembly was, somehow, null"));
 
 Log.Logger = new LoggerConfiguration()
 	.Enrich.FromLogContext()
@@ -47,7 +47,7 @@ Log.Logger = new LoggerConfiguration()
 	.ReadFrom.Configuration(builder.Configuration)
 	.WriteTo.Logger(lc => lc
 		.ReadFrom.Configuration(builder.Configuration, new ConfigurationReaderOptions { SectionName = "ConsoleLogger" })
-		.WriteTo.Console(LogEventLevel.Information, theme: ConsoleTheme.None))
+		.WriteTo.Console(LogEventLevel.Information))
 	.WriteTo.OpenTelemetry()
 	.CreateLogger();
 
@@ -56,7 +56,8 @@ await builder.AddInfisicalAsync();
 builder.Host.UseSerilog();
 
 // builder.WebHost.UseUrls("https://+:5001");
-builder.WebHost.ConfigureKestrel(options => {
+builder.WebHost.ConfigureKestrel(options =>
+{
 	options.Limits.Http2.KeepAlivePingDelay = TimeSpan.FromSeconds(10);
 	options.Limits.Http2.KeepAlivePingTimeout = TimeSpan.FromSeconds(1);
 	options.ConfigureEndpointDefaults(lo => { lo.Protocols = HttpProtocols.Http1AndHttp2AndHttp3; });
