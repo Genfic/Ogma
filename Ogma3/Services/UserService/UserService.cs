@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using Immediate.Injections.Shared;
+using Microsoft.AspNetCore.Identity;
 using Ogma3.Data;
 using Ogma3.Data.Images;
 using Ogma3.Data.Shelves;
@@ -19,6 +20,9 @@ public sealed class UserService(
 {
 	public ClaimsPrincipal? User => accessor?.HttpContext?.User;
 	public long? UserId => User?.GetNumericId();
+
+	public bool IsSignedIn() =>
+		User is not null && User.Identities.Any(i => i.AuthenticationType == IdentityConstants.ApplicationScheme);
 
 	public async Task<UserCreationResult> CreateAsync(string username, string email, string password, bool activated = false, string? inviteCode = null, CancellationToken cancellationToken = default)
 	{

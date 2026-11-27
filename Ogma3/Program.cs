@@ -14,7 +14,6 @@ using Riok.Mapperly.Abstractions;
 using Serilog;
 using Serilog.Events;
 using Serilog.Settings.Configuration;
-using Serilog.Sinks.SystemConsole.Themes;
 
 [assembly: MapperDefaults(RequiredMappingStrategy = RequiredMappingStrategy.Target)]
 [assembly: Behaviors(typeof(ValidationBehavior<,>))]

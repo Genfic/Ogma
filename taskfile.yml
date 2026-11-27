@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
 version: "3"
 silent: true
 
@@ -46,17 +47,17 @@ tasks:
 
   # EF helpers
   db-migrate:
-    aliases: [ dbm ]
+    aliases: [dbm]
     cmds:
       - dotnet ef migrations add {{.CLI_ARGS}}
 
   db-unmigrate:
-    aliases: [ dbu ]
+    aliases: [dbu]
     cmds:
       - dotnet ef migrations remove --offline {{.CLI_ARGS}}
 
   db-compile:
-    aliases: [ dbc ]
+    aliases: [dbc]
     prompt: Currently blocked by https://github.com/dotnet/efcore/issues/24897. Do you want to continue?
     cmds:
       - dotnet ef dbcontext optimize --output-dir CompiledModels --namespace CompiledModels {{.CLI_ARGS}}
@@ -82,9 +83,9 @@ tasks:
       - for:
           matrix:
             FONT:
-              - 'IMFellEnglish-Italic.ttf'
-              - 'IMFellEnglish-Regular.ttf'
-            FMT: ['woff', 'woff2']
+              - "IMFellEnglish-Italic.ttf"
+              - "IMFellEnglish-Regular.ttf"
+            FMT: ["woff", "woff2"]
         cmd: >-
           pyftsubset "./FrontendCode/fonts/{{.ITEM.FONT}}"
           --unicodes="U+0020-007E"

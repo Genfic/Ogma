@@ -9,4 +9,5 @@ public sealed partial class Workers : IValidationTarget<Workers>
 {
 	public required string AvatarServiceSignatureKey { get; init; }
 	public required string DiscordBotSignatureKey { get; init; }
+	public required string StatmonPingSignatureKey { get; init; }
 }

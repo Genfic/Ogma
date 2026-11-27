@@ -25,6 +25,7 @@ public sealed class GeneratedImagesServiceTest
 			{
 				AvatarServiceSignatureKey = "secret",
 				DiscordBotSignatureKey = "discord-secret",
+				StatmonPingSignatureKey = "statmon-secret",
 			}),
 			new OgmaConfig { AvatarServiceUrl = "https://avatars.example.com/avatar" }
 		);
